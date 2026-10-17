@@ -29,6 +29,13 @@
       "when": 1792254821068,
       "tag": "0003_secure_invitation_acceptance",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792254860335,
+      "tag": "0004_enforce_company_reference_boundaries",
+      "breakpoints": true
     }
   ]
 }
