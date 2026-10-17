@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import "@lovable.dev/cloud-auth-js/styles.css";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
@@ -78,11 +77,13 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen ruled">
-      <div className="mx-auto flex max-w-md flex-col px-5 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto flex max-w-6xl px-5 py-6 sm:px-8">
         <Brand />
-        <div className="paper-card mt-10 p-6 sm:p-8">
-          <h1 className="text-3xl sm:text-4xl">{mode === "signup" ? "Start your workspace" : "Welcome back"}</h1>
+      </div>
+      <div className="mx-auto flex max-w-sm flex-col px-5 pb-10 pt-10 sm:pt-16">
+        <div>
+          <h1 className="text-3xl">{mode === "signup" ? "Create your account" : "Welcome back"}</h1>
           <p className="mt-2 text-muted-foreground">
             {mode === "signup" ? "Free to try. You can load a sample company right after." : "Sign in to your team's role maps."}
           </p>
@@ -97,9 +98,9 @@ function AuthPage() {
                 <Button type="button" variant="outline" className="h-11" onClick={() => oauth("google")}>
                   Continue with Google
                 </Button>
-                <button type="button" className="lovable-auth-button" onClick={() => oauth("lovable")}>
+                <Button type="button" variant="outline" className="h-11" onClick={() => oauth("lovable")}>
                   Continue with Lovable
-                </button>
+                </Button>
               </div>
               <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
                 <div className="h-px flex-1 bg-border" /> or with email <div className="h-px flex-1 bg-border" />
@@ -125,16 +126,17 @@ function AuthPage() {
               </form>
             </>
           )}
-          <button
+          <Button
             type="button"
-            className="mt-5 w-full text-center text-sm text-primary underline-offset-4 hover:underline"
+            variant="ghost"
+            className="mt-5 w-full whitespace-normal text-center text-sm text-muted-foreground"
             onClick={() => {
               setMode(mode === "signup" ? "signin" : "signup");
               setSent(false);
             }}
           >
             {mode === "signup" ? "Already have an account? Sign in" : "New here? Create an account"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

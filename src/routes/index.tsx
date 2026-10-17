@@ -43,43 +43,35 @@ function Landing() {
       </header>
 
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-6 md:grid-cols-2 md:pt-12">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-widest text-terracotta">For Indian SMEs</p>
-            <h1 className="mt-3 text-4xl leading-[1.15] sm:text-5xl">
-              When Anitha leaves, <em className="text-primary">how she does the job</em> shouldn't leave with her.
-            </h1>
-            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-              People speak short daily notes in their own language. Kaimaaral turns them into a living, searchable onboarding map for
-              every role — ready for the next person.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
-                <Link to="/app">Try it with a sample company</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/readme">How it works</Link>
-              </Button>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground" lang="ml">
-              "ഇന്ന് Rajan Traders-ന്റെ invoice approve ചെയ്തു…" → <span lang="en">Decision: payments above ₹50,000 need MD approval</span>
-            </p>
+        <section className="mx-auto max-w-3xl px-5 pb-16 pt-16 text-center sm:pb-20 sm:pt-24">
+          <h1 className="text-4xl sm:text-5xl">Kaimaaral</h1>
+          <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Keep the knowledge. Hand over the role.
+          </p>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
+            Voice notes, files and everyday decisions — connected into one source-backed role map, in your language.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
+              <Link to="/app">Open your workspace</Link>
+            </Button>
+            <Button asChild size="lg" variant="ghost">
+              <Link to="/readme">Read Me</Link>
+            </Button>
           </div>
-          <div className="paper-card overflow-hidden">
-            <img src={hero} alt="A notebook with notes in Malayalam, Hindi and Tamil connected to icons for tasks, people and tools" className="h-full w-full object-cover" width={1280} height={960} />
-          </div>
+          <p className="mt-5 text-xs text-muted-foreground">English · हिन्दी · മലയാളം · தமிழ்</p>
         </section>
 
         <section className="border-t border-border bg-paper">
           <div className="mx-auto grid max-w-6xl gap-6 px-5 py-14 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <div key={f.title} className="flex gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center text-muted-foreground">
                   <f.icon className="h-5 w-5" aria-hidden />
                 </div>
                 <div>
-                  <h2 className="text-2xl">{f.title}</h2>
-                  <p className="mt-1 text-muted-foreground">{f.body}</p>
+                  <h2 className="text-lg">{f.title}</h2>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
                 </div>
               </div>
             ))}
@@ -87,7 +79,8 @@ function Landing() {
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-14">
-          <h2 className="text-4xl">How it works</h2>
+          <img src={hero} alt="Role knowledge recorded in Malayalam, Hindi and Tamil" className="mb-10 h-48 w-full rounded-lg object-cover grayscale sm:h-64" width={1280} height={960} />
+          <h2 className="text-2xl">How it works</h2>
           <ol className="mt-6 grid gap-4 md:grid-cols-4">
             {[
               ["Set up", "Add departments like Finance or Marketing, create role cards, invite people."],
@@ -95,9 +88,9 @@ function Landing() {
               ["Map", "AI pulls out tasks, decisions and the reasons behind them, contacts, tools and gotchas."],
               ["Hand over", "The successor gets the map, a week-by-week plan and a chat that knows the role."],
             ].map(([t, b], i) => (
-              <li key={t} className="paper-card p-5">
-                <span className="font-display text-3xl text-terracotta">{i + 1}</span>
-                <h3 className="mt-1 text-2xl">{t}</h3>
+              <li key={t} className="border-t border-border py-5">
+                <span className="text-sm text-muted-foreground">{i + 1}</span>
+                <h3 className="mt-2 text-lg">{t}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{b}</p>
               </li>
             ))}
