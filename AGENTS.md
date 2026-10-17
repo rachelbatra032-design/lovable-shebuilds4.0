@@ -18,3 +18,4 @@
 - Role page UI lives in `src/components/role/RoleWorkspace.tsx` (route file only passes the id) so `src/test/role-tabs.test.tsx` can click every tab without a router; run `bunx vitest run` before publishing.
 - Browser runtime errors are logged by `src/lib/client-error-log.ts` (installed once in `__root`) into `client_errors` with page, last action and stack; keep it dependency-free so it can't itself crash the page.
 - Onboarding readiness is computed by the shared source-backed validator in `src/lib/plan-completeness.ts` on save and display, not by an AI readiness claim; missing or legacy audits fail closed to draft.
+- Stale dynamic-module failures recover through a fresh document load, capped per path to prevent reload loops; ordinary runtime errors remain in the error boundary.
