@@ -48,20 +48,26 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const tried = useRef(new Set<string>());
 
   const list = items.data?.items ?? [];
-  const needsTranslation = lang !== "en" && list.some((i) => !(i.translations as Record<string, unknown>)?.[lang]);
+  const untranslated = lang === "en" ? 0 : list.filter((i) => !(i.translations as Record<string, unknown>)?.[lang]).length;
+  const needsTranslation = untranslated > 0;
 
   useEffect(() => {
-    const key = `${roleId}-${lang}-${list.length}`;
+    const key = `${roleId}-${lang}-${untranslated}`;
     if (!needsTranslation || tried.current.has(key)) return;
     tried.current.add(key);
     setTranslating(true);
     translate({ data: { roleId, language: lang as "ml" | "hi" | "ta" } })
       .then((r) => {
-        if (!r.ok) toast.error(r.error);
+        if (!r.ok) {
+          toast.error(r.error);
+          tried.current.delete(key); // allow a retry on the next render
+        } else if (r.remaining > 0) {
+          tried.current.delete(key); // more items to translate — run again
+        }
         qc.invalidateQueries({ queryKey: ["role", roleId, "items"] });
       })
       .finally(() => setTranslating(false));
-  }, [needsTranslation, lang, roleId, list.length, translate, qc]);
+  }, [needsTranslation, lang, roleId, untranslated, translate, qc]);
 
   const display = useCallback((i: KnowledgeItem) => displayItem(i, lang), [lang]);
 

@@ -333,10 +333,14 @@ export const translateItems = createServerFn({ method: "POST" })
       .from("knowledge_items")
       .select("id, title, body, cadence, translations")
       .eq("role_id", data.roleId);
-    const todo = (items ?? []).filter((i) => !(i.translations as Record<string, unknown> | null)?.[data.language]).slice(0, 60);
-    if (!todo.length) return { ok: true as const, translated: 0 };
+    const missing = (items ?? []).filter((i) => !(i.translations as Record<string, unknown> | null)?.[data.language]);
+    if (!missing.length) return { ok: true as const, translated: 0, remaining: 0 };
     try {
-      const out = await respondJSON<{ items: { id: string; title: string; body: string; cadence: string | null }[] }>({
+      let translated = 0;
+      // Translate in small batches; the AI sometimes drops items from large batches.
+      for (let start = 0; start < missing.length && start < 60; start += 6) {
+        const todo = missing.slice(start, start + 6);
+        const out = await respondJSON<{ items: { id: string; title: string; body: string; cadence: string | null }[] }>({
         instructions: `Translate workplace knowledge items from English into natural, everyday ${LANG_NAME[data.language]} as an SME employee would speak it (native script). Keep names, amounts, product and software names (Tally, GST, etc.) unchanged. Keep markdown/numbering.`,
         schema: {
           name: "translations",
@@ -359,14 +363,16 @@ export const translateItems = createServerFn({ method: "POST" })
         },
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(todo.map(({ id, title, body, cadence }) => ({ id, title, body, cadence }))) }] }],
       });
-      const byId = new Map(todo.map((t) => [t.id, t]));
-      for (const t of out.items) {
-        const orig = byId.get(t.id);
-        if (!orig) continue;
-        const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
-        await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
+        const byId = new Map(todo.map((t) => [t.id, t]));
+        for (const t of out.items) {
+          const orig = byId.get(t.id);
+          if (!orig) continue;
+          const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
+          await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
+          translated++;
+        }
       }
-      return { ok: true as const, translated: out.items.length };
+      return { ok: true as const, translated, remaining: Math.max(0, missing.length - translated) };
     } catch (e) {
       return { ok: false as const, error: errMessage(e) };
     }
