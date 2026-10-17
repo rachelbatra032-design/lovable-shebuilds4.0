@@ -22,6 +22,7 @@
 - [x] Add compact phone panel navigation, consistent capture/upload/map styling, optional dark mode, and clearer role-map hierarchy and decision summaries (24 tests pass; signed-in phone/laptop checks, theme persistence, real upload and sourced Ask answer verified)
 - [ ] Publish and verify judge access — waits for user authorization to publish
 - [x] Simplify the first-time walkthrough, clarify fresh/returning sample access, and keep Read Me reachable on phones (verified signed in at 360/390/1366px; no overflow or runtime errors; 24 tests pass)
+- [x] Add a distinctive monochrome handover identity to workspace, role headers and visual map (24 tests pass; category switching and source opening verified at 393/1366px without overflow or runtime errors)
 - [x] Review three security layers, fix invitation and company-reference access gaps, retain evidence and pass eight live security assertions
 - [ ] Complete Lovable deep code scan before publication — requires More → Security → Run deep scan in the editor
 - [ ] Review stored-plan direct-write enforcement and sensitive error telemetry — not established by this security review

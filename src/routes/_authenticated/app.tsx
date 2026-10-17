@@ -255,10 +255,10 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
       <div className="grid gap-4 sm:flex sm:items-end sm:justify-between">
         <div className="min-w-0">
           <div className="grid gap-2 sm:flex sm:items-center">
-            <h1 className="min-w-0 text-3xl sm:text-4xl">{name}</h1>
+            <h1 className="min-w-0 text-3xl sm:text-5xl">{name}</h1>
             {isSample && <Badge variant="outline" className="w-fit shrink-0 border-terracotta text-terracotta">Sample data</Badge>}
           </div>
-          <p className="mt-1 text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             {departments.length} departments · {roles.length} roles · {atRisk} at risk
           </p>
         </div>
@@ -266,18 +266,18 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
       </div>
 
       <div className="mt-8 space-y-10">
-        {departments.map((d) => {
+        {departments.map((d, departmentIndex) => {
           const deptRoles = roles.filter((r) => r.department_id === d.id);
           return (
             <section key={d.id}>
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border pb-2">
-                <h2 className="min-w-0 text-2xl sm:text-3xl">{d.name}</h2>
+                <div className="flex min-w-0 items-baseline gap-3"><span className="text-xs tabular-nums text-muted-foreground">{String(departmentIndex + 1).padStart(2, "0")}</span><h2 className="min-w-0 text-2xl">{d.name}</h2></div>
                 <AddRoleDialog companyId={companyId} departmentId={d.id} departmentName={d.name} onDone={refresh} />
               </div>
               {deptRoles.length === 0 ? (
                 <p className="mt-4 text-muted-foreground">No roles yet. Add the first role in {d.name} — e.g. "Accounts Lead".</p>
               ) : (
-                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
                   {deptRoles.map((r) => {
                     const s = scoreFor(r.id);
                     const risk = riskLabel(s);
@@ -287,12 +287,12 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                         key={r.id}
                         to="/roles/$roleId"
                         params={{ roleId: r.id }}
-                        className="paper-card group flex min-w-0 items-center gap-3 p-4 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring sm:gap-4 sm:p-5"
+                        className="group flex min-w-0 flex-col gap-5 rounded-lg border border-border p-5 transition-colors hover:border-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:p-6"
                       >
-                        <ScoreRing value={s} />
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-xl sm:text-2xl">{r.title}</h3>
-                          <p className="truncate text-sm text-muted-foreground">{r.holder_name || "No holder yet"}</p>
+                        <div className="flex w-full items-center justify-between gap-3"><ScoreRing value={s} /><ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden /></div>
+                        <div className="w-full min-w-0 flex-1">
+                          <h3 className="text-2xl sm:text-3xl">{r.title}</h3>
+                          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><span>{r.holder_name || "No holder yet"}</span>{r.successor_name && <><ArrowRight className="h-3 w-3" aria-hidden /><span>{r.successor_name}</span></>}</div>
                           <div className="mt-2 flex flex-wrap gap-1.5">
                             <Badge variant="outline" className={risk.tone === "danger" ? "border-destructive text-destructive" : risk.tone === "warn" ? "border-terracotta text-terracotta" : "border-success text-success"}>
                               {risk.label}
@@ -301,7 +301,6 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                             {pending > 0 && <Badge variant="secondary">{pending} to review</Badge>}
                           </div>
                         </div>
-                        <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden />
                       </Link>
                     );
                   })}
