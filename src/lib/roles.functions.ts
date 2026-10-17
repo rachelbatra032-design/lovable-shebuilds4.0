@@ -474,7 +474,7 @@ Each phase: one-sentence goal; 3-5 tasks; a checkpoint written as "By the end, y
 Each task: one short imperative sentence (max ~14 words), a type (meet / learn / shadow / do / review), when (e.g. "Day 1", "Before the 10th", "Every Friday") or null, with_person (a name from the map) or null, and item_id of the source map item or null.
 Make every task SELF-EXPLANATORY so the successor never has to ask around:
 - why: one sentence on why it matters (the consequence, e.g. lost input tax credit).
-- steps: 2-6 concrete numbered actions copied from the map's details — which screen/menu/report in which tool, what to check, exact thresholds, amounts, who to send to, what to say. For "meet" tasks, list the specific questions to ask and what to note down. For "learn" tasks, state the actual rule in full.
+- steps: 2-6 concrete actions (do NOT prefix them with numbers) copied from the map's details — which screen/menu/report in which tool, what to check, exact thresholds, amounts, who to send to, what to say. For "meet" tasks, list the specific questions to ask and what to note down. For "learn" tasks, state the actual rule in full.
 - done_when: one observable result (e.g. "Register emailed to Priya and saved in the GST folder").
 - ask_if_stuck: name of the person from the map to ask, or null.
 Only use facts in the map; if a detail is not in the map, say "Confirm with <holder>" instead of inventing.
