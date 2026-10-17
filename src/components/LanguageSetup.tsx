@@ -36,6 +36,12 @@ export function LanguageSetup() {
     if (prefs.data && !prefs.data.language_setup_done) setOpen(true);
   }, [prefs.data]);
 
+  // On a new device, start with the output language chosen at setup.
+  useEffect(() => {
+    const out = prefs.data?.output_language as LangCode | null | undefined;
+    if (out && !localStorage.getItem("kaimaaral-lang")) setLang(out);
+  }, [prefs.data, setLang]);
+
   useEffect(() => {
     if (!open || !prefs.data) return;
     setStep(1);

@@ -15,3 +15,5 @@
 - Knowledge items are stored in English with the original-language quote kept; other reading languages are cached in `knowledge_items.translations` on demand.
 - The completeness score formula lives only in `src/lib/knowledge.ts` and is covered by `knowledge.test.ts`.
 - Sample workspaces are created per user by a user-triggered server function, so each reviewer gets a private copy.
+- Role page UI lives in `src/components/role/RoleWorkspace.tsx` (route file only passes the id) so `src/test/role-tabs.test.tsx` can click every tab without a router; run `bunx vitest run` before publishing.
+- Browser runtime errors are logged by `src/lib/client-error-log.ts` (installed once in `__root`) into `client_errors` with page, last action and stack; keep it dependency-free so it can't itself crash the page.
