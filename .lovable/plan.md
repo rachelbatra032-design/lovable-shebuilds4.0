@@ -59,6 +59,30 @@ A warm "field notebook" look: off-white paper background, deep ink-green primary
 - **Phase 2**: KT and screen-recording capture/upload turned into step-by-step guides with screenshots, onboarding plan and checklist generator, department risk dashboard, "possibly outdated" marking.
 - **Later / outside this app**: a WhatsApp or Slack bot for sending voice notes, and a browser extension that records clicks (like Scribe). A browser extension can't be built inside this project; WhatsApp/Slack need their own business accounts.
 
+## SheBuilds submission (deadline Sun Oct 18, 12:29 IST, about 22 hours away)
+
+Judges reward one focused, working journey more than lots of features, so Phase 1 is the submission and Phase 2 only gets built if time allows. Category: **Business Operations**.
+
+Build order (each step leaves the app in a working state):
+1. Workspace, departments, roles, sign-in.
+2. Daily voice/text log in Malayalam/Hindi/Tamil/English, with transcription and extraction into the map.
+3. Map in Read and Visual modes, with source links and the language switch.
+4. Ask the role, with citations.
+5. Change confirmation cards and the completeness index.
+6. File and chat-export uploads.
+7. Phase 2 extras (KT/screen recordings first) if time remains.
+
+Pre-submission checklist built into the work:
+- **Judge can open the link**: publish to a .lovable.app URL. The home page explains the product and has a "Try the demo" button.
+- **Safe login**: a dedicated demo account (e.g. a fictional company "Kerala Spices Traders") with Finance and Marketing departments. The credentials go only in the private submission form.
+- **Sample data clearly labeled**: fictional seeded logs in Malayalam, Hindi and English, an extracted map, and one pending change card, all marked with a "Sample data" badge. No real personal data.
+- **Main journey works**: tested end to end while signed in as the demo user: record a note, see it processed, see the map update, ask a question.
+- **Security errors resolved**: run a security scan and fix every error before submitting.
+- **Known limitations** shown on an About page (e.g. maximum recording length, supported file types, accuracy can vary on regional dialects).
+- **Testing instructions and screenshots**: I'll write short testing steps and capture 3 screenshots for the form.
+- **Original build**: everything is created fresh in this project during the event, with no imported designs or templates.
+- After submission, no further edits. Any further work happens in a separate copy.
+
 ## Technical details
 
 - Lovable Cloud: email auth, profiles, `user_roles` table (admin/member), plus tables for companies, departments, roles, role_members, inputs (type, language, storage path, transcript, status), knowledge_items (kind, title, body, original_text, source_input_id, confidence), knowledge_links (graph edges), and chat threads/messages. RLS restricts all data to members of the same company.
