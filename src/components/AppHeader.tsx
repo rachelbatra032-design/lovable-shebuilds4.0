@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut } from "lucide-react";
+import { BookOpen, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Brand } from "./Brand";
@@ -40,8 +40,11 @@ export function AppHeader() {
           </select>
           <LanguageSetup />
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <Link to="/readme">Read Me</Link>
+          <Button asChild variant="ghost" size="sm" className="h-11 w-11 px-0 sm:h-9 sm:w-auto sm:px-3">
+            <Link to="/readme" aria-label="Read Me" title="Read Me">
+              <BookOpen className="sm:hidden" />
+              <span className="hidden sm:inline">Read Me</span>
+            </Link>
           </Button>
           <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
             <LogOut />

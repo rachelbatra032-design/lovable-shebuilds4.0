@@ -7,9 +7,9 @@ export const Route = createFileRoute("/readme")({
   head: () => ({
     meta: [
       { title: "Read Me — how to review Kaimaaral" },
-      { name: "description", content: "A 3-minute walkthrough of Kaimaaral: who it's for, what works, design choices and known limitations." },
+      { name: "description", content: "Start with a private sample company in Kaimaaral, explore sourced role knowledge, and test capture, answers and onboarding plans." },
       { property: "og:title", content: "Read Me — how to review Kaimaaral" },
-      { property: "og:description", content: "A 3-minute walkthrough: usefulness, functionality, user experience and originality." },
+      { property: "og:description", content: "A quick sample walkthrough, followed by usefulness, functionality, user experience and originality." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -48,17 +48,19 @@ function ReadMe() {
           </p>
         </div>
 
-        <Section n="Start here" title="Review it in 3 minutes">
+        <Section n="Start here" title="Try the sample first">
+          <p>Use your own account. No shared password, invitation, company files or microphone access is needed for this walkthrough.</p>
           <ol className="space-y-2 [&>li]:ml-5 [&>li]:list-decimal">
-            <li>Sign in, choose your recording languages and optional reading language, then choose <strong>Load sample company</strong>. This creates your own private copy of the fictional "Kerala Spices Traders".</li>
-            <li>Open <strong>Finance → Accounts Lead</strong> (Anitha, leaving soon). Note the completeness score.</li>
-            <li>On the <strong>Map</strong> tab, switch between <strong>Read</strong> and <strong>Visual</strong>. Click any item to see its source: the original Malayalam voice note and its English meaning.</li>
-            <li>Change the language at the top to <strong>മലയാളം / हिन्दी / தமிழ்</strong> — the map is translated on demand.</li>
-            <li>Open <strong>Review</strong>: a WhatsApp chat says the packaging vendor changed. Tap <strong>Confirm change</strong> and the map updates itself.</li>
-            <li>Open <strong>Ask</strong> and try "How do I pay a new vendor?" — the answer cites its sources.</li>
-            <li>Open <strong>Capture</strong> and record a short voice note in any language (or type one). Watch it get transcribed and added to the map.</li>
-            <li>Optional: <strong>Plan</strong> generates a 30–60–90-day handover plan with executable instructions and sources. Missing screen paths, decision criteria, approval rules or completion criteria are flagged; incomplete plans stay <strong>Draft</strong>.</li>
+            <li>Choose <strong>Open app</strong> and create an account or sign in. If email confirmation is requested, follow the link in your inbox. Choose your recording languages; select English as the optional reading language for the quickest first look.</li>
+            <li>Choose <strong>Load sample company</strong>. If a workspace already appears, choose <strong>New workspace → Or load the sample company</strong>. This creates your own private copy of fictional <strong>Kerala Spices Traders</strong>.</li>
+            <li>Open <strong>Finance → Accounts Lead</strong>. On <strong>Map</strong>, open a recorded item to inspect its source and original-language quote. Try <strong>Visual</strong>, then return to <strong>Read</strong> for the details.</li>
+            <li>Open <strong>Ask</strong> and select <strong>How do I pay a new vendor?</strong> Read the answer and open a cited source.</li>
+            <li>Open <strong>Capture</strong>, type a fictional work note under <strong>Note, email or chat</strong>, and choose <strong>Add to map</strong>. Wait for <strong>Added to map</strong> before switching panels, then find the extracted knowledge on <strong>Map</strong>.</li>
+            <li>Open <strong>Review</strong> and inspect the sample vendor change. Choose <strong>Confirm change</strong> to update your copy. If you already reviewed it, an empty review list is expected.</li>
+            <li>Open <strong>Plan</strong> and generate a plan if none exists. Inspect the instructions, sources and missing-detail flags. <strong>Draft is an intentional safety result</strong>: missing screen paths, decision criteria, approval rules or completion criteria prevent a plan from being marked Ready.</li>
           </ol>
+          <p><strong>Optional next:</strong> try a short voice note, upload a file, or change the reading language to Malayalam, Hindi or Tamil. Recording asks for microphone permission; translations and AI processing can take a little time.</p>
+          <p className="text-muted-foreground">All starting people, companies and figures are fictional and labeled Sample data. Notes you add are processed live by AI and belong only to your private sample copy.</p>
         </Section>
 
         <Section n="Criterion 1" title="Usefulness & understanding of the user">
