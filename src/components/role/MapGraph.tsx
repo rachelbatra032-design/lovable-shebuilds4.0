@@ -65,8 +65,9 @@ export default function MapGraph({
   return (
     <div className="paper-card h-[70vh] min-h-[480px] overflow-hidden">
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        key={nodes.map((n) => `${n.id}:${String(n.data["label"])}`).join("|") + edges.length}
+        defaultNodes={nodes}
+        defaultEdges={edges}
         fitView
         minZoom={0.2}
         onNodeClick={(_e: unknown, n: { id: string }) => {
