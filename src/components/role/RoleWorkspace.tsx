@@ -124,12 +124,12 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 aria-controls={`panel-${t.value}`}
                 onClick={() => setTab(t.value)}
                 className={cn(
-                  "inline-flex min-h-11 min-w-0 items-center justify-center rounded-md px-1 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9 sm:px-3 sm:text-sm",
+                  "inline-flex min-h-11 min-w-0 items-center justify-center whitespace-nowrap rounded-md px-1 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9 sm:px-3 sm:text-sm",
                   tab === t.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {t.label}
-                {t.value === "review" && pending > 0 && <span className="ml-1 rounded-full bg-terracotta px-1.5 text-xs text-terracotta-foreground">{pending}</span>}
+                {t.value === "review" && pending > 0 && <span className="ml-0.5 shrink-0 rounded-full bg-terracotta px-1 text-[10px] text-terracotta-foreground sm:ml-1 sm:px-1.5 sm:text-xs">{pending}</span>}
               </button>
             ))}
           </div>

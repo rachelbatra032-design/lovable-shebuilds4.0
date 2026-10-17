@@ -287,11 +287,11 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                         key={r.id}
                         to="/roles/$roleId"
                         params={{ roleId: r.id }}
-                        className="paper-card group flex items-center gap-4 p-5 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring"
+                        className="paper-card group flex min-w-0 items-center gap-3 p-4 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring sm:gap-4 sm:p-5"
                       >
                         <ScoreRing value={s} />
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate text-2xl">{r.title}</h3>
+                          <h3 className="text-xl sm:text-2xl">{r.title}</h3>
                           <p className="truncate text-sm text-muted-foreground">{r.holder_name || "No holder yet"}</p>
                           <div className="mt-2 flex flex-wrap gap-1.5">
                             <Badge variant="outline" className={risk.tone === "danger" ? "border-destructive text-destructive" : risk.tone === "warn" ? "border-terracotta text-terracotta" : "border-success text-success"}>
