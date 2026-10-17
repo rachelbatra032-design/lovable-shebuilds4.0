@@ -204,6 +204,42 @@
   --xy-handle-background-color: var(--muted-foreground);
 }
 
+.role-graph .handover-node {
+  width: 240px;
+  min-height: 66px;
+  padding: 18px 20px;
+  border-radius: 8px;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: none;
+}
+.role-graph .handover-node-role {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  font-size: 21px;
+  font-weight: 600;
+}
+.role-graph .handover-node-category {
+  background: var(--background);
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.role-graph .handover-node-active {
+  color: var(--foreground);
+  border-color: var(--foreground);
+  font-weight: 600;
+}
+.role-graph .handover-node-item {
+  background: var(--background);
+  cursor: pointer;
+}
+.role-graph .handover-edge .react-flow__edge-path { stroke: var(--border); }
+.role-graph .handover-edge-active .react-flow__edge-path { stroke: var(--muted-foreground); }
+.role-graph .handover-edge-related .react-flow__edge-path { stroke: var(--border); stroke-dasharray: 4 4; }
+
 @media print {
   .mobile-workspace-nav { display: none; }
 }
