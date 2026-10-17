@@ -104,6 +104,10 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
 
       {busy && <p className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Reading the role map and building the plan… this takes about half a minute.</p>}
 
+      {isV2 && !plan!.phases!.some((p) => p.tasks.some((t) => t.steps?.length)) && (
+        <div className="paper-card p-4 text-sm">Tap <strong>Make a new plan</strong> to get step-by-step instructions under every task.</div>
+      )}
+
       {plan && !isV2 && (
         <div className="paper-card p-5">
           <p>This plan was made with an older, simpler format. Tap <strong>Make a new plan</strong> for the clearer step-by-step version.</p>
@@ -191,6 +195,14 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
                                 {t.with_person && <span>with {t.with_person}</span>}
                                 <SourceLink id={t.item_id} onOpenItem={onOpenItem} />
                               </div>
+                              {t.why && <p className="mt-2 text-sm"><span className="font-semibold">Why: </span>{t.why}</p>}
+                              {!!t.steps?.length && (
+                                <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
+                                  {t.steps.map((st, si) => <li key={si}>{st}</li>)}
+                                </ol>
+                              )}
+                              {t.done_when && <p className="mt-2 text-sm"><span className="font-semibold">Done when: </span>{t.done_when}</p>}
+                              {t.ask_if_stuck && <p className="mt-1 text-xs text-muted-foreground">Stuck? Ask {t.ask_if_stuck}.</p>}
                             </div>
                           </li>
                         );
