@@ -30,9 +30,9 @@ const features = [
 function Landing() {
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+      <header className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-5 sm:flex sm:justify-between sm:px-5">
         <Brand />
-        <nav className="flex items-center gap-2">
+        <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
           <Button asChild variant="ghost">
             <Link to="/readme">Read Me</Link>
           </Button>
@@ -46,7 +46,7 @@ function Landing() {
         <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-6 md:grid-cols-2 md:pt-12">
           <div>
             <p className="text-sm font-medium uppercase tracking-widest text-terracotta">For Indian SMEs</p>
-            <h1 className="mt-3 text-5xl leading-[1.05] sm:text-6xl">
+            <h1 className="mt-3 text-4xl leading-[1.15] sm:text-5xl">
               When Anitha leaves, <em className="text-primary">how she does the job</em> shouldn't leave with her.
             </h1>
             <p className="mt-5 max-w-lg text-lg text-muted-foreground">
@@ -54,7 +54,7 @@ function Landing() {
               every role — ready for the next person.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
                 <Link to="/app">Try it with a sample company</Link>
               </Button>
               <Button asChild size="lg" variant="outline">

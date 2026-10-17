@@ -17,6 +17,7 @@
 - [x] Onboarding readiness check: flag missing screen paths, decision criteria, approval rules and completion criteria
 - [x] Basic security scan, signed-in main journey, labels, category, testing instructions and fallback verification
 - [x] Persistent route-loading fallback with retry after automatic recovery
+- [x] Simplify typography and verify phone/laptop layouts across sign-in, workspace and role tabs (360px, 390px, 1366px; no page overflow or runtime errors; 21 tests pass)
 - [ ] Publish and verify judge access — waits for user authorization to publish
 - [ ] Resolve remaining sprintf-js dependency warnings — no patched registry release available
 - [ ] Complete external Hub submission fields and optional screenshot uploads — Hub form unavailable here

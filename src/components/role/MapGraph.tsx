@@ -63,7 +63,7 @@ export default function MapGraph({
   }, [items, links, roleTitle, display]);
 
   return (
-    <div className="paper-card h-[70vh] min-h-[480px] overflow-hidden">
+    <div className="paper-card h-[60dvh] min-h-[320px] overflow-hidden sm:h-[70dvh] sm:min-h-[480px]">
       <ReactFlow
         key={nodes.map((n) => `${n.id}:${String(n.data["label"])}`).join("|") + edges.length}
         defaultNodes={nodes}

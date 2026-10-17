@@ -212,7 +212,7 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
               <span className="whitespace-normal text-xs text-muted-foreground">Becomes a step-by-step guide with screenshots</span>
             </Button>
           )}
-          <Button variant="link" className="justify-start sm:col-span-2" onClick={() => videoRef.current?.click()} disabled={busy}>
+          <Button variant="link" className="h-auto justify-start whitespace-normal text-left sm:col-span-2" onClick={() => videoRef.current?.click()} disabled={busy}>
             Upload a KT session video instead (max 25 MB)
           </Button>
           <input ref={videoRef} type="file" className="hidden" accept="video/*" onChange={onFile} />

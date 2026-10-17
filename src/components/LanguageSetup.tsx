@@ -80,7 +80,7 @@ export function LanguageSetup() {
         <Languages />
       </Button>
       <Dialog open={open} onOpenChange={(o) => (prefs.data?.language_setup_done || !o ? setOpen(o) : null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-md">
           {step === 1 ? (
             <>
               <DialogHeader>
