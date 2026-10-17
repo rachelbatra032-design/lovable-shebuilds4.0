@@ -466,19 +466,21 @@ Role: "${role?.title}". Outgoing holder: ${holder}. Successor: ${role?.successor
 Use ONLY facts from the role map items given. Never invent names, amounts or dates.
 
 Return exactly four phases, in this order:
-1. label "Get set up", timeframe "Days 1–2": access to tools, meet the outgoing holder and the 2-3 most important contacts, read the key decisions.
-2. label "Watch and learn", timeframe "Week 1": shadow ${holder} on the recurring tasks, learn decision rules and thresholds.
-3. label "Do it together", timeframe "Weeks 2–4": successor does the recurring tasks while ${holder} reviews; handle edge cases with help.
+1. label "Get set up", timeframe "Days 1–2": prepare the documented tools and records, read the actual decision rules and responsibilities.
+2. label "Learn the workflow", timeframe "Week 1": work through the recorded procedures and examples, stating the actual actions and decision rules in full.
+3. label "Practise the work", timeframe "Weeks 2–4": successor follows the documented procedures; include the real approval and review steps recorded in the map.
 4. label "Own it", timeframe "Month 2–3": runs the role alone, reviews what changed, updates the map.
 Each phase: one-sentence goal; 3-5 tasks; a checkpoint written as "By the end, you can …" (observable).
 Each task: one short imperative sentence (max ~14 words), a type (meet / learn / shadow / do / review), when (e.g. "Day 1", "Before the 10th", "Every Friday") or null, with_person (a name from the map) or null, and item_id of the source map item or null.
 Make every task SELF-EXPLANATORY so the successor never has to ask around:
 - why: one sentence on why it matters (the consequence, e.g. lost input tax credit).
-- steps: 2-6 concrete actions (do NOT prefix them with numbers) copied from the map's details — which screen/menu/report in which tool, what to check, exact thresholds, amounts, who to send to, what to say. For "meet" tasks, list the specific questions to ask and what to note down. For "learn" tasks, state the actual rule in full.
+- steps: 2-8 concrete actions (do NOT prefix them with numbers) synthesized across ALL relevant map items — which documented screen/menu/report to use, what to check, the exact recorded thresholds, amounts, recipients and approval sequence. For "learn" tasks, state the actual rule in full. Each step tells the successor what to DO, not what to ask someone to explain.
 - done_when: one observable result (e.g. "Register emailed to Priya and saved in the GST folder").
 - ask_if_stuck: name of the person from the map to ask, or null.
-Only use facts in the map; if a detail is not in the map, say "Confirm with <holder>" instead of inventing.
-Put recurring deadlines in the phase where they first fall, and give the shadow-then-do progression for each important recurring task.
+Do NOT create tasks or steps such as "Ask how she coordinates GST", "Ask which Tally export/screens she uses", "Ask how invoices are paid", "note the workflow", "confirm shadowing", or "arrange a meeting to learn the steps". These defeat the purpose of a handover plan. Do not turn missing information into questions for the successor.
+Instead, populate the actual GST preparation, checks, recorded handoff to the named contact, invoice verification, approval and payment workflow using every relevant map item. Mention people only when a documented action genuinely requires their approval, a handoff or escalation. Do not require the outgoing holder to be available; support is optional, not a dependency of the instructions.
+Only use facts in the map. Never invent a Tally menu path, GST portal screen, approval limit or procedure. If a necessary detail is absent, put "Not recorded: <specific missing detail>" in watch_outs, separate from the executable steps. If that gap prevents safe execution, state the blocked action in done_when; do not imply the task can be completed. Keep all available steps useful and explicit even when a detail is missing.
+Put recurring deadlines in the phase where they first fall, and give the recorded-example-to-independent-execution progression for each important recurring task.
 key_dates: up to 6 deadlines/cadences from the map. key_contacts: up to 6 people with why they matter. watch_outs: up to 5 edge cases or mistakes to avoid.
 summary: 1-2 sentences in plain words.
 Write everything in ${LANG_NAME[data.language]} (native script); keep names, amounts and tool names (Tally, GST…) as-is. Short, simple sentences.`,

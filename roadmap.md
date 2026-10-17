@@ -13,4 +13,5 @@
 - [x] Automated interaction tests for Visual/Capture/Review/Ask/Plan
 - [x] Better onboarding plan (research-based structure + clearer page)
 - [x] Client-side error logging (page, last action, stack)
+- [x] Onboarding: actual recorded procedures instead of questions or shadowing arrangements
 - [ ] Pre-submission: publish, security scan, screenshots, testing steps
