@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ReactFlow, Controls, type Node, type Edge } from "@xyflow/react";
+import { ReactFlow, Controls, Position, type Node, type Edge } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { KINDS, KIND_LABEL, type Kind } from "@/lib/knowledge";
 import type { KnowledgeItem } from "@/lib/queries";
@@ -31,7 +31,7 @@ export default function MapGraph({ roleTitle, items, links, display, onSelect }:
     links.forEach((link, index) => {
       if (ids.has(link.from_item) && ids.has(link.to_item)) edges.push({ id: `link-${index}`, source: link.from_item, target: link.to_item, className: "handover-edge-related", type: "smoothstep" });
     });
-    return { nodes, edges };
+    return { nodes: nodes.map((node) => ({ ...node, sourcePosition: Position.Right, targetPosition: Position.Left })), edges };
   }, [items, links, roleTitle, display, active, kinds.join("|")]);
 
   return (
