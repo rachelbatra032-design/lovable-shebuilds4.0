@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Field notebook design system: warm paper, ink green, terracotta.
+ * Minimal monochrome design system with quiet surfaces and functional status colors.
  * All colors in oklch.
  */
 
@@ -61,48 +61,48 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.975 0.012 85);
-  --paper: oklch(0.99 0.008 85);
-  --foreground: oklch(0.24 0.03 160);
-  --ink: oklch(0.24 0.03 160);
-  --card: oklch(0.99 0.008 85);
-  --card-foreground: oklch(0.24 0.03 160);
-  --popover: oklch(0.99 0.008 85);
-  --popover-foreground: oklch(0.24 0.03 160);
-  --primary: oklch(0.38 0.07 160);
-  --primary-foreground: oklch(0.97 0.015 85);
-  --secondary: oklch(0.93 0.02 85);
-  --secondary-foreground: oklch(0.28 0.04 160);
-  --muted: oklch(0.94 0.015 85);
-  --muted-foreground: oklch(0.47 0.025 150);
-  --accent: oklch(0.92 0.04 60);
-  --accent-foreground: oklch(0.35 0.08 40);
-  --terracotta: oklch(0.6 0.14 40);
-  --terracotta-foreground: oklch(0.98 0.01 85);
-  --turmeric: oklch(0.8 0.14 85);
-  --success: oklch(0.55 0.12 150);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(0.88 0.02 85);
-  --input: oklch(0.86 0.02 85);
-  --ring: oklch(0.38 0.07 160);
-  --kind-responsibility: oklch(0.45 0.08 160);
-  --kind-task: oklch(0.55 0.1 230);
-  --kind-decision: oklch(0.6 0.14 40);
-  --kind-contact: oklch(0.55 0.12 320);
-  --kind-tool: oklch(0.62 0.12 85);
-  --kind-edge: oklch(0.52 0.18 27);
-  --kind-guide: oklch(0.5 0.1 270);
-  --shadow-paper: 0 1px 0 oklch(0.88 0.02 85), 0 12px 30px -18px oklch(0.3 0.04 160 / 0.35);
-  --sidebar: oklch(0.96 0.015 85);
-  --sidebar-foreground: oklch(0.24 0.03 160);
-  --sidebar-primary: oklch(0.38 0.07 160);
-  --sidebar-primary-foreground: oklch(0.97 0.015 85);
-  --sidebar-accent: oklch(0.93 0.02 85);
-  --sidebar-accent-foreground: oklch(0.24 0.03 160);
-  --sidebar-border: oklch(0.88 0.02 85);
-  --sidebar-ring: oklch(0.38 0.07 160);
+  --radius: 0.5rem;
+  --background: oklch(1 0 0);
+  --paper: oklch(1 0 0);
+  --foreground: oklch(0.22 0 0);
+  --ink: var(--foreground);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.22 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.49 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: var(--foreground);
+  --terracotta: oklch(0.46 0 0);
+  --terracotta-foreground: var(--primary-foreground);
+  --turmeric: oklch(0.7 0 0);
+  --success: oklch(0.46 0.1 155);
+  --destructive: oklch(0.52 0.18 27);
+  --destructive-foreground: var(--primary-foreground);
+  --border: oklch(0.91 0 0);
+  --input: oklch(0.86 0 0);
+  --ring: var(--foreground);
+  --kind-responsibility: oklch(0.32 0 0);
+  --kind-task: oklch(0.45 0 0);
+  --kind-decision: oklch(0.38 0 0);
+  --kind-contact: oklch(0.5 0 0);
+  --kind-tool: oklch(0.42 0 0);
+  --kind-edge: var(--destructive);
+  --kind-guide: oklch(0.48 0 0);
+  --shadow-paper: none;
+  --sidebar: var(--muted);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 @layer base {
@@ -141,17 +141,12 @@
 @utility paper-card {
   background-color: var(--paper);
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-paper);
 }
 
 @utility ruled {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 31px,
-    oklch(0.88 0.02 85 / 0.6) 32px
-  );
+  background-image: none;
 }
 
 @utility mic-pulse {
@@ -159,6 +154,10 @@
 }
 
 @keyframes micpulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.6 0.14 40 / 0.45); }
-  50% { box-shadow: 0 0 0 18px oklch(0.6 0.14 40 / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 25%, transparent); }
+  50% { box-shadow: 0 0 0 18px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mic-pulse { animation: none; }
 }
