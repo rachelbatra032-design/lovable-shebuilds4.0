@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Brand } from "@/components/Brand";
+import { ThemeToggle } from "@/components/ThemeProvider";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: z.object({ redirect: z.string().optional() }),
@@ -78,8 +79,9 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto flex max-w-6xl px-5 py-6 sm:px-8">
+      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center px-5 py-6 sm:px-8">
         <Brand />
+        <ThemeToggle />
       </div>
       <div className="mx-auto flex max-w-sm flex-col px-5 pb-10 pt-10 sm:pt-16">
         <div>

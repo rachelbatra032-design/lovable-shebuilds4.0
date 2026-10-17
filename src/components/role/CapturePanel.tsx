@@ -148,18 +148,18 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
   const mmss = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+    <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
       <div className="space-y-5">
-        <div className="paper-card flex flex-col items-center p-8 text-center">
-          <p className="font-display text-3xl">What did you decide today, and why?</p>
-          <p className="mt-1 text-muted-foreground">Speak in Malayalam, Hindi, Tamil or English. A minute is plenty.</p>
+        <section className="flex flex-col items-center border-b border-border px-4 py-6 text-center sm:py-8">
+          <h2 className="text-2xl">What did you decide today, and why?</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Malayalam · Hindi · Tamil · English</p>
           <div className="mt-6">
             {recording === "voice" ? (
-              <Button size="mic" variant="terracotta" className="mic-pulse" onClick={stop} aria-label="Stop recording">
+              <Button size="mic" className="mic-pulse shadow-none" onClick={stop} aria-label="Stop recording">
                 <Square />
               </Button>
             ) : (
-              <Button size="mic" onClick={() => start("voice")} disabled={busy || !!recording} aria-label="Record a voice note">
+              <Button size="mic" className="shadow-none" onClick={() => start("voice")} disabled={busy || !!recording} aria-label="Record a voice note">
                 {busy ? <Loader2 className="animate-spin" /> : <Mic />}
               </Button>
             )}
@@ -167,10 +167,10 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
           <p className="mt-3 h-5 text-sm text-muted-foreground" aria-live="polite">
             {recording === "voice" ? `Recording… ${mmss}  · tap to finish` : busy ? "Processing…" : "Tap to record"}
           </p>
-        </div>
+        </section>
 
         <form
-          className="paper-card p-5"
+          className="py-2"
           onSubmit={(e) => {
             e.preventDefault();
             if (!note.trim()) return;
@@ -178,10 +178,10 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
             setNote("");
           }}
         >
-          <label htmlFor="note" className="font-medium">
-            Or type / paste a note, email thread or chat
+          <label htmlFor="note" className="text-sm font-semibold">
+            Note, email or chat
           </label>
-          <Textarea id="note" className="mt-2 min-h-28 text-base" value={note} onChange={(e) => setNote(e.target.value)} placeholder="ഇന്ന് GST file ചെയ്തു… / आज vendor को payment किया… / Today I…" />
+          <Textarea id="note" className="mt-3 min-h-32 bg-muted text-base shadow-none" value={note} onChange={(e) => setNote(e.target.value)} placeholder="ഇന്ന് GST file ചെയ്തു… / आज vendor को payment किया… / Today I…" />
           <div className="mt-3 flex justify-end">
             <Button type="submit" disabled={busy || !note.trim()}>
               <Send /> Add to map
@@ -190,22 +190,22 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
         </form>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <Button variant="paper" className="h-auto flex-col items-start gap-1 p-4 text-left" onClick={() => fileRef.current?.click()} disabled={busy}>
+          <Button variant="outline" className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={() => fileRef.current?.click()} disabled={busy}>
             <span className="flex items-center gap-2 font-semibold">
               <Upload /> Upload a file
             </span>
             <span className="whitespace-normal text-xs text-muted-foreground">PDF, Word, Excel, CSV, email or WhatsApp export, audio</span>
           </Button>
-          <input ref={fileRef} type="file" className="hidden" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,.eml,.json,audio/*" onChange={onFile} />
+          <input ref={fileRef} aria-label="Upload document or audio" type="file" className="hidden" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,.eml,.json,audio/*" onChange={onFile} />
           {recording === "screen" ? (
-            <Button variant="terracotta" className="h-auto flex-col items-start gap-1 p-4 text-left" onClick={stop}>
+            <Button className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={stop}>
               <span className="flex items-center gap-2 font-semibold">
                 <Square /> Stop screen recording · {mmss}
               </span>
               <span className="text-xs">Explain each step out loud as you go</span>
             </Button>
           ) : (
-            <Button variant="paper" className="h-auto flex-col items-start gap-1 p-4 text-left" onClick={() => start("screen")} disabled={busy || !!recording}>
+            <Button variant="outline" className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={() => start("screen")} disabled={busy || !!recording}>
               <span className="flex items-center gap-2 font-semibold">
                 <MonitorUp /> Record screen + voice
               </span>
@@ -215,30 +215,31 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
           <Button variant="link" className="h-auto justify-start whitespace-normal text-left sm:col-span-2" onClick={() => videoRef.current?.click()} disabled={busy}>
             Upload a KT session video instead (max 25 MB)
           </Button>
-          <input ref={videoRef} type="file" className="hidden" accept="video/*" onChange={onFile} />
+          <input ref={videoRef} aria-label="Upload session video" type="file" className="hidden" accept="video/*" onChange={onFile} />
         </div>
       </div>
 
-      <div>
-        <h3 className="text-2xl">Day-in-the-life log</h3>
-        <p className="text-sm text-muted-foreground">Everything captured for this role, newest first.</p>
-        <ul className="mt-3 space-y-3">
+      <section className="min-w-0">
+        <h2 className="text-xl">Capture history</h2>
+        <ul className="mt-3 divide-y divide-border">
           {inputs.length === 0 && <li className="text-muted-foreground">Nothing yet. Record your first voice note.</li>}
           {inputs.map((i) => (
-            <li key={i.id} className="paper-card p-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{i.title || i.kind}</span>
+            <li key={i.id} className="py-4">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
+                <span className="min-w-0 font-medium">{i.title || i.kind}</span>
+                <span className="flex shrink-0 flex-col items-end gap-1">
                 {i.language && <Badge variant="secondary">{LANG_LABEL[i.language] ?? i.language}</Badge>}
                 {i.is_sample && <Badge variant="outline" className="border-terracotta text-terracotta">Sample data</Badge>}
+                </span>
               </div>
               <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
-                {i.status === "done" ? <CheckCircle2 className="h-4 w-4 text-success" /> : i.status === "failed" ? <AlertCircle className="h-4 w-4 text-destructive" /> : <Loader2 className="h-4 w-4 animate-spin" />}
+                {i.status === "done" ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : i.status === "failed" ? <AlertCircle className="h-4 w-4 shrink-0 text-destructive" /> : <Loader2 className="h-4 w-4 shrink-0 animate-spin" />}
                 {STATUS[i.status]} · {formatDistanceToNow(new Date(i.created_at), { addSuffix: true })}
               </div>
               {i.original_text && <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-[0.98rem]">{i.original_text}</p>}
               {i.status === "failed" && (
-                <div className="mt-2 flex items-center justify-between gap-2 rounded-md bg-destructive/10 p-2 text-sm text-destructive">
-                  <span>{i.error}</span>
+                <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md bg-destructive/10 p-2 text-sm text-destructive">
+                  <span className="min-w-0">{i.error}</span>
                   <Button size="sm" variant="outline" onClick={() => retry(i.id)}>
                     <RotateCw /> Retry
                   </Button>
@@ -247,7 +248,7 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
             </li>
           ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 }

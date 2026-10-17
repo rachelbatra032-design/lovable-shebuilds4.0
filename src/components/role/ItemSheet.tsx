@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { KIND_COLOR_VAR, KIND_SINGULAR, type Kind, type LangCode } from "@/lib/knowledge";
+import { KIND_SINGULAR, type Kind, type LangCode } from "@/lib/knowledge";
 import type { InputRow, KnowledgeItem } from "@/lib/queries";
 import { signedUrl } from "@/lib/capture";
 import { displayItem, LANG_LABEL } from "./display";
@@ -89,10 +89,10 @@ export function ItemSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader>
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: KIND_COLOR_VAR[item.kind as Kind] }}>
+          <span className="text-xs font-semibold text-muted-foreground">
             {KIND_SINGULAR[item.kind as Kind]}
           </span>
-          <SheetTitle className="font-display text-3xl font-normal leading-tight">{d.title}</SheetTitle>
+          <SheetTitle className="font-display text-2xl font-semibold leading-tight">{d.title}</SheetTitle>
           <SheetDescription className="sr-only">Details and source</SheetDescription>
         </SheetHeader>
         <div className="space-y-5 px-4 pb-8">
