@@ -46,7 +46,7 @@ export function SourceBlock({ input }: { input: InputRow }) {
   );
 }
 
-function GuideMedia({ media }: { media: (string | null)[] }) {
+function useGuideMedia({ media }: { media: (string | null)[] }) {
   const [urls, setUrls] = useState<(string | null)[]>([]);
   useEffect(() => {
     Promise.all(media.map((m) => (m ? signedUrl(m) : Promise.resolve(null)))).then(setUrls);
@@ -68,7 +68,7 @@ export function ItemSheet({
   onOpenChange: (o: boolean) => void;
 }) {
   const media = (item?.media as (string | null)[] | null) ?? [];
-  const urls = GuideMedia({ media });
+  const urls = useGuideMedia({ media });
   if (!item) return null;
   const d = displayItem(item, lang);
   const source = inputs.find((i) => i.id === item.source_input_id);

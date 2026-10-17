@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ReadmeRouteImport } from './routes/readme'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedRolesRoleIdRouteImport } from './routes/_authenticated/roles.$roleId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,18 +40,26 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   path: '/app',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRolesRoleIdRoute =
+  AuthenticatedRolesRoleIdRouteImport.update({
+    id: '/roles/$roleId',
+    path: '/roles/$roleId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/readme': typeof ReadmeRoute
   '/app': typeof AuthenticatedAppRoute
+  '/roles/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/readme': typeof ReadmeRoute
   '/app': typeof AuthenticatedAppRoute
+  '/roles/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +68,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/readme': typeof ReadmeRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/roles/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/readme' | '/app'
+  fullPaths: '/' | '/auth' | '/readme' | '/app' | '/roles/$roleId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/readme' | '/app'
+  to: '/' | '/auth' | '/readme' | '/app' | '/roles/$roleId'
   id:
     | '__root__'
     | '/'
@@ -72,6 +82,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/readme'
     | '/_authenticated/app'
+    | '/_authenticated/roles/$roleId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,15 +129,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/roles/$roleId': {
+      id: '/_authenticated/roles/$roleId'
+      path: '/roles/$roleId'
+      fullPath: '/roles/$roleId'
+      preLoaderRoute: typeof AuthenticatedRolesRoleIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedRolesRoleIdRoute: typeof AuthenticatedRolesRoleIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedRolesRoleIdRoute: AuthenticatedRolesRoleIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

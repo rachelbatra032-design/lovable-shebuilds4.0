@@ -13,7 +13,7 @@ export class AiError extends Error {
 }
 
 function apiKey() {
-  const key = process.env.LOVABLE_API_KEY;
+  const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new AiError(401, "AI is not configured for this app.");
   return key;
 }

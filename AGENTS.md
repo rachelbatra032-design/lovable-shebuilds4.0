@@ -8,3 +8,10 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture rules
+- Data access is company-scoped via RLS helper `is_company_member`; storage paths start with the company id so the same check covers files.
+- All AI calls live in `src/lib/ai.server.ts` (streamed raw HTTP to the Lovable AI Gateway) and are dynamically imported inside server functions in `src/lib/roles.functions.ts`, keeping keys server-only.
+- Knowledge items are stored in English with the original-language quote kept; other reading languages are cached in `knowledge_items.translations` on demand.
+- The completeness score formula lives only in `src/lib/knowledge.ts` and is covered by `knowledge.test.ts`.
+- Sample workspaces are created per user by a user-triggered server function, so each reviewer gets a private copy.
