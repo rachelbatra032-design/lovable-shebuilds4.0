@@ -109,5 +109,6 @@ export const roleChangesQuery = (roleId: string) =>
     },
   });
 
-export type KnowledgeItem = Awaited<ReturnType<NonNullable<ReturnType<typeof roleItemsQuery>["queryFn"]>>>["items"][number];
-export type InputRow = Awaited<ReturnType<NonNullable<ReturnType<typeof roleInputsQuery>["queryFn"]>>>[number];
+import type { Database } from "@/integrations/supabase/types";
+export type KnowledgeItem = Database["public"]["Tables"]["knowledge_items"]["Row"];
+export type InputRow = Database["public"]["Tables"]["inputs"]["Row"];
