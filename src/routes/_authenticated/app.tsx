@@ -27,6 +27,8 @@ export const Route = createFileRoute("/_authenticated/app")({
       { name: "description", content: "Departments, roles and how well each role is documented." },
       { property: "og:title", content: "Workspace — Kaimaaral" },
       { property: "og:description", content: "Departments, roles and how well each role is documented." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AppHome,

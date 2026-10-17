@@ -11,6 +11,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Staff speak 60-second voice notes in Malayalam, Hindi, Tamil or English. AI turns them into a living onboarding map for every role." },
       { property: "og:title", content: "Kaimaaral — keep role knowledge when people leave" },
       { property: "og:description", content: "Voice-first, regional-language role mapping and handover for Indian SMEs." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Landing,

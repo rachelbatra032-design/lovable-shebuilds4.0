@@ -6,7 +6,7 @@ function fixture() {
   const procedure_checks = Object.fromEntries(PLAN_CRITERIA.map((key) => [key, {
     status: "documented", detail: body, source_item_id: "invoice", source_quote: body,
   }])) as ProcedureChecks;
-  return { phases: [{ tasks: [{ steps: [body], done_when: "Payment receipt saved", procedure_checks }] }] };
+  return { phases: [{ tasks: [{ steps: [body], done_when: "Payment receipt saved", procedure_checks }] as [{ steps: string[]; done_when: string; procedure_checks: ProcedureChecks }] }] as [{ tasks: [{ steps: string[]; done_when: string; procedure_checks: ProcedureChecks }] }] };
 }
 const sources = [{ id: "invoice", body }];
 describe("Onboarding readiness", () => {

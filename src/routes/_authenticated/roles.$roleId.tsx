@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/roles/$roleId")({
       { name: "description", content: "How this role works: tasks, decisions, people, tools and edge cases." },
       { property: "og:title", content: "Role map — Kaimaaral" },
       { property: "og:description", content: "How this role works: tasks, decisions, people, tools and edge cases." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: RolePage,
