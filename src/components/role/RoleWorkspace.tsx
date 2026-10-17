@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ScoreRing";
 import { roleChangesQuery, roleInputsQuery, roleItemsQuery, roleQuery, type KnowledgeItem } from "@/lib/queries";
-import { completeness, KINDS, KIND_COLOR_VAR, KIND_LABEL, type Kind } from "@/lib/knowledge";
+import { completeness, KINDS, KIND_LABEL, type Kind } from "@/lib/knowledge";
 import { useLang } from "@/lib/use-lang";
 import { translateItems, type OnboardingPlan } from "@/lib/roles.functions";
 import { displayItem } from "./display";
@@ -99,7 +99,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:flex sm:gap-5">
           <div className="shrink-0"><ScoreRing value={score} size={76} /></div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm uppercase tracking-widest text-muted-foreground">{dept}</p>
+            <p className="text-sm text-muted-foreground">{dept}</p>
             <h1 className="text-2xl sm:text-4xl">{r.title}</h1>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground sm:text-base">
               {r.holder_name ?? "No holder"}
@@ -113,7 +113,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         </div>
 
         <div className="mt-6">
-          <div role="tablist" aria-label="Role sections" className="grid w-full grid-cols-5 gap-1 rounded-lg bg-secondary p-1 sm:inline-flex sm:w-auto">
+          <div role="tablist" aria-label="Role sections" className="grid w-full grid-cols-5 gap-1 border-b border-border sm:flex">
             {TABS.map((t) => (
               <button
                 key={t.value}
@@ -124,8 +124,8 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 aria-controls={`panel-${t.value}`}
                 onClick={() => setTab(t.value)}
                 className={cn(
-                  "inline-flex min-h-11 min-w-0 items-center justify-center whitespace-nowrap rounded-md px-1 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9 sm:px-3 sm:text-sm",
-                  tab === t.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+                  "inline-flex min-h-11 min-w-0 items-center justify-center whitespace-nowrap border-b-2 px-1 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:px-5 sm:text-sm",
+                  tab === t.value ? "border-foreground text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
                 )}
               >
                 {t.label}
@@ -138,7 +138,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
             {tab === "map" && (
               <>
                 <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
-                  <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-lg border border-border bg-paper p-1">
+                  <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-lg bg-muted p-1">
                     {(
                       [
                         { v: "read", label: "Read", Icon: BookText },
@@ -173,8 +173,8 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 ) : mode === "read" ? (
                   <div className="grid gap-5 md:grid-cols-2">
                     {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k) => (
-                      <section key={k} className="paper-card p-5" style={{ borderTop: `4px solid ${KIND_COLOR_VAR[k as Kind]}` }}>
-                        <h2 className="text-2xl">{KIND_LABEL[k as Kind]}</h2>
+                      <section key={k} className="min-w-0 border-t border-border py-5">
+                        <h2 className="text-lg">{KIND_LABEL[k as Kind]}</h2>
                         <ul className="mt-3 divide-y divide-border">
                           {list
                             .filter((i) => i.kind === k)

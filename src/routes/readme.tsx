@@ -18,9 +18,9 @@ export const Route = createFileRoute("/readme")({
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="paper-card p-6 sm:p-8">
-      <p className="text-sm font-medium uppercase tracking-widest text-terracotta">{n}</p>
-      <h2 className="mt-1 text-3xl sm:text-4xl">{title}</h2>
+    <section className="border-t border-border py-6 sm:py-8">
+      <p className="text-sm font-medium text-muted-foreground">{n}</p>
+      <h2 className="mt-2 text-2xl sm:text-3xl">{title}</h2>
       <div className="mt-4 space-y-3 text-[1.02rem] leading-relaxed [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold">{children}</div>
     </section>
   );
@@ -91,7 +91,7 @@ function ReadMe() {
             <li><strong>Built for phones first</strong> for daily logging: one big mic button, with no forms to fill in.</li>
             <li><strong>Read / Visual toggle</strong> for different learning styles.</li>
             <li><strong>Proper Indic fonts</strong> (Noto Sans Malayalam, Devanagari, Tamil) at a readable size, with the original language always one tap away.</li>
-            <li>A warm "field notebook" look, high-contrast text, keyboard-accessible controls, and empty states that explain what to do next.</li>
+            <li>A minimal monochrome layout, consistent typography, high-contrast text and keyboard-accessible controls on phones and laptops.</li>
           </ul>
         </Section>
 

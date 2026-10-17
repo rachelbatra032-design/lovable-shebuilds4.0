@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowUp, Loader2, BookOpenCheck } from "lucide-react";
+import { ArrowUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -66,16 +66,15 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
   const byId = new Map(items.map((i) => [i.id, i]));
 
   return (
-    <div className="paper-card flex h-[65dvh] min-h-[360px] max-h-[800px] flex-col">
+    <div className="mx-auto flex h-[65dvh] min-h-[360px] max-h-[800px] max-w-3xl flex-col">
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto p-4 sm:p-5" aria-live="polite">
         {msgs.length === 0 && (
-          <div className="py-6 text-center">
-            <BookOpenCheck className="mx-auto h-10 w-10 text-primary" aria-hidden />
-            <p className="mt-3 font-display text-3xl">Ask the {roleTitle}</p>
-            <p className="text-muted-foreground">Answers come only from this role's map, with sources. Change the language at the top.</p>
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <div className="py-10 text-center sm:py-16">
+            <p className="font-display text-2xl sm:text-3xl">Ask the {roleTitle}</p>
+            <p className="mt-2 text-sm text-muted-foreground">Grounded in this role’s recorded knowledge.</p>
+            <div className="mt-6 grid gap-1 text-left sm:mx-auto sm:max-w-lg">
               {SUGGESTIONS.map((s) => (
-                <Button key={s} variant="outline" size="sm" className="h-auto whitespace-normal py-2" onClick={() => send(s)}>
+                <Button key={s} variant="ghost" size="sm" className="h-auto justify-start whitespace-normal py-3 text-left text-muted-foreground" onClick={() => send(s)}>
                   {s}
                 </Button>
               ))}
@@ -84,7 +83,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
         )}
         {msgs.map((m, i) =>
           m.role === "user" ? (
-            <div key={i} className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-primary-foreground">
+            <div key={i} className="ml-auto w-fit max-w-[85%] rounded-lg bg-secondary px-4 py-2.5 text-foreground">
               {m.text}
             </div>
           ) : (
@@ -130,7 +129,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
         <div ref={endRef} />
       </div>
       <form
-        className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 border-t border-border p-3"
+        className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-lg border border-border bg-muted p-3"
         onSubmit={(e) => {
           e.preventDefault();
           send(q);
@@ -146,7 +145,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
             }
           }}
           placeholder="Ask anything about this role…"
-          className="min-h-11 flex-1 resize-none text-base"
+          className="min-h-11 flex-1 resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0"
           rows={1}
           aria-label="Your question"
         />
