@@ -24,7 +24,7 @@ async def main():
         await page.evaluate("([k,v]) => localStorage.setItem(k,v)",
                             [minted["storage_key"], json.dumps(minted["session"])])
         await page.goto("http://localhost:8080/app")
-        await page.get_by_role("heading", name="Your workspace", exact=True).wait_for()
+        await page.wait_for_function("document.querySelectorAll("a[href*=roles]").length > 0")
         Path("/tmp/browser/security").mkdir(parents=True, exist_ok=True)
         await page.screenshot(path="/tmp/browser/security/workspace.png")
         async def query(operation, payload):
