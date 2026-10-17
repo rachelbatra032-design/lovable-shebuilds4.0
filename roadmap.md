@@ -16,3 +16,5 @@
 - [x] Onboarding: actual recorded procedures instead of questions or shadowing arrangements
 - [x] Onboarding readiness check: flag missing screen paths, decision criteria, approval rules and completion criteria
 - [ ] Pre-submission: publish, security scan, screenshots, testing steps
+- [ ] Verify judge access, safe login, main journey, labels, category and submission fields
+- [ ] Persistent route-loading fallback with retry after automatic recovery
