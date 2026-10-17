@@ -1,81 +1,57 @@
-import { useMemo } from "react";
-import { ReactFlow, Background, Controls, type Node, type Edge } from "@xyflow/react";
+import { useMemo, useState } from "react";
+import { ReactFlow, Controls, type Node, type Edge } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { KINDS, KIND_COLOR_VAR, KIND_LABEL, type Kind } from "@/lib/knowledge";
+import { KINDS, KIND_LABEL, type Kind } from "@/lib/knowledge";
 import type { KnowledgeItem } from "@/lib/queries";
 
-export default function MapGraph({
-  roleTitle,
-  items,
-  links,
-  display,
-  onSelect,
-}: {
+export default function MapGraph({ roleTitle, items, links, display, onSelect }: {
   roleTitle: string;
   items: KnowledgeItem[];
   links: { from_item: string; to_item: string }[];
   display: (i: KnowledgeItem) => { title: string };
   onSelect: (id: string) => void;
 }) {
+  const kinds = KINDS.filter((k) => items.some((i) => i.kind === k));
+  const [expanded, setExpanded] = useState<Kind>(kinds[0] ?? "responsibility");
+  const active = kinds.includes(expanded) ? expanded : kinds[0];
   const { nodes, edges } = useMemo(() => {
-    const nodes: Node[] = [];
+    const group = items.filter((i) => i.kind === active);
+    const height = Math.max(kinds.length * 100, group.length * 100);
+    const nodes: Node[] = [{ id: "role", position: { x: 0, y: height / 2 - 35 }, data: { label: roleTitle }, className: "handover-node handover-node-role", draggable: false }];
     const edges: Edge[] = [];
-    const kinds = KINDS.filter((k) => items.some((i) => i.kind === k));
-    nodes.push({
-      id: "role",
-      position: { x: -90, y: -28 },
-      data: { label: roleTitle },
-      style: { background: "var(--primary)", color: "var(--primary-foreground)", border: "none", borderRadius: 8, width: 180, fontFamily: "var(--font-display)", fontSize: 18, padding: 12 },
-      draggable: true,
+    kinds.forEach((k, index) => {
+      nodes.push({ id: `kind-${k}`, position: { x: 320, y: height / 2 - kinds.length * 50 + index * 100 }, data: { label: `${KIND_LABEL[k]} · ${items.filter((i) => i.kind === k).length}` }, className: `handover-node handover-node-category ${active === k ? "handover-node-active" : ""}`, draggable: false });
+      edges.push({ id: `role-${k}`, source: "role", target: `kind-${k}`, type: "smoothstep", className: active === k ? "handover-edge-active" : "handover-edge" });
     });
-    kinds.forEach((k, ki) => {
-      const angle = (ki / kinds.length) * Math.PI * 2 - Math.PI / 2;
-      const hx = Math.cos(angle) * 330;
-      const hy = Math.sin(angle) * 260;
-      const color = KIND_COLOR_VAR[k as Kind];
-      nodes.push({
-        id: `kind-${k}`,
-        position: { x: hx - 80, y: hy - 18 },
-        data: { label: KIND_LABEL[k as Kind] },
-        style: { background: "var(--muted)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 8, width: 160, fontWeight: 600, fontSize: 13 },
-      });
-      edges.push({ id: `e-role-${k}`, source: "role", target: `kind-${k}`, style: { stroke: color, strokeWidth: 2 } });
-      const group = items.filter((i) => i.kind === k);
-      group.forEach((it, ii) => {
-        const spread = Math.min(1.1, 0.28 * group.length);
-        const a = angle + (group.length > 1 ? (ii / (group.length - 1) - 0.5) * spread : 0);
-        const dist = 560 + (ii % 2) * 90;
-        nodes.push({
-          id: it.id,
-          position: { x: Math.cos(a) * dist - 85, y: Math.sin(a) * dist * 0.8 - 20 },
-          data: { label: display(it).title },
-          style: { background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)", borderRadius: 8, width: 170, fontSize: 13, textAlign: "left", cursor: "pointer" },
-        });
-        edges.push({ id: `e-${k}-${it.id}`, source: `kind-${k}`, target: it.id, style: { stroke: color, opacity: 0.5 } });
-      });
+    group.forEach((item, index) => {
+      nodes.push({ id: item.id, position: { x: 680, y: height / 2 - group.length * 50 + index * 100 }, data: { label: display(item).title }, className: "handover-node handover-node-item", draggable: false });
+      edges.push({ id: `item-${item.id}`, source: `kind-${active}`, target: item.id, type: "smoothstep", className: "handover-edge-active" });
     });
-    const ids = new Set(items.map((i) => i.id));
-    links.forEach((l, i) => {
-      if (ids.has(l.from_item) && ids.has(l.to_item))
-        edges.push({ id: `l-${i}`, source: l.from_item, target: l.to_item, style: { stroke: "var(--terracotta)", strokeDasharray: "4 4" }, animated: false });
+    const ids = new Set(group.map((i) => i.id));
+    links.forEach((link, index) => {
+      if (ids.has(link.from_item) && ids.has(link.to_item)) edges.push({ id: `link-${index}`, source: link.from_item, target: link.to_item, className: "handover-edge-related", type: "smoothstep" });
     });
     return { nodes, edges };
-  }, [items, links, roleTitle, display]);
+  }, [items, links, roleTitle, display, active, kinds.join("|")]);
 
   return (
-    <div className="role-graph h-[60dvh] min-h-[320px] overflow-hidden rounded-lg border border-border bg-background sm:h-[70dvh] sm:min-h-[480px]">
+    <div className="role-graph relative h-[60dvh] min-h-[400px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[70dvh] sm:min-h-[520px]">
+      <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-background px-4 py-3">
+        <span className="text-sm font-medium">{active ? KIND_LABEL[active] : roleTitle}</span>
+        <span className="text-xs tabular-nums text-muted-foreground">{items.filter((i) => i.kind === active).length} records</span>
+      </div>
       <ReactFlow
         key={nodes.map((n) => `${n.id}:${String(n.data["label"])}`).join("|") + edges.length}
-        defaultNodes={nodes}
-        defaultEdges={edges}
-        fitView
-        minZoom={0.2}
-        onNodeClick={(_e: unknown, n: { id: string }) => {
-          if (n.id !== "role" && !n.id.startsWith("kind-")) onSelect(n.id);
+        defaultNodes={nodes} defaultEdges={edges} fitView fitViewOptions={{ padding: 0.22 }} minZoom={0.2}
+        nodesConnectable={false}
+        onNodeClick={(_event, node) => {
+          if (node.id.startsWith("kind-")) {
+            const kind = kinds.find((k) => `kind-${k}` === node.id);
+            if (kind) setExpanded(kind);
+          } else if (node.id !== "role") onSelect(node.id);
         }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="var(--border)" gap={24} />
         <Controls showInteractive={false} />
       </ReactFlow>
     </div>
