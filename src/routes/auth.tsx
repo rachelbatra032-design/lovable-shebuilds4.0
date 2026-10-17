@@ -82,7 +82,7 @@ function AuthPage() {
       <div className="mx-auto flex max-w-md flex-col px-5 py-8">
         <Brand />
         <div className="paper-card mt-10 p-6 sm:p-8">
-          <h1 className="text-4xl">{mode === "signup" ? "Start your workspace" : "Welcome back"}</h1>
+          <h1 className="text-3xl sm:text-4xl">{mode === "signup" ? "Start your workspace" : "Welcome back"}</h1>
           <p className="mt-2 text-muted-foreground">
             {mode === "signup" ? "Free to try. You can load a sample company right after." : "Sign in to your team's role maps."}
           </p>

@@ -66,8 +66,8 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
   const byId = new Map(items.map((i) => [i.id, i]));
 
   return (
-    <div className="paper-card flex min-h-[60vh] flex-col">
-      <div className="flex-1 space-y-6 overflow-y-auto p-5" aria-live="polite">
+    <div className="paper-card flex h-[65dvh] min-h-[360px] max-h-[800px] flex-col">
+      <div className="min-h-0 flex-1 space-y-6 overflow-y-auto p-4 sm:p-5" aria-live="polite">
         {msgs.length === 0 && (
           <div className="py-6 text-center">
             <BookOpenCheck className="mx-auto h-10 w-10 text-primary" aria-hidden />
@@ -110,7 +110,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
                       {m.cited.map((id) => {
                         const it = byId.get(id);
                         return it ? (
-                          <button key={id} onClick={() => onOpenItem(id)} className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs hover:border-primary">
+                          <button key={id} onClick={() => onOpenItem(id)} className="max-w-full rounded-full border border-border bg-background px-2.5 py-0.5 text-left text-xs hover:border-primary">
                             {displayItem(it, lang).title}
                           </button>
                         ) : null;
@@ -130,7 +130,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
         <div ref={endRef} />
       </div>
       <form
-        className="flex items-end gap-2 border-t border-border p-3"
+        className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 border-t border-border p-3"
         onSubmit={(e) => {
           e.preventDefault();
           send(q);

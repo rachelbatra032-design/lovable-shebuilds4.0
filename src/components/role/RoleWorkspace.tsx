@@ -96,12 +96,12 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> {co?.name}
         </Link>
-        <div className="mt-3 flex flex-wrap items-center gap-5">
-          <ScoreRing value={score} size={76} />
+        <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:flex sm:gap-5">
+          <div className="shrink-0"><ScoreRing value={score} size={76} /></div>
           <div className="min-w-0 flex-1">
             <p className="text-sm uppercase tracking-widest text-muted-foreground">{dept}</p>
-            <h1 className="text-4xl sm:text-5xl">{r.title}</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl sm:text-4xl">{r.title}</h1>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground sm:text-base">
               {r.holder_name ?? "No holder"}
               {r.status === "leaving" && <> · <span className="text-terracotta">leaving soon</span></>}
               {r.successor_name && <> · next: {r.successor_name}</>}
@@ -109,11 +109,11 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
               {score}% documented, based on the last 30 days
             </p>
           </div>
-          {co?.is_sample && <Badge variant="outline" className="border-terracotta text-terracotta">Sample data</Badge>}
+          {co?.is_sample && <Badge variant="outline" className="col-start-2 w-fit shrink-0 border-terracotta text-terracotta">Sample data</Badge>}
         </div>
 
         <div className="mt-6">
-          <div role="tablist" aria-label="Role sections" className="inline-flex h-auto w-full flex-wrap justify-start gap-1 rounded-lg bg-secondary p-1 sm:w-auto">
+          <div role="tablist" aria-label="Role sections" className="grid w-full grid-cols-5 gap-1 rounded-lg bg-secondary p-1 sm:inline-flex sm:w-auto">
             {TABS.map((t) => (
               <button
                 key={t.value}
@@ -124,7 +124,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 aria-controls={`panel-${t.value}`}
                 onClick={() => setTab(t.value)}
                 className={cn(
-                  "inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                  "inline-flex min-h-11 min-w-0 items-center justify-center rounded-md px-1 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9 sm:px-3 sm:text-sm",
                   tab === t.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -137,7 +137,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5">
             {tab === "map" && (
               <>
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
                   <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-lg border border-border bg-paper p-1">
                     {(
                       [
@@ -151,7 +151,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                         aria-pressed={mode === v}
                         onClick={() => setMode(v)}
                         className={cn(
-                          "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                          "inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9",
                           mode === v ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground",
                         )}
                       >
@@ -184,7 +184,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                                 <li key={i.id}>
                                   <button onClick={() => setSelected(i.id)} className="w-full py-3 text-left hover:text-primary focus-visible:outline-2 focus-visible:outline-ring">
                                     <span className="flex items-start justify-between gap-2">
-                                      <span className="font-medium">{d.title}</span>
+                                      <span className="min-w-0 font-medium">{d.title}</span>
                                       {d.cadence && <Badge variant="secondary" className="shrink-0">{d.cadence}</Badge>}
                                     </span>
                                     <span className="mt-0.5 line-clamp-2 block text-sm text-muted-foreground">{d.body}</span>

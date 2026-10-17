@@ -10,7 +10,7 @@
  */
 
 @theme inline {
-  --font-display: "Instrument Serif", "Noto Serif Malayalam", Georgia, serif;
+  --font-display: "Work Sans", "Noto Sans Malayalam", "Noto Sans Devanagari", "Noto Sans Tamil", system-ui, sans-serif;
   --font-sans: "Work Sans", "Noto Sans Malayalam", "Noto Sans Devanagari", "Noto Sans Tamil", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -117,11 +117,24 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    overflow-wrap: anywhere;
   }
   h1, h2, h3 {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+  input, textarea, select, button {
+    font-family: inherit;
+  }
+  @media (max-width: 639px) {
+    input, textarea, select {
+      font-size: 1rem;
+    }
+    button, [role="tab"], select {
+      min-height: 44px;
+    }
   }
 }
 
