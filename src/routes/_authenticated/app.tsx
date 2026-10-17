@@ -51,10 +51,10 @@ function AppHome() {
           <Onboarding onCreated={(id) => navigate({ search: { c: id } })} />
         ) : (
           <>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
+            <div className="mb-6 grid gap-3 sm:flex sm:items-center">
               {list.length > 1 ? (
                 <Select value={current.id} onValueChange={(v) => navigate({ search: { c: v } })}>
-                  <SelectTrigger className="w-auto min-w-[14rem]" aria-label="Workspace">
+                  <SelectTrigger className="w-full min-w-0 sm:w-auto sm:min-w-[14rem]" aria-label="Workspace">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -185,7 +185,7 @@ function Onboarding({ onCreated }: { onCreated: (id: string) => void }) {
 
   return (
     <div className="mx-auto max-w-3xl py-6">
-      <h1 className="text-5xl">Let's map your first role</h1>
+      <h1 className="text-3xl sm:text-5xl">Let's map your first role</h1>
       <p className="mt-2 text-lg text-muted-foreground">Start from a ready-made example, or set up your own company in a minute.</p>
 
       {invites.data?.length ? (
@@ -252,11 +252,11 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-4xl sm:text-5xl">{name}</h1>
-            {isSample && <Badge variant="outline" className="border-terracotta text-terracotta">Sample data</Badge>}
+      <div className="grid gap-4 sm:flex sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <div className="grid gap-2 sm:flex sm:items-center">
+            <h1 className="min-w-0 text-3xl sm:text-4xl">{name}</h1>
+            {isSample && <Badge variant="outline" className="w-fit shrink-0 border-terracotta text-terracotta">Sample data</Badge>}
           </div>
           <p className="mt-1 text-muted-foreground">
             {departments.length} departments · {roles.length} roles · {atRisk} at risk
@@ -270,8 +270,8 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
           const deptRoles = roles.filter((r) => r.department_id === d.id);
           return (
             <section key={d.id}>
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <h2 className="text-3xl">{d.name}</h2>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border pb-2">
+                <h2 className="min-w-0 text-2xl sm:text-3xl">{d.name}</h2>
                 <AddRoleDialog companyId={companyId} departmentId={d.id} departmentName={d.name} onDone={refresh} />
               </div>
               {deptRoles.length === 0 ? (
@@ -301,7 +301,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                             {pending > 0 && <Badge variant="secondary">{pending} to review</Badge>}
                           </div>
                         </div>
-                        <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden />
+                        <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden />
                       </Link>
                     );
                   })}

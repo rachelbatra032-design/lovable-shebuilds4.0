@@ -197,7 +197,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                     ))}
                   </div>
                 ) : (
-                  <Suspense fallback={<div className="paper-card h-[70vh] animate-pulse" />}>
+                  <Suspense fallback={<div className="paper-card h-[60dvh] min-h-[320px] animate-pulse sm:h-[70dvh] sm:min-h-[480px]" />}>
                     <MapGraph roleTitle={r.title} items={list} links={items.data?.links ?? []} display={display} onSelect={setSelected} />
                   </Suspense>
                 )}

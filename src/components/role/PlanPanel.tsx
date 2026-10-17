@@ -80,7 +80,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
 
   return (
     <div className="space-y-5">
-      <div className="paper-card flex flex-wrap items-center justify-between gap-4 p-5">
+      <div className="paper-card grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="min-w-0 flex-1">
           <p className="font-display text-3xl">Onboarding plan</p>
           {audit && <p role="status" className={cn("mt-1 text-sm font-semibold", audit.status === "ready" ? "text-primary" : "text-terracotta")}>
@@ -91,16 +91,16 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
           </p>
           {isV2 && (
             <div className="mt-3 flex items-center gap-3" aria-label={`${doneCount} of ${allTasks.length} steps done`}>
-              <div className="h-2 w-48 overflow-hidden rounded-full bg-secondary">
+              <div className="h-2 w-48 min-w-0 shrink overflow-hidden rounded-full bg-secondary">
                 <div className="h-full bg-primary transition-all" style={{ width: `${pct}%` }} />
               </div>
-              <span className="text-sm text-muted-foreground">
+              <span className="shrink-0 text-sm text-muted-foreground">
                 {doneCount} of {allTasks.length} done
               </span>
             </div>
           )}
         </div>
-        <div className="flex gap-2 print:hidden">
+        <div className="flex flex-wrap gap-2 print:hidden">
           {isV2 && (
             <Button variant="outline" onClick={() => window.print()}>
               <Printer /> Print
@@ -187,9 +187,9 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
                   >
                     {pi + 1}
                   </span>
-                  <section className="paper-card p-5">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 className="text-3xl">{p.label}</h3>
+                  <section className="paper-card p-3 sm:p-5">
+                    <div className="grid gap-2 sm:flex sm:items-baseline sm:justify-between">
+                      <h3 className="min-w-0 text-2xl sm:text-3xl">{p.label}</h3>
                       <span className="rounded-full bg-secondary px-3 py-0.5 text-sm font-medium">{p.timeframe}</span>
                     </div>
                     <p className="mt-1 text-muted-foreground">{p.goal}</p>
