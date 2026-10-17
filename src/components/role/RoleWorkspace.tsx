@@ -2,12 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, BookText, Network, Loader2 } from "lucide-react";
+import { ArrowLeft, BookText, Network, Loader2, Mic, MessageCircle, ListChecks, ClipboardCheck, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ScoreRing } from "@/components/ScoreRing";
 import { roleChangesQuery, roleInputsQuery, roleItemsQuery, roleQuery, type KnowledgeItem } from "@/lib/queries";
 import { completeness, KINDS, KIND_LABEL, type Kind } from "@/lib/knowledge";
@@ -21,11 +22,11 @@ import { AskPanel } from "./AskPanel";
 import { PlanPanel } from "./PlanPanel";
 
 const TABS = [
-  { value: "map", label: "Map" },
-  { value: "capture", label: "Capture" },
-  { value: "review", label: "Review" },
-  { value: "ask", label: "Ask" },
-  { value: "plan", label: "Plan" },
+  { value: "map", label: "Map", icon: BookText },
+  { value: "capture", label: "Capture", icon: Mic },
+  { value: "review", label: "Review", icon: ClipboardCheck },
+  { value: "ask", label: "Ask", icon: MessageCircle },
+  { value: "plan", label: "Plan", icon: ListChecks },
 ] as const;
 
 const MapGraph = lazy(() => import("./MapGraph"));
@@ -46,6 +47,14 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const [translating, setTranslating] = useState(false);
   const translate = useServerFn(translateItems);
   const tried = useRef(new Set<string>());
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  function switchPanel(value: string) {
+    setTab(value);
+    if (window.matchMedia("(max-width: 639px)").matches) {
+      requestAnimationFrame(() => panelRef.current?.scrollIntoView({ block: "start" }));
+    }
+  }
 
   const list = items.data?.items ?? [];
   const untranslated = lang === "en" ? 0 : list.filter((i) => !(i.translations as Record<string, unknown>)?.[lang]).length;
@@ -90,7 +99,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const selectedItem = list.find((i) => i.id === selected) ?? null;
 
   return (
-    <div className="min-h-screen pb-16">
+    <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
       <AppHeader />
       <main className="mx-auto max-w-6xl px-4 py-5">
         <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -113,28 +122,30 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         </div>
 
         <div className="mt-6">
-          <div role="tablist" aria-label="Role sections" className="grid w-full grid-cols-5 gap-1 border-b border-border sm:flex">
+          <div role="tablist" aria-label="Role sections" className="mobile-workspace-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 gap-1 border-t border-border bg-background px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] sm:static sm:flex sm:w-full sm:border-t-0 sm:border-b sm:px-0 sm:py-0">
             {TABS.map((t) => (
-              <button
+              <Button
                 key={t.value}
                 type="button"
                 role="tab"
                 id={`tab-${t.value}`}
                 aria-selected={tab === t.value}
                 aria-controls={`panel-${t.value}`}
-                onClick={() => setTab(t.value)}
+                variant="ghost"
+                onClick={() => switchPanel(t.value)}
                 className={cn(
-                  "inline-flex min-h-11 min-w-0 items-center justify-center whitespace-nowrap border-b-2 px-1 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:px-5 sm:text-sm",
-                  tab === t.value ? "border-foreground text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
+                  "relative h-14 min-w-0 flex-col gap-1 rounded-md border-b-2 px-1 py-2 text-[11px] font-medium sm:h-11 sm:flex-row sm:rounded-none sm:px-5 sm:text-sm",
+                  tab === t.value ? "border-transparent bg-muted text-foreground sm:border-foreground sm:bg-transparent" : "border-transparent text-muted-foreground hover:text-foreground",
                 )}
               >
+                <t.icon className="h-4 w-4 sm:hidden" aria-hidden="true" />
                 {t.label}
-                {t.value === "review" && pending > 0 && <span className="ml-0.5 shrink-0 rounded-full bg-terracotta px-1 text-[10px] text-terracotta-foreground sm:ml-1 sm:px-1.5 sm:text-xs">{pending}</span>}
-              </button>
+                {t.value === "review" && pending > 0 && <span className="absolute top-1 right-2 rounded-full bg-primary px-1 text-[10px] text-primary-foreground sm:static sm:ml-1">{pending}</span>}
+              </Button>
             ))}
           </div>
 
-          <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5">
+          <div ref={panelRef} role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5 scroll-mt-24">
             {tab === "map" && (
               <>
                 <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
@@ -173,8 +184,11 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 ) : mode === "read" ? (
                   <div className="grid gap-5 md:grid-cols-2">
                     {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k) => (
-                      <section key={k} className="min-w-0 border-t border-border py-5">
-                        <h2 className="text-lg">{KIND_LABEL[k as Kind]}</h2>
+                      <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "md:col-span-2")}>
+                        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                          <h2 className="min-w-0 text-xl">{KIND_LABEL[k as Kind]}</h2>
+                          <span className="text-xs tabular-nums text-muted-foreground">{list.filter((i) => i.kind === k).length}</span>
+                        </div>
                         <ul className="mt-3 divide-y divide-border">
                           {list
                             .filter((i) => i.kind === k)
@@ -182,13 +196,16 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                               const d = display(i);
                               return (
                                 <li key={i.id}>
-                                  <button onClick={() => setSelected(i.id)} className="w-full py-3 text-left hover:text-primary focus-visible:outline-2 focus-visible:outline-ring">
-                                    <span className="flex items-start justify-between gap-2">
+                                  <Button variant="ghost" onClick={() => setSelected(i.id)} className="h-auto w-full flex-col items-stretch gap-1 whitespace-normal px-0 py-4 text-left hover:bg-transparent focus-visible:outline-2 focus-visible:outline-ring">
+                                    <span className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                                       <span className="min-w-0 font-medium">{d.title}</span>
-                                      {d.cadence && <Badge variant="secondary" className="shrink-0">{d.cadence}</Badge>}
+                                      <ChevronRight className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true" />
                                     </span>
-                                    <span className="mt-0.5 line-clamp-2 block text-sm text-muted-foreground">{d.body}</span>
-                                  </button>
+                                    {d.cadence && <span className="text-xs font-normal text-muted-foreground">{d.cadence}</span>}
+                                    {k === "decision" ? (
+                                      <span className="block max-w-3xl text-sm font-normal leading-relaxed text-foreground">{d.body.split(/(?<=[.!?।])\s+/)[0]}</span>
+                                    ) : <span className="line-clamp-2 block text-sm font-normal leading-relaxed text-muted-foreground">{d.body}</span>}
+                                  </Button>
                                 </li>
                               );
                             })}

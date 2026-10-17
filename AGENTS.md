@@ -23,3 +23,5 @@
 - Typography is centralized in global font tokens; display and body share one sans-serif stack with script-specific fallbacks so headings and controls stay consistent across languages.
 - Shared surface and category colors use global semantic tokens; retain legacy token aliases so redesigns do not alter knowledge logic or status behavior.
 - Shared navigation and mixed text/action rows use shrink-safe responsive grids; bounded chat/map canvases and scrollable dialogs keep phone controls reachable without changing laptop layouts.
+- Theme preference is owned by the root ThemeProvider and restored after hydration; shared tokens and graph variables keep light/dark presentation consistent without server storage access.
+- Role panels share one tab state and one responsive tablist, fixed to the phone bottom edge with safe-area clearance, so desktop and mobile navigation cannot diverge.
