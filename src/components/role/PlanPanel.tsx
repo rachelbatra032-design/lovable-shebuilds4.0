@@ -198,7 +198,7 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
                               {t.why && <p className="mt-2 text-sm"><span className="font-semibold">Why: </span>{t.why}</p>}
                               {!!t.steps?.length && (
                                 <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
-                                  {t.steps.map((st, si) => <li key={si}>{st}</li>)}
+                                  {t.steps.map((st, si) => <li key={si}>{st.replace(/^\s*(?:step\s*)?\d+\s*[.):\-–]\s*/i, "")}</li>)}
                                 </ol>
                               )}
                               {t.done_when && <p className="mt-2 text-sm"><span className="font-semibold">Done when: </span>{t.done_when}</p>}
