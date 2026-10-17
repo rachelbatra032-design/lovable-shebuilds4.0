@@ -122,7 +122,9 @@ export const processInput = createServerFn({ method: "POST" })
         const mime = input.mime_type || blob.type || "audio/webm";
         const ext = mime.includes("mp4") ? "mp4" : mime.includes("mpeg") ? "mp3" : mime.includes("wav") ? "wav" : mime.includes("ogg") ? "ogg" : mime.includes("m4a") ? "m4a" : "webm";
         const typed = new Blob([await blob.arrayBuffer()], { type: mime });
-        const transcript = await transcribe(typed, `input.${ext}`);
+        const { data: prof } = await supabase.from("profiles").select("recording_languages").eq("id", context.userId).maybeSingle();
+        const hint = (prof?.recording_languages ?? []).map((c) => LANG_NAME[c as keyof typeof LANG_NAME] ?? c).join(" and ");
+        const transcript = await transcribe(typed, `input.${ext}`, hint || undefined);
         text = text ? `${text}\n\n${transcript}` : transcript;
         await setStatus({ original_text: text });
       }

@@ -4,6 +4,7 @@ import { LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Brand } from "./Brand";
+import { LanguageSetup } from "./LanguageSetup";
 import { LANGUAGES, type LangCode } from "@/lib/knowledge";
 import { useLang } from "@/lib/use-lang";
 
@@ -36,6 +37,7 @@ export function AppHeader() {
               </option>
             ))}
           </select>
+          <LanguageSetup />
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
             <Link to="/readme">Read Me</Link>
           </Button>
