@@ -93,7 +93,8 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
         const dest = ctx.createMediaStreamDestination();
         for (const s of streams.current) if (s.getAudioTracks().length) ctx.createMediaStreamSource(s).connect(dest);
         stream = new MediaStream([...display.getVideoTracks(), ...dest.stream.getAudioTracks()]);
-        display.getVideoTracks()[0].onended = () => stop();
+        const vt = display.getVideoTracks()[0];
+        if (vt) vt.onended = () => stop();
       }
       const mime = pickMime(kind === "screen");
       const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
@@ -101,7 +102,7 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
       rec.ondataavailable = (e) => e.data.size && chunks.current.push(e.data);
       rec.onstop = async () => {
         streams.current.forEach((s) => s.getTracks().forEach((t) => t.stop()));
-        const type = (rec.mimeType || mime || (kind === "voice" ? "audio/webm" : "video/webm")).split(";")[0];
+        const type = (rec.mimeType || mime || (kind === "voice" ? "audio/webm" : "video/webm")).split(";")[0] ?? "audio/webm";
         const blob = new Blob(chunks.current, { type: kind === "voice" ? type.replace("video/", "audio/") : type });
         if (kind === "voice") {
           await run({ companyId, roleId, kind: "voice", title: `Voice note · ${new Date().toLocaleDateString()}`, file: blob });

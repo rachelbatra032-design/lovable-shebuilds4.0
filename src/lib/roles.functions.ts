@@ -362,7 +362,7 @@ export const translateItems = createServerFn({ method: "POST" })
         const orig = byId.get(t.id);
         if (!orig) continue;
         const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
-        await supabase.from("knowledge_items").update({ translations }).eq("id", t.id);
+        await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
       }
       return { ok: true as const, translated: out.items.length };
     } catch (e) {
@@ -506,13 +506,13 @@ export const createSampleWorkspace = createServerFn({ method: "POST" })
         }
         const links = r.links
           .filter(([a, b]) => itemIds[a] && itemIds[b])
-          .map(([a, b]) => ({ company_id: cid, role_id: role.id, from_item: itemIds[a], to_item: itemIds[b] }));
+          .map(([a, b]) => ({ company_id: cid, role_id: role.id, from_item: itemIds[a]!, to_item: itemIds[b]! }));
         if (links.length) await supabase.from("knowledge_links").insert(links);
         for (const ch of r.changes) {
           await supabase.from("change_requests").insert({
             company_id: cid,
             role_id: role.id,
-            existing_item_id: itemIds[ch.item],
+            existing_item_id: itemIds[ch.item] ?? null,
             proposed_title: ch.title,
             proposed_body: ch.body,
             reason: ch.reason,
