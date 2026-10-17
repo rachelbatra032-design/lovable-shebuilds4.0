@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Plus, Sparkles as _unused, UserPlus, ArrowRight, Building2 } from "lucide-react";
+import { Plus, UserPlus, ArrowRight, Building2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/AppHeader";
@@ -18,7 +18,6 @@ import { completeness, riskLabel } from "@/lib/knowledge";
 import { createSampleWorkspace } from "@/lib/roles.functions";
 import { ScoreRing } from "@/components/ScoreRing";
 
-void _unused;
 
 export const Route = createFileRoute("/_authenticated/app")({
   validateSearch: z.object({ c: z.string().optional() }),
