@@ -5,8 +5,15 @@ import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, BookText, Network, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cn } from "@/lib/utils";
+
+const TABS = [
+  { value: "map", label: "Map" },
+  { value: "capture", label: "Capture" },
+  { value: "review", label: "Review" },
+  { value: "ask", label: "Ask" },
+  { value: "plan", label: "Plan" },
+] as const;
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ScoreRing";
 import { roleChangesQuery, roleInputsQuery, roleItemsQuery, roleQuery, type KnowledgeItem } from "@/lib/queries";
@@ -111,84 +118,103 @@ function RolePage() {
           {co?.is_sample && <Badge variant="outline" className="border-terracotta text-terracotta">Sample data</Badge>}
         </div>
 
-        <Tabs value={tab} onValueChange={setTab} className="mt-6">
-          <TabsList className="h-auto w-full flex-wrap justify-start gap-1 bg-secondary p-1 sm:w-auto">
-            <TabsTrigger value="map">Map</TabsTrigger>
-            <TabsTrigger value="capture">Capture</TabsTrigger>
-            <TabsTrigger value="review">
-              Review {pending > 0 && <span className="ml-1 rounded-full bg-terracotta px-1.5 text-xs text-terracotta-foreground">{pending}</span>}
-            </TabsTrigger>
-            <TabsTrigger value="ask">Ask</TabsTrigger>
-            <TabsTrigger value="plan">Plan</TabsTrigger>
-          </TabsList>
+        <div className="mt-6">
+          <div role="tablist" aria-label="Role sections" className="inline-flex h-auto w-full flex-wrap justify-start gap-1 rounded-lg bg-secondary p-1 sm:w-auto">
+            {TABS.map((t) => (
+              <button
+                key={t.value}
+                type="button"
+                role="tab"
+                id={`tab-${t.value}`}
+                aria-selected={tab === t.value}
+                aria-controls={`panel-${t.value}`}
+                onClick={() => setTab(t.value)}
+                className={cn(
+                  "inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                  tab === t.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {t.label}
+                {t.value === "review" && pending > 0 && <span className="ml-1 rounded-full bg-terracotta px-1.5 text-xs text-terracotta-foreground">{pending}</span>}
+              </button>
+            ))}
+          </div>
 
-          <TabsContent value="map" className="mt-5">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <ToggleGroup type="single" value={mode} onValueChange={(v) => v && setMode(v as "read" | "visual")} className="rounded-lg border border-border bg-paper p-1" aria-label="View mode">
-                <ToggleGroupItem value="read" className="gap-1.5 px-3">
-                  <BookText className="h-4 w-4" /> Read
-                </ToggleGroupItem>
-                <ToggleGroupItem value="visual" className="gap-1.5 px-3">
-                  <Network className="h-4 w-4" /> Visual
-                </ToggleGroupItem>
-              </ToggleGroup>
-              {translating && (
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" /> Translating…
-                </span>
-              )}
-            </div>
-            {list.length === 0 ? (
-              <div className="paper-card p-8 text-center">
-                <p className="font-display text-3xl">This map is empty</p>
-                <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture — the AI will start building the map.</p>
-              </div>
-            ) : mode === "read" ? (
-              <div className="grid gap-5 md:grid-cols-2">
-                {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k) => (
-                  <section key={k} className="paper-card p-5" style={{ borderTop: `4px solid ${KIND_COLOR_VAR[k as Kind]}` }}>
-                    <h2 className="text-2xl">{KIND_LABEL[k as Kind]}</h2>
-                    <ul className="mt-3 divide-y divide-border">
-                      {list
-                        .filter((i) => i.kind === k)
-                        .map((i) => {
-                          const d = display(i);
-                          return (
-                            <li key={i.id}>
-                              <button onClick={() => setSelected(i.id)} className="w-full py-3 text-left hover:text-primary focus-visible:outline-2 focus-visible:outline-ring">
-                                <span className="flex items-start justify-between gap-2">
-                                  <span className="font-medium">{d.title}</span>
-                                  {d.cadence && <Badge variant="secondary" className="shrink-0">{d.cadence}</Badge>}
-                                </span>
-                                <span className="mt-0.5 line-clamp-2 block text-sm text-muted-foreground">{d.body}</span>
-                              </button>
-                            </li>
-                          );
-                        })}
-                    </ul>
-                  </section>
-                ))}
-              </div>
-            ) : (
-              <Suspense fallback={<div className="paper-card h-[70vh] animate-pulse" />}>
-                <MapGraph roleTitle={r.title} items={list} links={items.data?.links ?? []} display={display} onSelect={setSelected} />
-              </Suspense>
+          <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5">
+            {tab === "map" && (
+              <>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-lg border border-border bg-paper p-1">
+                    {(
+                      [
+                        { v: "read", label: "Read", Icon: BookText },
+                        { v: "visual", label: "Visual", Icon: Network },
+                      ] as const
+                    ).map(({ v, label, Icon }) => (
+                      <button
+                        key={v}
+                        type="button"
+                        aria-pressed={mode === v}
+                        onClick={() => setMode(v)}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                          mode === v ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        <Icon className="h-4 w-4" /> {label}
+                      </button>
+                    ))}
+                  </div>
+                  {translating && (
+                    <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin" /> Translating…
+                    </span>
+                  )}
+                </div>
+                {list.length === 0 ? (
+                  <div className="paper-card p-8 text-center">
+                    <p className="font-display text-3xl">This map is empty</p>
+                    <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture — the AI will start building the map.</p>
+                  </div>
+                ) : mode === "read" ? (
+                  <div className="grid gap-5 md:grid-cols-2">
+                    {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k) => (
+                      <section key={k} className="paper-card p-5" style={{ borderTop: `4px solid ${KIND_COLOR_VAR[k as Kind]}` }}>
+                        <h2 className="text-2xl">{KIND_LABEL[k as Kind]}</h2>
+                        <ul className="mt-3 divide-y divide-border">
+                          {list
+                            .filter((i) => i.kind === k)
+                            .map((i) => {
+                              const d = display(i);
+                              return (
+                                <li key={i.id}>
+                                  <button onClick={() => setSelected(i.id)} className="w-full py-3 text-left hover:text-primary focus-visible:outline-2 focus-visible:outline-ring">
+                                    <span className="flex items-start justify-between gap-2">
+                                      <span className="font-medium">{d.title}</span>
+                                      {d.cadence && <Badge variant="secondary" className="shrink-0">{d.cadence}</Badge>}
+                                    </span>
+                                    <span className="mt-0.5 line-clamp-2 block text-sm text-muted-foreground">{d.body}</span>
+                                  </button>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                ) : (
+                  <Suspense fallback={<div className="paper-card h-[70vh] animate-pulse" />}>
+                    <MapGraph roleTitle={r.title} items={list} links={items.data?.links ?? []} display={display} onSelect={setSelected} />
+                  </Suspense>
+                )}
+              </>
             )}
-          </TabsContent>
-
-          <TabsContent value="capture" className="mt-5">
-            <CapturePanel companyId={r.company_id} roleId={roleId} inputs={inputs.data ?? []} />
-          </TabsContent>
-          <TabsContent value="review" className="mt-5">
-            <ReviewPanel roleId={roleId} companyId={r.company_id} inputs={inputs.data ?? []} />
-          </TabsContent>
-          <TabsContent value="ask" className="mt-5">
-            <AskPanel roleId={roleId} roleTitle={r.title} items={list} lang={lang} onOpenItem={setSelected} />
-          </TabsContent>
-          <TabsContent value="plan" className="mt-5">
-            <PlanPanel roleId={roleId} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} onOpenItem={setSelected} />
-          </TabsContent>
-        </Tabs>
+            {tab === "capture" && <CapturePanel companyId={r.company_id} roleId={roleId} inputs={inputs.data ?? []} />}
+            {tab === "review" && <ReviewPanel roleId={roleId} companyId={r.company_id} inputs={inputs.data ?? []} />}
+            {tab === "ask" && <AskPanel roleId={roleId} roleTitle={r.title} items={list} lang={lang} onOpenItem={setSelected} />}
+            {tab === "plan" && <PlanPanel roleId={roleId} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} onOpenItem={setSelected} />}
+          </div>
+        </div>
       </main>
       <ItemSheet item={selectedItem} inputs={inputs.data ?? []} lang={lang} open={!!selected} onOpenChange={(o) => !o && setSelected(null)} />
     </div>

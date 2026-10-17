@@ -48,9 +48,21 @@ export function SourceBlock({ input }: { input: InputRow }) {
 
 function useGuideMedia({ media }: { media: (string | null)[] }) {
   const [urls, setUrls] = useState<(string | null)[]>([]);
+  // Depend on the paths' content, not the array identity: a fresh [] every
+  // render would otherwise re-run this effect forever and freeze the page.
+  const key = media.join("|");
   useEffect(() => {
-    Promise.all(media.map((m) => (m ? signedUrl(m) : Promise.resolve(null)))).then(setUrls);
-  }, [media]);
+    if (!key) {
+      setUrls((prev) => (prev.length ? [] : prev));
+      return;
+    }
+    let alive = true;
+    const paths = key.split("|");
+    Promise.all(paths.map((m) => (m ? signedUrl(m) : Promise.resolve(null)))).then((u) => alive && setUrls(u));
+    return () => {
+      alive = false;
+    };
+  }, [key]);
   return urls;
 }
 
