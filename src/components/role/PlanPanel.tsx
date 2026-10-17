@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { generatePlan, type OnboardingPlan, type PlanTaskType } from "@/lib/roles.functions";
 import type { LangCode } from "@/lib/knowledge";
 import { cn } from "@/lib/utils";
+import { checkPlanCompleteness, CRITERION_LABEL } from "@/lib/plan-completeness";
 
 const TYPE_META: Record<PlanTaskType, { label: string; Icon: typeof Users }> = {
   meet: { label: "Meet", Icon: Users },
@@ -45,7 +46,7 @@ function SourceLink({ id, onOpenItem }: { id: string | null; onOpenItem: (id: st
   );
 }
 
-export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: string; plan: OnboardingPlan | null; lang?: LangCode; onOpenItem: (id: string) => void }) {
+export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }: { roleId: string; plan: OnboardingPlan | null; lang?: LangCode; sourceItems: { id: string; body: string }[]; onOpenItem: (id: string) => void }) {
   const gen = useServerFn(generatePlan);
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
@@ -56,7 +57,8 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
     try {
       const r = await gen({ data: { roleId, language: lang } });
       if (r.ok) {
-        toast.success("Onboarding plan ready");
+        if (r.plan.completeness?.status === "ready") toast.success("Onboarding plan ready");
+        else toast.warning("Draft saved — missing procedural details need attention");
         qc.invalidateQueries({ queryKey: ["role", roleId] });
       } else toast.error(r.error);
     } catch (e) {
@@ -66,8 +68,13 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
     }
   }
 
-  const isV2 = !!plan?.phases?.length;
-  const allTasks = isV2 ? plan!.phases!.flatMap((p, pi) => p.tasks.map((_, ti) => `${pi}-${ti}`)) : [];
+  const phases = plan?.phases ?? [];
+  const keyDates = plan?.key_dates ?? [];
+  const keyContacts = plan?.key_contacts ?? [];
+  const watchOuts = plan?.watch_outs ?? [];
+  const isV2 = phases.length > 0;
+  const audit = plan ? checkPlanCompleteness(plan, sourceItems) : null;
+  const allTasks = phases.flatMap((p, pi) => p.tasks.map((_, ti) => `${pi}-${ti}`));
   const doneCount = allTasks.filter((k) => done[k]).length;
   const pct = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
 
@@ -76,6 +83,9 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
       <div className="paper-card flex flex-wrap items-center justify-between gap-4 p-5">
         <div className="min-w-0 flex-1">
           <p className="font-display text-3xl">Onboarding plan</p>
+          {audit && <p role="status" className={cn("mt-1 text-sm font-semibold", audit.status === "ready" ? "text-primary" : "text-terracotta")}>
+            {audit.status === "ready" ? "Ready · all procedural checks passed" : `Draft · ${audit.gaps.length ? `${audit.gaps.length} missing details` : "completeness check required"}`}
+          </p>}
           <p className="text-muted-foreground">
             {plan ? plan.summary : "Turn this role's map into a step-by-step plan: get set up, watch and learn, do it together, then own it."}
           </p>
@@ -104,7 +114,14 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
 
       {busy && <p className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Reading the role map and building the plan… this takes about half a minute.</p>}
 
-      {isV2 && !plan!.phases!.some((p) => p.tasks.some((t) => t.steps?.length)) && (
+      {audit?.status === "draft" && isV2 && (
+        <section aria-label="Plan completeness check" className="border-l-4 border-terracotta bg-secondary p-4">
+          <h3 className="flex items-center gap-2 text-2xl"><AlertTriangle className="h-5 w-5 shrink-0 text-terracotta" /> Not ready for handover</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{phases.some((p) => p.tasks.some((t) => !t.procedure_checks)) ? "This plan has not been checked. Make a new plan to check every task against the recorded knowledge." : `${audit.gaps.length} procedural details are missing from the recorded knowledge. Affected tasks are flagged below.`}</p>
+        </section>
+      )}
+
+      {isV2 && !phases.some((p) => p.tasks.some((t) => t.steps?.length)) && (
         <div className="paper-card p-4 text-sm">Tap <strong>Make a new plan</strong> to get step-by-step instructions under every task.</div>
       )}
 
@@ -120,43 +137,43 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
             <section className="paper-card p-5">
               <h3 className="flex items-center gap-2 text-2xl"><CalendarDays className="h-5 w-5 text-primary" /> Key dates</h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {plan!.key_dates!.map((d, i) => (
+                {keyDates.map((d, i) => (
                   <li key={i}>
                     <span className="font-semibold">{d.when}</span> — {d.what}
                     <SourceLink id={d.item_id} onOpenItem={onOpenItem} />
                   </li>
                 ))}
-                {!plan!.key_dates!.length && <li className="text-muted-foreground">None recorded yet.</li>}
+                {!keyDates.length && <li className="text-muted-foreground">None recorded yet.</li>}
               </ul>
             </section>
             <section className="paper-card p-5">
               <h3 className="flex items-center gap-2 text-2xl"><Users className="h-5 w-5 text-primary" /> People to meet</h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {plan!.key_contacts!.map((c, i) => (
+                {keyContacts.map((c, i) => (
                   <li key={i}>
                     <span className="font-semibold">{c.name}</span> — {c.why}
                     <SourceLink id={c.item_id} onOpenItem={onOpenItem} />
                   </li>
                 ))}
-                {!plan!.key_contacts!.length && <li className="text-muted-foreground">None recorded yet.</li>}
+                {!keyContacts.length && <li className="text-muted-foreground">None recorded yet.</li>}
               </ul>
             </section>
             <section className="paper-card p-5">
               <h3 className="flex items-center gap-2 text-2xl"><AlertTriangle className="h-5 w-5 text-terracotta" /> Watch out for</h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {plan!.watch_outs!.map((w, i) => (
+                {watchOuts.map((w, i) => (
                   <li key={i}>
                     {w.text}
                     <SourceLink id={w.item_id} onOpenItem={onOpenItem} />
                   </li>
                 ))}
-                {!plan!.watch_outs!.length && <li className="text-muted-foreground">None recorded yet.</li>}
+                {!watchOuts.length && <li className="text-muted-foreground">None recorded yet.</li>}
               </ul>
             </section>
           </div>
 
           <ol className="relative space-y-5 border-l-2 border-border pl-6">
-            {plan!.phases!.map((p, pi) => {
+            {phases.map((p, pi) => {
               const keys = p.tasks.map((_, ti) => `${pi}-${ti}`);
               const phaseDone = keys.every((k) => done[k]);
               return (
@@ -180,6 +197,7 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
                       {p.tasks.map((t, ti) => {
                         const k = `${pi}-${ti}`;
                         const meta = TYPE_META[t.type] ?? TYPE_META.do;
+                        const gaps = audit?.gaps.filter((g) => g.phase === pi && g.task === ti) ?? [];
                         return (
                           <li key={ti} className="flex items-start gap-3 py-3">
                             <Checkbox id={`plan-${k}`} className="mt-1" checked={!!done[k]} onCheckedChange={(v) => toggle(k, v === true)} />
@@ -203,6 +221,14 @@ export function PlanPanel({ roleId, plan, lang = "en", onOpenItem }: { roleId: s
                               )}
                               {t.done_when && <p className="mt-2 text-sm"><span className="font-semibold">Done when: </span>{t.done_when}</p>}
                               {t.ask_if_stuck && <p className="mt-1 text-xs text-muted-foreground">Stuck? Ask {t.ask_if_stuck}.</p>}
+                              {gaps.length > 0 && (
+                                <div className="mt-3 border-l-2 border-terracotta pl-3 text-sm">
+                                  <p className="font-semibold text-terracotta">Missing procedural details</p>
+                                  <ul className="mt-1 space-y-1">
+                                    {gaps.map((gap) => <li key={gap.criterion}><strong>{CRITERION_LABEL[gap.criterion]}:</strong> {gap.detail}</li>)}
+                                  </ul>
+                                </div>
+                              )}
                             </div>
                           </li>
                         );
