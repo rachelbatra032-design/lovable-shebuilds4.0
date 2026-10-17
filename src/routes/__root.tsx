@@ -6,17 +6,15 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
-import { installClientErrorLogging, logClientError } from "@/lib/client-error-log";
-import { isModuleLoadError, recoverModuleLoad } from "@/lib/module-recovery";
-import { Button } from "@/components/ui/button";
+import { installClientErrorLogging } from "@/lib/client-error-log";
+import { recoverModuleLoad } from "@/lib/module-recovery";
+import { RouteErrorScreen } from "@/components/RouteErrorScreen";
 
 function NotFoundComponent() {
   return (
@@ -32,42 +30,6 @@ function NotFoundComponent() {
           >
             Go home
           </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ErrorComponent({ error, reset }: ErrorComponentProps) {
-  console.error(error);
-  const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-    logClientError(error, "error-boundary");
-    recoverModuleLoad(error);
-  }, [error]);
-
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-2xl text-foreground">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong. Try again or head back home.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <Button
-            onClick={() => {
-              if (isModuleLoadError(error)) {
-                window.location.reload();
-                return;
-              }
-              router.invalidate();
-              reset();
-            }}
-          >
-            Try again
-          </Button>
-          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent">
-            Go home
-          </a>
         </div>
       </div>
     </div>
@@ -98,7 +60,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
+  errorComponent: RouteErrorScreen,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
