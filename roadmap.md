@@ -21,6 +21,7 @@
 - [x] Replace the rejected notebook look with a simple Grok-inspired monochrome design; verified sign-in, workspace, all role tabs and language dialog at 360px, 390px and 1366px (no overflow/runtime errors; 21 tests pass)
 - [x] Add compact phone panel navigation, consistent capture/upload/map styling, optional dark mode, and clearer role-map hierarchy and decision summaries (24 tests pass; signed-in phone/laptop checks, theme persistence, real upload and sourced Ask answer verified)
 - [ ] Publish and verify judge access — waits for user authorization to publish
+- [ ] Verify three-layer security and collect evidence; complete Lovable deep code scan before publication
 - [ ] Resolve remaining sprintf-js dependency warnings — no patched registry release available
 - [ ] Complete external Hub submission fields and optional screenshot uploads — Hub form unavailable here
 - [ ] Freeze submitted version — waits for confirmed submission
