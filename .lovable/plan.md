@@ -22,6 +22,15 @@ A shared workspace where people in each department (Finance, Marketing, Ops...) 
 8. **Ask the role**: chat with the role's map. Answers cite their sources. The successor picks the answer language; original quotes are kept and can be shown.
 9. **Department view**: every role in a department, how complete each map is, and recent activity.
 
+## "For Judges" guide page (/judges, linked from the home page and the app header)
+
+- **How to review in 3 minutes**: open the demo, then the Accounts Lead map, switch Read/Visual and the language, ask "How do I pay a new vendor?", record a voice note in any language, and confirm the pending change card.
+- **1. Usefulness and understanding of the user (30)**: who it's for (Indian SMEs whose staff work in regional languages), the problem (knowledge leaves when people leave, and wikis don't get written), and how each feature maps to a real need: voice in your own language, no writing, handover plan.
+- **2. Functionality and execution (30)**: the working core journey step by step, what is real AI vs. sample data, and how errors and limits are handled.
+- **3. User experience and design (25)**: mobile-first logging, Read/Visual modes for different learning styles, Indic fonts, accessibility choices, and clear feedback states.
+- **4. Originality (15)**: organized by role instead of by page, regional languages first, the change-confirmation loop, and the completeness index.
+- Known limitations and sample-data notes. Demo credentials are not shown on the page; they go in the private form.
+
 ## End-to-end user flow
 
 ```text
