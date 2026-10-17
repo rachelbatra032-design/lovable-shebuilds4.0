@@ -8,5 +8,9 @@
 - [x] Ask the role chat with citations
 - [x] Change confirmation cards + completeness index
 - [x] File / chat export uploads, KT/screen recordings, onboarding plan
-- [ ] Signed-in end-to-end test (blocked: needs the user to sign in once in preview)
+- [x] Signed-in end-to-end tab test
+- [x] First sign-in language setup (recording languages + optional output language)
+- [x] Automated interaction tests for Visual/Capture/Review/Ask/Plan
+- [x] Better onboarding plan (research-based structure + clearer page)
+- [x] Client-side error logging (page, last action, stack)
 - [ ] Pre-submission: publish, security scan, screenshots, testing steps

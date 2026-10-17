@@ -85,6 +85,42 @@ export type Database = {
           },
         ]
       }
+      client_errors: {
+        Row: {
+          created_at: string
+          id: string
+          last_action: string | null
+          message: string
+          page: string
+          source: string | null
+          stack: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_action?: string | null
+          message: string
+          page: string
+          source?: string | null
+          stack?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_action?: string | null
+          message?: string
+          page?: string
+          source?: string | null
+          stack?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           created_at: string
@@ -428,18 +464,27 @@ export type Database = {
           display_name: string | null
           email: string | null
           id: string
+          language_setup_done: boolean
+          output_language: string | null
+          recording_languages: string[]
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           email?: string | null
           id: string
+          language_setup_done?: boolean
+          output_language?: string | null
+          recording_languages?: string[]
         }
         Update: {
           created_at?: string
           display_name?: string | null
           email?: string | null
           id?: string
+          language_setup_done?: boolean
+          output_language?: string | null
+          recording_languages?: string[]
         }
         Relationships: []
       }

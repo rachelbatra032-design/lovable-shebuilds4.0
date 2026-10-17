@@ -110,7 +110,7 @@ export async function respondJSON<T>(opts: Parameters<typeof respond>[0] & { sch
 }
 
 /** Transcribe audio in its original language. */
-export async function transcribe(blob: Blob, filename: string): Promise<string> {
+export async function transcribe(blob: Blob, filename: string, languageHint?: string): Promise<string> {
   if (!blob.size) throw new AiError(400, "The recording is empty.");
   if (blob.size > 25 * 1024 * 1024) throw new AiError(400, "Recording is too large (max 25 MB).");
   const form = new FormData();
@@ -118,7 +118,7 @@ export async function transcribe(blob: Blob, filename: string): Promise<string> 
   form.append("file", blob, filename);
   form.append("response_format", "json");
   form.append("stream", "true");
-  form.append("prompt", "Workplace voice note from an Indian SME employee. May be Malayalam, Hindi, Tamil, English or code-mixed (Manglish, Hinglish). Transcribe in the original script and language.");
+  form.append("prompt", "Workplace voice note from an Indian SME employee. May be Malayalam, Hindi, Tamil, English or code-mixed (Manglish, Hinglish). Transcribe in the original script and language." + (languageHint ? ` The speaker usually records in ${languageHint}.` : ""));
   const res = await fetch(`${GATEWAY}/v1/audio/transcriptions`, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey()}` },
