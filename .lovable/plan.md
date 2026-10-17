@@ -22,6 +22,28 @@ A shared workspace where people in each department (Finance, Marketing, Ops...) 
 8. **Ask the role**: chat with the role's map. Answers cite their sources. The successor picks the answer language; original quotes are kept and can be shown.
 9. **Department view**: every role in a department, how complete each map is, and recent activity.
 
+## Capture first, writing optional
+
+The app is built to capture work and organize it automatically, not for people to write and maintain pages. Nobody writes an SOP.
+
+- One-tap "End of day" voice button on every screen. It works well on phones (60-second notes).
+- Forward or paste email threads and chat exports straight into a role's bucket.
+- Screen recordings become **step-by-step guides with annotated screenshots** (key frames + narration turned into numbered steps).
+
+## Keeping the map fresh
+
+- **One-click change confirmation**: when a new log contradicts the map (e.g. "we switched from Vendor A to Vendor B"), the role-holder sees a card with Confirm change / Keep old, and the map updates itself.
+- Items that haven't come up in recent inputs are marked "possibly outdated".
+- Every point links back to its source: you can play the voice clip, open the chat snippet or document, or view the screenshot.
+
+## Completeness index
+
+Each role card shows a coverage score, e.g. "Accounts Lead: 85% documented, based on the last 30 days of activity". It reflects how many task categories are covered, how recent and frequent the logs are, and how many items have no source or are unconfirmed. Managers see which roles are a risk (single points of failure) on the department view.
+
+## Ask the role: multi-format answers
+
+Answers give exact steps, cite their sources inline (with a playable voice clip, screenshot, or chat excerpt), and can be turned into a day-by-day or week-by-week checklist.
+
 ## Language handling
 
 - Voice notes and recording audio are transcribed in the original language (Malayalam, Hindi, Tamil, English, including mixed speech like Manglish/Hinglish).
@@ -33,8 +55,9 @@ A warm "field notebook" look: off-white paper background, deep ink-green primary
 
 ## Phasing
 
-- **Phase 1 (this build)**: auth, company/departments/roles, daily voice/text logs, document and chat uploads, AI extraction, map in Read and Visual modes, Ask chat, language switch.
-- **Phase 2**: KT and screen-recording capture/upload with audio transcription plus key-frame analysis, onboarding plan generator, conflict review, department dashboard.
+- **Phase 1 (this build)**: auth, one-click workspace setup with email invites, company/departments/roles, daily voice/text logs, document and chat uploads, AI extraction with source links, one-click change confirmation, map in Read and Visual modes, Ask chat, language switch, completeness index.
+- **Phase 2**: KT and screen-recording capture/upload turned into step-by-step guides with screenshots, onboarding plan and checklist generator, department risk dashboard, "possibly outdated" marking.
+- **Later / outside this app**: a WhatsApp or Slack bot for sending voice notes, and a browser extension that records clicks (like Scribe). A browser extension can't be built inside this project; WhatsApp/Slack need their own business accounts.
 
 ## Technical details
 
