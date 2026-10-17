@@ -7,6 +7,7 @@ import { Brand } from "./Brand";
 import { LanguageSetup } from "./LanguageSetup";
 import { LANGUAGES, type LangCode } from "@/lib/knowledge";
 import { useLang } from "@/lib/use-lang";
+import { ThemeToggle } from "./ThemeProvider";
 
 export function AppHeader() {
   const [lang, setLang] = useLang();
@@ -29,7 +30,7 @@ export function AppHeader() {
             value={lang}
             onChange={(e) => setLang(e.target.value as LangCode)}
             aria-label="Reading language"
-            className="h-11 w-[6rem] min-w-0 rounded-md border border-transparent bg-background px-2 text-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:h-9 sm:w-[8.5rem]"
+            className="h-11 w-[4.75rem] min-w-0 rounded-md border border-transparent bg-background px-1 text-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:h-9 sm:w-[8.5rem] sm:px-2"
           >
             {LANGUAGES.map((l) => (
               <option key={l.code} value={l.code}>
@@ -38,6 +39,7 @@ export function AppHeader() {
             ))}
           </select>
           <LanguageSetup />
+          <ThemeToggle />
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
             <Link to="/readme">Read Me</Link>
           </Button>

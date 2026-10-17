@@ -15,6 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { installClientErrorLogging } from "@/lib/client-error-log";
 import { recoverModuleLoad } from "@/lib/module-recovery";
 import { RouteErrorScreen } from "@/components/RouteErrorScreen";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 function NotFoundComponent() {
   return (
@@ -102,8 +103,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
       <Outlet />
       <Toaster position="top-center" />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

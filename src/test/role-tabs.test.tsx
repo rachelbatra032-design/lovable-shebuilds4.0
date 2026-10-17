@@ -72,6 +72,7 @@ describe("Role page tabs", () => {
   beforeEach(() => {
     generatePlan.mockReset();
     askRole.mockReset();
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
   });
 
   it("Visual button shows the visual map", async () => {
@@ -86,6 +87,16 @@ describe("Role page tabs", () => {
     fireEvent.click(tab("Capture"));
     expect(tab("Capture")).toHaveAttribute("aria-selected", "true");
     expect(await screen.findByText(/What did you decide today/)).toBeInTheDocument();
+  });
+
+  it("phone panel navigation can return to Map after Capture, Plan and Ask", async () => {
+    setup();
+    for (const name of ["Capture", "Plan", "Ask", "Map"]) {
+      fireEvent.click(tab(name));
+      expect(tab(name)).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByRole("tabpanel")).toHaveAttribute("id", `panel-${name.toLowerCase()}`);
+    }
+    expect(await screen.findByText("File GSTR-1")).toBeInTheDocument();
   });
 
   it("Review tab opens the change review", async () => {

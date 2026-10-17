@@ -25,7 +25,7 @@ export default function MapGraph({
       id: "role",
       position: { x: -90, y: -28 },
       data: { label: roleTitle },
-      style: { background: "var(--primary)", color: "var(--primary-foreground)", border: "none", borderRadius: 999, width: 180, fontFamily: "var(--font-display)", fontSize: 20, padding: 12 },
+      style: { background: "var(--primary)", color: "var(--primary-foreground)", border: "none", borderRadius: 8, width: 180, fontFamily: "var(--font-display)", fontSize: 18, padding: 12 },
       draggable: true,
     });
     kinds.forEach((k, ki) => {
@@ -37,7 +37,7 @@ export default function MapGraph({
         id: `kind-${k}`,
         position: { x: hx - 80, y: hy - 18 },
         data: { label: KIND_LABEL[k as Kind] },
-        style: { background: "var(--paper)", border: `2px solid ${color}`, color, borderRadius: 12, width: 160, fontWeight: 600, fontSize: 12 },
+        style: { background: "var(--muted)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 8, width: 160, fontWeight: 600, fontSize: 13 },
       });
       edges.push({ id: `e-role-${k}`, source: "role", target: `kind-${k}`, style: { stroke: color, strokeWidth: 2 } });
       const group = items.filter((i) => i.kind === k);
@@ -49,7 +49,7 @@ export default function MapGraph({
           id: it.id,
           position: { x: Math.cos(a) * dist - 85, y: Math.sin(a) * dist * 0.8 - 20 },
           data: { label: display(it).title },
-          style: { background: "var(--card)", borderLeft: `4px solid ${color}`, borderRadius: 8, width: 170, fontSize: 12, textAlign: "left", cursor: "pointer" },
+          style: { background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)", borderRadius: 8, width: 170, fontSize: 13, textAlign: "left", cursor: "pointer" },
         });
         edges.push({ id: `e-${k}-${it.id}`, source: `kind-${k}`, target: it.id, style: { stroke: color, opacity: 0.5 } });
       });
@@ -63,7 +63,7 @@ export default function MapGraph({
   }, [items, links, roleTitle, display]);
 
   return (
-    <div className="paper-card h-[60dvh] min-h-[320px] overflow-hidden sm:h-[70dvh] sm:min-h-[480px]">
+    <div className="role-graph h-[60dvh] min-h-[320px] overflow-hidden rounded-lg border border-border bg-background sm:h-[70dvh] sm:min-h-[480px]">
       <ReactFlow
         key={nodes.map((n) => `${n.id}:${String(n.data["label"])}`).join("|") + edges.length}
         defaultNodes={nodes}

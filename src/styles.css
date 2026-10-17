@@ -105,12 +105,40 @@
   --sidebar-ring: var(--ring);
 }
 
+.dark {
+  --background: oklch(0.17 0 0);
+  --paper: var(--background);
+  --foreground: oklch(0.94 0 0);
+  --primary: oklch(0.94 0 0);
+  --primary-foreground: oklch(0.17 0 0);
+  --secondary: oklch(0.24 0 0);
+  --muted: oklch(0.21 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.28 0 0);
+  --terracotta: oklch(0.76 0 0);
+  --turmeric: oklch(0.65 0 0);
+  --success: oklch(0.72 0.1 155);
+  --destructive: oklch(0.72 0.15 27);
+  --border: oklch(0.31 0 0);
+  --input: oklch(0.37 0 0);
+  --kind-responsibility: var(--foreground);
+  --kind-task: var(--muted-foreground);
+  --kind-decision: var(--foreground);
+  --kind-contact: var(--muted-foreground);
+  --kind-tool: var(--foreground);
+  --kind-guide: var(--muted-foreground);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
   html {
     font-size: 16px;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
   }
   body {
     background-color: var(--color-background);
@@ -160,4 +188,22 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mic-pulse { animation: none; }
+}
+
+.role-graph .react-flow {
+  --xy-background-color: var(--background);
+  --xy-node-color: var(--foreground);
+  --xy-node-background-color: var(--card);
+  --xy-node-border: 1px solid var(--border);
+  --xy-controls-button-background-color: var(--background);
+  --xy-controls-button-background-color-hover: var(--muted);
+  --xy-controls-button-color: var(--foreground);
+  --xy-controls-button-border-color: var(--border);
+  --xy-controls-box-shadow: none;
+  --xy-edge-stroke: var(--muted-foreground);
+  --xy-handle-background-color: var(--muted-foreground);
+}
+
+@media print {
+  .mobile-workspace-nav { display: none; }
 }

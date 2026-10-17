@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/components/Brand";
+import { ThemeToggle } from "@/components/ThemeProvider";
 
 export const Route = createFileRoute("/readme")({
   head: () => ({
@@ -29,11 +30,14 @@ function Section({ n, title, children }: { n: string; title: string; children: R
 function ReadMe() {
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5">
+      <header className="mx-auto grid max-w-4xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-5 py-5">
         <Brand />
+        <div className="flex shrink-0 items-center gap-1">
+        <ThemeToggle />
         <Button asChild>
           <Link to="/app">Open app</Link>
         </Button>
+        </div>
       </header>
       <main className="mx-auto max-w-4xl space-y-6 px-5 pb-20">
         <div className="py-6">

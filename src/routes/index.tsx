@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/components/Brand";
+import { ThemeToggle } from "@/components/ThemeProvider";
 import hero from "@/assets/hero-notebook.jpg";
 
 export const Route = createFileRoute("/")({
@@ -33,6 +34,7 @@ function Landing() {
       <header className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-5 sm:flex sm:justify-between sm:px-5">
         <Brand />
         <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <ThemeToggle />
           <Button asChild variant="ghost">
             <Link to="/readme">Read Me</Link>
           </Button>
