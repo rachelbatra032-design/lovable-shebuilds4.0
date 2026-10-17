@@ -14,5 +14,5 @@
 - [x] Better onboarding plan (research-based structure + clearer page)
 - [x] Client-side error logging (page, last action, stack)
 - [x] Onboarding: actual recorded procedures instead of questions or shadowing arrangements
-- [ ] Onboarding readiness check: flag missing screen paths, decision criteria, approval rules and completion criteria
+- [x] Onboarding readiness check: flag missing screen paths, decision criteria, approval rules and completion criteria
 - [ ] Pre-submission: publish, security scan, screenshots, testing steps
