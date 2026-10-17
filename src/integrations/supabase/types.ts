@@ -14,13 +14,496 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      change_requests: {
+        Row: {
+          company_id: string
+          created_at: string
+          existing_item_id: string | null
+          id: string
+          is_sample: boolean
+          proposed_body: string
+          proposed_title: string
+          reason: string | null
+          role_id: string
+          source_input_id: string | null
+          status: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          existing_item_id?: string | null
+          id?: string
+          is_sample?: boolean
+          proposed_body: string
+          proposed_title: string
+          reason?: string | null
+          role_id: string
+          source_input_id?: string | null
+          status?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          existing_item_id?: string | null
+          id?: string
+          is_sample?: boolean
+          proposed_body?: string
+          proposed_title?: string
+          reason?: string | null
+          role_id?: string
+          source_input_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "change_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "change_requests_existing_item_id_fkey"
+            columns: ["existing_item_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "change_requests_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "change_requests_source_input_id_fkey"
+            columns: ["source_input_id"]
+            isOneToOne: false
+            referencedRelation: "inputs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      companies: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          is_sample: boolean
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          is_sample?: boolean
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_sample?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
+      company_members: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          member_role: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          member_role?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          member_role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departments: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inputs: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          english_text: string | null
+          error: string | null
+          frames: Json
+          id: string
+          is_sample: boolean
+          kind: string
+          language: string | null
+          mime_type: string | null
+          original_text: string | null
+          role_id: string
+          status: string
+          storage_path: string | null
+          title: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          english_text?: string | null
+          error?: string | null
+          frames?: Json
+          id?: string
+          is_sample?: boolean
+          kind: string
+          language?: string | null
+          mime_type?: string | null
+          original_text?: string | null
+          role_id: string
+          status?: string
+          storage_path?: string | null
+          title?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          english_text?: string | null
+          error?: string | null
+          frames?: Json
+          id?: string
+          is_sample?: boolean
+          kind?: string
+          language?: string | null
+          mime_type?: string | null
+          original_text?: string | null
+          role_id?: string
+          status?: string
+          storage_path?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inputs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inputs_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invites: {
+        Row: {
+          accepted: boolean
+          company_id: string
+          created_at: string
+          email: string
+          id: string
+          invited_by: string
+          role_id: string | null
+        }
+        Insert: {
+          accepted?: boolean
+          company_id: string
+          created_at?: string
+          email: string
+          id?: string
+          invited_by: string
+          role_id?: string | null
+        }
+        Update: {
+          accepted?: boolean
+          company_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          invited_by?: string
+          role_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invites_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invites_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_items: {
+        Row: {
+          body: string
+          cadence: string | null
+          company_id: string
+          created_at: string
+          id: string
+          is_sample: boolean
+          kind: string
+          last_seen_at: string
+          media: Json
+          mentions: number
+          original_quote: string | null
+          role_id: string
+          source_input_id: string | null
+          status: string
+          title: string
+          translations: Json
+        }
+        Insert: {
+          body?: string
+          cadence?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          kind: string
+          last_seen_at?: string
+          media?: Json
+          mentions?: number
+          original_quote?: string | null
+          role_id: string
+          source_input_id?: string | null
+          status?: string
+          title: string
+          translations?: Json
+        }
+        Update: {
+          body?: string
+          cadence?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          kind?: string
+          last_seen_at?: string
+          media?: Json
+          mentions?: number
+          original_quote?: string | null
+          role_id?: string
+          source_input_id?: string | null
+          status?: string
+          title?: string
+          translations?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_items_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_items_source_input_id_fkey"
+            columns: ["source_input_id"]
+            isOneToOne: false
+            referencedRelation: "inputs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_links: {
+        Row: {
+          company_id: string
+          from_item: string
+          id: string
+          label: string | null
+          role_id: string
+          to_item: string
+        }
+        Insert: {
+          company_id: string
+          from_item: string
+          id?: string
+          label?: string | null
+          role_id: string
+          to_item: string
+        }
+        Update: {
+          company_id?: string
+          from_item?: string
+          id?: string
+          label?: string | null
+          role_id?: string
+          to_item?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_links_from_item_fkey"
+            columns: ["from_item"]
+            isOneToOne: false
+            referencedRelation: "knowledge_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_links_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_links_to_item_fkey"
+            columns: ["to_item"]
+            isOneToOne: false
+            referencedRelation: "knowledge_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      roles: {
+        Row: {
+          company_id: string
+          created_at: string
+          department_id: string
+          holder_email: string | null
+          holder_name: string | null
+          id: string
+          onboarding_plan: Json | null
+          status: string
+          successor_name: string | null
+          title: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          department_id: string
+          holder_email?: string | null
+          holder_name?: string | null
+          id?: string
+          onboarding_plan?: Json | null
+          status?: string
+          successor_name?: string | null
+          title: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          department_id?: string
+          holder_email?: string | null
+          holder_name?: string | null
+          id?: string
+          onboarding_plan?: Json | null
+          status?: string
+          successor_name?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_company_admin: { Args: { _company: string }; Returns: boolean }
+      is_company_member: { Args: { _company: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
