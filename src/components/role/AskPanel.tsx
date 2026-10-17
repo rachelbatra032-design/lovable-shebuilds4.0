@@ -42,7 +42,9 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
-  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), [msgs]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [msgs]);
 
   async function send(question: string) {
     if (!question.trim() || busy) return;
