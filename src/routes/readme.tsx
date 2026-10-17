@@ -9,6 +9,8 @@ export const Route = createFileRoute("/readme")({
       { name: "description", content: "A 3-minute walkthrough of Kaimaaral: who it's for, what works, design choices and known limitations." },
       { property: "og:title", content: "Read Me — how to review Kaimaaral" },
       { property: "og:description", content: "A 3-minute walkthrough: usefulness, functionality, user experience and originality." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ReadMe,

@@ -18,6 +18,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in to capture and explore your team's role knowledge." },
       { property: "og:title", content: "Sign in — Kaimaaral" },
       { property: "og:description", content: "Sign in to capture and explore your team's role knowledge." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,

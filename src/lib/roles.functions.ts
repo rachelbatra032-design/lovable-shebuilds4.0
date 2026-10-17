@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { KINDS } from "./knowledge";
 import { buildSample } from "./sample-data";
+import { checkPlanCompleteness, PLAN_CRITERIA, type PlanCompleteness, type ProcedureChecks } from "./plan-completeness";
 
 const LANG_NAME: Record<string, string> = { en: "English", ml: "Malayalam", hi: "Hindi", ta: "Tamil" };
 
@@ -381,6 +382,7 @@ export const translateItems = createServerFn({ method: "POST" })
 export type PlanTaskType = "meet" | "learn" | "shadow" | "do" | "review";
 export type OnboardingPlan = {
   version?: 2;
+  completeness?: PlanCompleteness;
   summary: string;
   language?: string;
   /** Legacy (v1) plans only. */
@@ -390,7 +392,7 @@ export type OnboardingPlan = {
     timeframe: string;
     goal: string;
     checkpoint: string;
-    tasks: { task: string; type: PlanTaskType; when: string | null; with_person: string | null; item_id: string | null; why?: string; steps?: string[]; done_when?: string; ask_if_stuck?: string | null }[];
+    tasks: { task: string; type: PlanTaskType; when: string | null; with_person: string | null; item_id: string | null; why?: string; steps?: string[]; done_when?: string; ask_if_stuck?: string | null; procedure_checks?: ProcedureChecks }[];
   }[];
   key_dates?: { when: string; what: string; item_id: string | null }[];
   key_contacts?: { name: string; why: string; item_id: string | null }[];
@@ -398,6 +400,14 @@ export type OnboardingPlan = {
 };
 
 const ref = { type: ["string", "null"] } as const;
+const PROCEDURE_CHECK_SCHEMA = {
+  type: "object", additionalProperties: false,
+  required: ["status", "detail", "source_item_id", "source_quote"],
+  properties: {
+    status: { type: "string", enum: ["documented", "missing", "not_applicable"] },
+    detail: { type: "string" }, source_item_id: ref, source_quote: ref,
+  },
+};
 const PLAN_SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -420,7 +430,7 @@ const PLAN_SCHEMA = {
             items: {
               type: "object",
               additionalProperties: false,
-              required: ["task", "type", "when", "with_person", "item_id", "why", "steps", "done_when", "ask_if_stuck"],
+              required: ["task", "type", "when", "with_person", "item_id", "why", "steps", "done_when", "ask_if_stuck", "procedure_checks"],
               properties: {
                 task: { type: "string" },
                 type: { type: "string", enum: ["meet", "learn", "shadow", "do", "review"] },
@@ -431,6 +441,10 @@ const PLAN_SCHEMA = {
                 steps: { type: "array", items: { type: "string" } },
                 done_when: { type: "string" },
                 ask_if_stuck: ref,
+                procedure_checks: {
+                  type: "object", additionalProperties: false, required: [...PLAN_CRITERIA],
+                  properties: Object.fromEntries(PLAN_CRITERIA.map((key) => [key, PROCEDURE_CHECK_SCHEMA])),
+                },
               },
             },
           },
@@ -483,6 +497,9 @@ Only use facts in the map. Never invent a Tally menu path, GST portal screen, ap
 Put recurring deadlines in the phase where they first fall, and give the recorded-example-to-independent-execution progression for each important recurring task.
 key_dates: up to 6 deadlines/cadences from the map. key_contacts: up to 6 people with why they matter. watch_outs: up to 5 edge cases or mistakes to avoid.
 summary: 1-2 sentences in plain words.
+Before finalizing, audit EVERY task in procedure_checks for screen_paths, decision_criteria, approval_rules and completion_criteria.
+For each check return status, detail, source_item_id and source_quote. A documented check needs a specific usable detail in the task AND an EXACT verbatim quote from a source item's English body supporting it (even when output is translated). Screen paths require the actual screen/menu/report navigation, not merely a tool name. Decision criteria require the recorded conditions, checks or thresholds and what action to take. Approval rules require who approves, when and any recorded limits or sequence; a contact name alone is insufficient. Completion criteria require an observable result, not a blocked action or a vague instruction to learn.
+If the necessary detail is absent, mark missing, describe exactly what is missing, and use null for source_item_id/source_quote. Do not hide missing details as not_applicable. Use not_applicable only when the recorded workflow demonstrably needs no screen, decision or approval; give the reason and the exact source quote supporting that scope. Completion criteria can NEVER be not_applicable. Include all known gaps even if watch_outs has reached its limit. Never invent details to pass these checks. A task with blocked execution has missing completion_criteria. The application, not you, decides readiness.
 Write everything in ${LANG_NAME[data.language]} (native script); keep names, amounts and tool names (Tally, GST…) as-is. Short, simple sentences.`,
         schema: { name: "onboarding_plan", schema: PLAN_SCHEMA },
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(items) }] }],
@@ -498,7 +515,9 @@ Write everything in ${LANG_NAME[data.language]} (native script); keep names, amo
         key_contacts: (raw.key_contacts ?? []).map(fix),
         watch_outs: (raw.watch_outs ?? []).map(fix),
       };
-      await supabase.from("roles").update({ onboarding_plan: plan as never }).eq("id", data.roleId);
+      plan.completeness = checkPlanCompleteness(plan, items);
+      const { error: saveError } = await supabase.from("roles").update({ onboarding_plan: plan as never }).eq("id", data.roleId);
+      if (saveError) throw new Error(saveError.message);
       return { ok: true as const, plan };
     } catch (e) {
       return { ok: false as const, error: errMessage(e) };
