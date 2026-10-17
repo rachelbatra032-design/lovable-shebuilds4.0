@@ -212,7 +212,7 @@ function RolePage() {
             {tab === "capture" && <CapturePanel companyId={r.company_id} roleId={roleId} inputs={inputs.data ?? []} />}
             {tab === "review" && <ReviewPanel roleId={roleId} companyId={r.company_id} inputs={inputs.data ?? []} />}
             {tab === "ask" && <AskPanel roleId={roleId} roleTitle={r.title} items={list} lang={lang} onOpenItem={setSelected} />}
-            {tab === "plan" && <PlanPanel roleId={roleId} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} onOpenItem={setSelected} />}
+            {tab === "plan" && <PlanPanel roleId={roleId} lang={lang} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} onOpenItem={setSelected} />}
           </div>
         </div>
       </main>
