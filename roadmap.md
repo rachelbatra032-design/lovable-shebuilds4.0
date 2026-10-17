@@ -21,6 +21,7 @@
 - [x] Replace the rejected notebook look with a simple Grok-inspired monochrome design; verified sign-in, workspace, all role tabs and language dialog at 360px, 390px and 1366px (no overflow/runtime errors; 21 tests pass)
 - [x] Add compact phone panel navigation, consistent capture/upload/map styling, optional dark mode, and clearer role-map hierarchy and decision summaries (24 tests pass; signed-in phone/laptop checks, theme persistence, real upload and sourced Ask answer verified)
 - [ ] Publish and verify judge access — waits for user authorization to publish
+- [ ] Simplify the first-time walkthrough, clarify fresh/returning sample access, and keep Read Me reachable on phones
 - [x] Review three security layers, fix invitation and company-reference access gaps, retain evidence and pass eight live security assertions
 - [ ] Complete Lovable deep code scan before publication — requires More → Security → Run deep scan in the editor
 - [ ] Review stored-plan direct-write enforcement and sensitive error telemetry — not established by this security review
