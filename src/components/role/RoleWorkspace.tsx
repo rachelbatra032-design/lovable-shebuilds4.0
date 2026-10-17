@@ -7,13 +7,6 @@ import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { cn } from "@/lib/utils";
 
-const TABS = [
-  { value: "map", label: "Map" },
-  { value: "capture", label: "Capture" },
-  { value: "review", label: "Review" },
-  { value: "ask", label: "Ask" },
-  { value: "plan", label: "Plan" },
-] as const;
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ScoreRing";
 import { roleChangesQuery, roleInputsQuery, roleItemsQuery, roleQuery, type KnowledgeItem } from "@/lib/queries";
@@ -26,6 +19,14 @@ import { CapturePanel } from "./CapturePanel";
 import { ReviewPanel } from "./ReviewPanel";
 import { AskPanel } from "./AskPanel";
 import { PlanPanel } from "./PlanPanel";
+
+const TABS = [
+  { value: "map", label: "Map" },
+  { value: "capture", label: "Capture" },
+  { value: "review", label: "Review" },
+  { value: "ask", label: "Ask" },
+  { value: "plan", label: "Plan" },
+] as const;
 
 const MapGraph = lazy(() => import("./MapGraph"));
 
