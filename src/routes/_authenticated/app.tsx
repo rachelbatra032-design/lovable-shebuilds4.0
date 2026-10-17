@@ -175,7 +175,7 @@ function Onboarding({ onCreated }: { onCreated: (id: string) => void }) {
   async function accept(inv: { id: string; company_id: string }) {
     const { data: u } = await supabase.auth.getUser();
     const { error } = await supabase.from("company_members").insert({ company_id: inv.company_id, user_id: u.user!.id, member_role: "member" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await supabase.from("invites").update({ accepted: true }).eq("id", inv.id);
     qc.invalidateQueries();
     onCreated(inv.company_id);
@@ -231,7 +231,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
     e.preventDefault();
     if (!newDept.trim()) return;
     const { error } = await supabase.from("departments").insert({ company_id: companyId, name: newDept.trim() });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setNewDept("");
     refresh();
   }
@@ -332,7 +332,7 @@ function AddRoleDialog({ companyId, departmentId, departmentName, onDone }: { co
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("roles").insert({ company_id: companyId, department_id: departmentId, title, holder_name: holder || null });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setOpen(false);
     onDone();
   }
@@ -385,7 +385,7 @@ function InviteDialog({
     const { error } = await supabase
       .from("invites")
       .insert({ company_id: companyId, email: email.trim().toLowerCase(), role_id: roleId === "none" ? null : roleId, invited_by: u.user!.id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Invite saved. ${email} can join after signing up with this email.`);
     setEmail("");
     onDone();

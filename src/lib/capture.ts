@@ -76,7 +76,7 @@ export async function extractText(file: File): Promise<string | null> {
   if (["xlsx", "xls", "ods"].includes(ext)) {
     const XLSX = await import("xlsx");
     const wb = XLSX.read(await file.arrayBuffer());
-    return wb.SheetNames.map((n: string) => `# Sheet: ${n}\n${XLSX.utils.sheet_to_csv(wb.Sheets[n])}`).join("\n\n").slice(0, 60000);
+    return wb.SheetNames.map((n: string) => `# Sheet: ${n}\n${XLSX.utils.sheet_to_csv(wb.Sheets[n]!)}`).join("\n\n").slice(0, 60000);
   }
   throw new Error("Unsupported file type. Try PDF, Word, Excel, CSV or a text export.");
 }

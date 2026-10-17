@@ -14,7 +14,7 @@ export function ReviewPanel({ roleId, companyId, inputs }: { roleId: string; com
   async function resolve(id: string, itemId: string | null, accept: boolean, title: string, body: string) {
     if (accept && itemId) {
       const { error } = await supabase.from("knowledge_items").update({ title, body, translations: {}, last_seen_at: new Date().toISOString() }).eq("id", itemId);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
     }
     await supabase.from("change_requests").update({ status: accept ? "confirmed" : "rejected" }).eq("id", id);
     toast.success(accept ? "Map updated" : "Kept the old version");
