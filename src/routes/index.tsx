@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "lucide-react";
+import { ArrowRight, Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/components/Brand";
 import { ThemeToggle } from "@/components/ThemeProvider";
@@ -44,20 +44,22 @@ function Landing() {
       </header>
 
       <main>
-        <section className="mx-auto max-w-3xl px-5 pb-16 pt-16 text-center sm:pb-20 sm:pt-24">
-          <h1 className="text-4xl sm:text-5xl">Kaimaaral</h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Keep the knowledge. Hand over the role.
+        <section className="mx-auto max-w-4xl px-5 pb-12 pt-8 text-center sm:pb-16 sm:pt-14" aria-labelledby="home-title">
+          <svg viewBox="0 0 160 96" fill="none" className="mx-auto mb-6 h-[72px] w-[120px] text-foreground sm:mb-8 sm:h-24 sm:w-40" role="img" aria-label="Handover: knowledge passed from one person to the next">
+            <path d="M38 16H18v64h20M122 16h20v64h-20" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M38 48h80m-20-20 20 20-20 20" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="m68 35 13 13-13 13-13-13 13-13Z" fill="currentColor" />
+          </svg>
+          <h1 id="home-title" className="text-5xl font-semibold leading-none sm:text-7xl lg:text-8xl">Kaimaaral</h1>
+          <p className="mx-auto mt-6 max-w-xl text-2xl font-medium leading-tight text-foreground sm:mt-8 sm:text-3xl">
+            Keep the knowledge.<br />Hand over the role.
           </p>
-          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
             Voice notes, files and everyday decisions — connected into one source-backed role map, in your language.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
-              <Link to="/app">Open your workspace</Link>
-            </Button>
-            <Button asChild size="lg" variant="ghost">
-              <Link to="/readme">Read Me</Link>
+          <div className="mt-6 flex justify-center sm:mt-8">
+            <Button asChild size="lg" className="h-auto min-h-12 max-w-full gap-4 whitespace-normal px-6 py-3 text-center text-base">
+              <Link to="/app">Open your workspace <ArrowRight className="h-5 w-5 shrink-0" aria-hidden="true" /></Link>
             </Button>
           </div>
           <p className="mt-5 text-xs text-muted-foreground">English · हिन्दी · മലയാളം · தமிழ்</p>
