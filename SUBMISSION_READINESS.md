@@ -5,9 +5,10 @@
 - Hosted sign-in settings: signups, email and Google enabled; anonymous accounts disabled. Google OAuth completion and email delivery were not exercised.
 - Signed-in journey exercised with real AI and a new private sample workspace: sample creation → visual map (21 nodes) → typed note extraction → change confirmation → cited answer → generated draft plan → reload/readback.
 - A forced route-module failure after automatic recovery showed the branded fallback; Retry page restored the role.
-- All 21 automated tests pass. Preview reports build OK.
+- All 24 automated tests pass. Preview reports build OK.
 - Sample company/role/capture/review labels and Known limitations are visible. Read Me now describes the current plan and its readiness gate.
 - Basic backend security checks passed (not a deep code audit). Removed anonymous access to company helpers and direct caller access to the signup trigger function.
+- Three-layer source and live-policy review found and fixed invitation retargeting, accepted-invitation reuse and cross-company relationship gaps; eight live access assertions passed. See `SECURITY_REVIEW.md` for evidence and limitations.
 - Updated SheetJS to official 0.20.3 and patched js-yaml/source-map-js. Two moderate sprintf-js dependency warnings remain; the registry has no version newer than the reported vulnerable 1.1.3. The scanner cannot registry-check the official SheetJS tarball; its installed version was verified directly.
 - The two remaining database advisor warnings concern intentional signed-in execution of membership/admin helpers. Each checks only the caller's auth.uid(); these helpers are required for company-scoped policies.
 
@@ -24,6 +25,7 @@
 ## Remaining release gates
 - User authorizes publication and verifies the public URL in a signed-out browser. A normal project preview is access-restricted and is not the required published submission URL.
 - Resolve or review remaining dependency warnings; no fully clean security claim is made.
+- Run the editor's deep code scan (More → Security → Run deep scan); review an up-to-date completed result. Basic tool scans do not satisfy this requirement. Stored-plan write enforcement and sensitive telemetry redaction remain unverified, as documented in the security review.
 - Submit the external SheBuilds Hub fields and attach any chosen screenshots. The actual Hub form is not available to inspect here; completion is unverified.
 - Confirm fresh-project/team/rule eligibility in the Hub; these are not established by app behavior.
 - Freeze only after submission. No code, content, configuration or connected-backend changes to the submitted version; further work uses a separate duplicate.
