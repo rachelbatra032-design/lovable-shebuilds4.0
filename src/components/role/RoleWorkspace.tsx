@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, BookText, Network, Loader2, Mic, MessageCircle, ListChecks, ClipboardCheck, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookText, Network, Loader2, Mic, MessageCircle, ListChecks, ClipboardCheck, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { cn } from "@/lib/utils";
@@ -105,20 +105,20 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> {co?.name}
         </Link>
-        <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:flex sm:gap-5">
-          <div className="shrink-0"><ScoreRing value={score} size={76} /></div>
+        <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-border pb-7 sm:pb-9">
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-muted-foreground">{dept}</p>
-            <h1 className="text-2xl sm:text-4xl">{r.title}</h1>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {r.holder_name ?? "No holder"}
-              {r.status === "leaving" && <> · <span className="text-terracotta">leaving soon</span></>}
-              {r.successor_name && <> · next: {r.successor_name}</>}
-              {" · "}
-              {score}% documented, based on the last 30 days
-            </p>
+            <p className="mb-3 text-xs font-medium uppercase text-muted-foreground">{dept} / Role knowledge</p>
+            <h1 className="text-3xl sm:text-5xl">{r.title}</h1>
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm">
+              <div><p className="text-xs text-muted-foreground">{r.status === "leaving" ? "Handing over" : "Role-holder"}</p><p className="mt-1 font-medium">{r.holder_name ?? "No holder"}</p></div>
+              {r.successor_name && <><ArrowRight className="h-5 w-5 text-muted-foreground" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">Taking over</p><p className="mt-1 font-medium">{r.successor_name}</p></div></>}
+            </div>
           </div>
-          {co?.is_sample && <Badge variant="outline" className="col-start-2 w-fit shrink-0 border-terracotta text-terracotta">Sample data</Badge>}
+          <div className="flex flex-col items-center gap-2"><ScoreRing value={score} size={64} /><span className="text-xs text-muted-foreground">Documented</span></div>
+          <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
+            <span>{list.length} recorded items · Based on the last 30 days</span>
+          </div>
         </div>
 
         <div className="mt-6">
@@ -183,10 +183,10 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                   </div>
                 ) : mode === "read" ? (
                   <div className="grid gap-5 md:grid-cols-2">
-                    {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k) => (
+                    {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k, sectionIndex) => (
                       <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "md:col-span-2")}>
                         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                          <h2 className="min-w-0 text-xl">{KIND_LABEL[k as Kind]}</h2>
+                          <div className="flex min-w-0 items-baseline gap-3"><span className="text-xs tabular-nums text-muted-foreground">{String(sectionIndex + 1).padStart(2, "0")}</span><h2 className="min-w-0 text-xl sm:text-2xl">{KIND_LABEL[k as Kind]}</h2></div>
                           <span className="text-xs tabular-nums text-muted-foreground">{list.filter((i) => i.kind === k).length}</span>
                         </div>
                         <ul className="mt-3 divide-y divide-border">
