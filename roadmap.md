@@ -15,6 +15,9 @@
 - [x] Client-side error logging (page, last action, stack)
 - [x] Onboarding: actual recorded procedures instead of questions or shadowing arrangements
 - [x] Onboarding readiness check: flag missing screen paths, decision criteria, approval rules and completion criteria
-- [ ] Pre-submission: publish, security scan, screenshots, testing steps
-- [ ] Verify judge access, safe login, main journey, labels, category and submission fields
-- [ ] Persistent route-loading fallback with retry after automatic recovery
+- [x] Basic security scan, signed-in main journey, labels, category, testing instructions and fallback verification
+- [x] Persistent route-loading fallback with retry after automatic recovery
+- [ ] Publish and verify judge access — waits for user authorization to publish
+- [ ] Resolve remaining sprintf-js dependency warnings — no patched registry release available
+- [ ] Complete external Hub submission fields and optional screenshot uploads — Hub form unavailable here
+- [ ] Freeze submitted version — waits for confirmed submission
