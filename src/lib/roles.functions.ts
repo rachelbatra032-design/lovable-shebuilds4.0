@@ -333,10 +333,14 @@ export const translateItems = createServerFn({ method: "POST" })
       .from("knowledge_items")
       .select("id, title, body, cadence, translations")
       .eq("role_id", data.roleId);
-    const todo = (items ?? []).filter((i) => !(i.translations as Record<string, unknown> | null)?.[data.language]).slice(0, 60);
-    if (!todo.length) return { ok: true as const, translated: 0 };
+    const missing = (items ?? []).filter((i) => !(i.translations as Record<string, unknown> | null)?.[data.language]);
+    if (!missing.length) return { ok: true as const, translated: 0, remaining: 0 };
     try {
-      const out = await respondJSON<{ items: { id: string; title: string; body: string; cadence: string | null }[] }>({
+      let translated = 0;
+      // Translate in small batches; the AI sometimes drops items from large batches.
+      for (let start = 0; start < missing.length && start < 60; start += 6) {
+        const todo = missing.slice(start, start + 6);
+        const out = await respondJSON<{ items: { id: string; title: string; body: string; cadence: string | null }[] }>({
         instructions: `Translate workplace knowledge items from English into natural, everyday ${LANG_NAME[data.language]} as an SME employee would speak it (native script). Keep names, amounts, product and software names (Tally, GST, etc.) unchanged. Keep markdown/numbering.`,
         schema: {
           name: "translations",
