@@ -363,14 +363,16 @@ export const translateItems = createServerFn({ method: "POST" })
         },
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(todo.map(({ id, title, body, cadence }) => ({ id, title, body, cadence }))) }] }],
       });
-      const byId = new Map(todo.map((t) => [t.id, t]));
-      for (const t of out.items) {
-        const orig = byId.get(t.id);
-        if (!orig) continue;
-        const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
-        await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
+        const byId = new Map(todo.map((t) => [t.id, t]));
+        for (const t of out.items) {
+          const orig = byId.get(t.id);
+          if (!orig) continue;
+          const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
+          await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
+          translated++;
+        }
       }
-      return { ok: true as const, translated: out.items.length };
+      return { ok: true as const, translated, remaining: Math.max(0, missing.length - translated) };
     } catch (e) {
       return { ok: false as const, error: errMessage(e) };
     }
