@@ -22,6 +22,38 @@ A shared workspace where people in each department (Finance, Marketing, Ops...) 
 8. **Ask the role**: chat with the role's map. Answers cite their sources. The successor picks the answer language; original quotes are kept and can be shown.
 9. **Department view**: every role in a department, how complete each map is, and recent activity.
 
+## End-to-end user flow
+
+```text
+Landing page --> Sign up / "Try the demo"
+   |
+Admin: create company --> add departments (Finance, Marketing...) --> add role cards --> invite people by email
+   |
+Role-holder dashboard ("My roles")
+   |-- Daily log: tap mic --> speak in Malayalam/Hindi/Tamil/English --> save
+   |-- Upload: files, chat exports, emails, KT/screen recordings
+   |        |
+   |   Processing status: transcribing --> extracting --> added to map
+   |        |
+   |-- Review inbox: "Did this change?" cards --> Confirm / Keep old
+   |
+Role map  [Read | Visual toggle]  [language switch]
+   |-- sections or graph --> click an item --> see its source (clip, snippet, file)
+   |-- Ask the role (chat with cited answers)
+   |-- Onboarding plan (week 1 / week 2 / month 1 checklist)
+   |
+Manager: department view --> completeness % per role --> spot risky roles
+   |
+Handover: role-holder leaves --> admin assigns successor --> successor opens the map, plan and chat
+```
+
+## Design system
+
+- Components: shadcn/ui (accessible, already in the project), themed with our own colors and fonts so it doesn't look generic.
+- Accessibility: WCAG AA contrast, large touch targets for the mic button, full keyboard support, readable Indic fonts at 16px or larger.
+- Mobile-first for daily logging, with a desktop-friendly layout for the map and graph.
+- Every screen gives clear feedback: processing states, empty states that explain what to do next, and "Sample data" badges.
+
 ## Capture first, writing optional
 
 The app is built to capture work and organize it automatically, not for people to write and maintain pages. Nobody writes an SOP.
