@@ -46,18 +46,19 @@ function ReadMe() {
 
         <Section n="Start here" title="Review it in 3 minutes">
           <ol className="space-y-2 [&>li]:ml-5 [&>li]:list-decimal">
-            <li>Sign in (Google is quickest), then choose <strong>Load sample company</strong>. This creates your own private copy of the fictional "Kerala Spices Traders".</li>
+            <li>Sign in, choose your recording languages and optional reading language, then choose <strong>Load sample company</strong>. This creates your own private copy of the fictional "Kerala Spices Traders".</li>
             <li>Open <strong>Finance → Accounts Lead</strong> (Anitha, leaving soon). Note the completeness score.</li>
             <li>On the <strong>Map</strong> tab, switch between <strong>Read</strong> and <strong>Visual</strong>. Click any item to see its source: the original Malayalam voice note and its English meaning.</li>
             <li>Change the language at the top to <strong>മലയാളം / हिन्दी / தமிழ்</strong> — the map is translated on demand.</li>
             <li>Open <strong>Review</strong>: a WhatsApp chat says the packaging vendor changed. Tap <strong>Confirm change</strong> and the map updates itself.</li>
             <li>Open <strong>Ask</strong> and try "How do I pay a new vendor?" — the answer cites its sources.</li>
             <li>Open <strong>Capture</strong> and record a short voice note in any language (or type one). Watch it get transcribed and added to the map.</li>
-            <li>Optional: <strong>Plan</strong> generates a Week 1 / Week 2 / Month 1 onboarding plan.</li>
+            <li>Optional: <strong>Plan</strong> generates a 30–60–90-day handover plan with executable instructions and sources. Missing screen paths, decision criteria, approval rules or completion criteria are flagged; incomplete plans stay <strong>Draft</strong>.</li>
           </ol>
         </Section>
 
         <Section n="Criterion 1" title="Usefulness & understanding of the user">
+          <p><strong>Category:</strong> Business Operations — preserving role knowledge and preparing successors for day-to-day work.</p>
           <p>
             <strong>Who:</strong> small and medium businesses in India (traders, exporters, clinics, agencies) with 10–200 staff, where one person
             often holds a whole function in their head, and where everyday work happens in Malayalam, Hindi or Tamil over WhatsApp and phone calls.
@@ -109,6 +110,8 @@ function ReadMe() {
             <li>Scanned images inside documents and password-protected files aren't read. WhatsApp/Slack must be exported as text.</li>
             <li>Email invites are matched when the invited person signs up with the same email; no invite email is sent yet.</li>
             <li>All sample people, companies and figures are fictional.</li>
+            <li>AI answers and translations need checking against their sources. A readiness check validates recorded evidence, not the correctness of your business procedures.</li>
+            <li>A plan stays Draft when necessary details are not recorded. Capture the missing procedures, then make a new plan; the app does not invent them.</li>
           </ul>
         </Section>
       </main>

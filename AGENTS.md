@@ -19,3 +19,4 @@
 - Browser runtime errors are logged by `src/lib/client-error-log.ts` (installed once in `__root`) into `client_errors` with page, last action and stack; keep it dependency-free so it can't itself crash the page.
 - Onboarding readiness is computed by the shared source-backed validator in `src/lib/plan-completeness.ts` on save and display, not by an AI readiness claim; missing or legacy audits fail closed to draft.
 - Stale dynamic-module failures recover through a fresh document load, capped per path to prevent reload loops; ordinary runtime errors remain in the error boundary.
+- Root and router-default error boundaries share `RouteErrorScreen` so failed route imports retain a visible retry and home action after recovery is exhausted.
