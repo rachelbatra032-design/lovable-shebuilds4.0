@@ -61,7 +61,10 @@ export function LanguageSetup() {
       .update({ recording_languages: recording, output_language: out, language_setup_done: true })
       .eq("id", prefs.data.uid);
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     if (out) setLang(out);
     toast.success("Language settings saved");
     qc.invalidateQueries({ queryKey: ["me", "language-prefs"] });
