@@ -3,7 +3,6 @@ import { Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "luc
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/components/Brand";
 import { ThemeToggle } from "@/components/ThemeProvider";
-import hero from "@/assets/hero-notebook.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -81,7 +80,6 @@ function Landing() {
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-14">
-          <img src={hero} alt="Role knowledge recorded in Malayalam, Hindi and Tamil" className="mb-10 h-48 w-full rounded-lg object-cover grayscale sm:h-64" width={1280} height={960} />
           <h2 className="text-2xl">How it works</h2>
           <ol className="mt-6 grid gap-4 md:grid-cols-4">
             {[
