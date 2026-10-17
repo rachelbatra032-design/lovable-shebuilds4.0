@@ -6,6 +6,7 @@ Fixture IDs are reserved for temporary security-test workspaces, never real data
 import asyncio
 import json
 import os
+import sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
@@ -41,6 +42,12 @@ async def main():
               if (operation === 'foreignReference') result = await supabase.from('inputs').insert({company_id: payload.company, role_id: payload.role, kind:'text', original_text:'Security test'});
               return {failed: Boolean(result.error), data: result.data};
             }""", {"operation": operation, "payload": payload})
+        if "--after-removal" in sys.argv:
+            result = await query("join", {"company": A})
+            assert result["failed"], "Removed member must not reuse an accepted invitation"
+            print("PASS: removed member cannot reuse accepted invitation")
+            await browser.close()
+            return
         result = await query("inviteUpdate", {"id": INVITE, "patch": {"company_id": B}})
         assert result["failed"], "Invitee must not change the invited company"
         print("PASS: invitation cannot be retargeted")
