@@ -31,7 +31,7 @@ export async function createInput(opts: {
     .insert({
       company_id: opts.companyId,
       role_id: opts.roleId,
-      created_by: u.user?.id,
+      created_by: u.user?.id ?? null,
       kind: opts.kind,
       title: opts.title,
       original_text: opts.text ?? null,
@@ -44,7 +44,7 @@ export async function createInput(opts: {
   const patch: { storage_path?: string; frames?: string[] } = {};
   if (opts.file) {
     const path = `${base}.${extFor(opts.file.type, opts.fileName)}`;
-    const up = await supabase.storage.from("inputs").upload(path, opts.file, { contentType: opts.file.type || undefined });
+    const up = await supabase.storage.from("inputs").upload(path, opts.file, opts.file.type ? { contentType: opts.file.type } : {});
     if (up.error) throw up.error;
     patch.storage_path = path;
   }
@@ -52,7 +52,7 @@ export async function createInput(opts: {
     const paths: string[] = [];
     for (let i = 0; i < opts.frames.length; i++) {
       const p = `${base}-frame-${i}.jpg`;
-      const up = await supabase.storage.from("inputs").upload(p, opts.frames[i], { contentType: "image/jpeg" });
+      const up = await supabase.storage.from("inputs").upload(p, opts.frames[i]!, { contentType: "image/jpeg" });
       if (!up.error) paths.push(p);
     }
     patch.frames = paths;
@@ -76,7 +76,7 @@ export async function extractText(file: File): Promise<string | null> {
   if (["xlsx", "xls", "ods"].includes(ext)) {
     const XLSX = await import("xlsx");
     const wb = XLSX.read(await file.arrayBuffer());
-    return wb.SheetNames.map((n) => `# Sheet: ${n}\n${XLSX.utils.sheet_to_csv(wb.Sheets[n])}`).join("\n\n").slice(0, 60000);
+    return wb.SheetNames.map((n: string) => `# Sheet: ${n}\n${XLSX.utils.sheet_to_csv(wb.Sheets[n])}`).join("\n\n").slice(0, 60000);
   }
   throw new Error("Unsupported file type. Try PDF, Word, Excel, CSV or a text export.");
 }

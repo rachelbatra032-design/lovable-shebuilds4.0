@@ -69,7 +69,7 @@ export default function MapGraph({
         edges={edges}
         fitView
         minZoom={0.2}
-        onNodeClick={(_, n) => {
+        onNodeClick={(_e: unknown, n: { id: string }) => {
           if (n.id !== "role" && !n.id.startsWith("kind-")) onSelect(n.id);
         }}
         proOptions={{ hideAttribution: true }}
