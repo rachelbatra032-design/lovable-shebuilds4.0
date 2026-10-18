@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_runs: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          finished_at: string | null
+          id: string
+          role_id: string
+          status: string
+          summary: string | null
+          task: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          finished_at?: string | null
+          id?: string
+          role_id: string
+          status?: string
+          summary?: string | null
+          task: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          finished_at?: string | null
+          id?: string
+          role_id?: string
+          status?: string
+          summary?: string | null
+          task?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_runs_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       change_requests: {
         Row: {
           company_id: string
@@ -547,6 +598,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cache_item_translation: {
+        Args: {
+          expected_body: string
+          expected_title: string
+          item_id: string
+          reading_language: string
+          translated_value: Json
+        }
+        Returns: boolean
+      }
       is_company_admin: { Args: { _company: string }; Returns: boolean }
       is_company_member: { Args: { _company: string }; Returns: boolean }
     }

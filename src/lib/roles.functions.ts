@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { KINDS } from "./knowledge";
 import { buildSample } from "./sample-data";
+import { isItemTranslation } from "./translation";
 import { checkPlanCompleteness, PLAN_CRITERIA, type PlanCompleteness, type ProcedureChecks } from "./plan-completeness";
 
 const LANG_NAME: Record<string, string> = { en: "English", ml: "Malayalam", hi: "Hindi", ta: "Tamil" };
@@ -330,11 +331,12 @@ export const translateItems = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { respondJSON } = await import("./ai.server");
     const { supabase } = context;
-    const { data: items } = await supabase
+    const { data: items, error: readError } = await supabase
       .from("knowledge_items")
       .select("id, title, body, cadence, translations")
-      .eq("role_id", data.roleId);
-    const missing = (items ?? []).filter((i) => !(i.translations as Record<string, unknown> | null)?.[data.language]);
+      .eq("role_id", data.roleId).eq("status", "active");
+    if (readError) return { ok: false as const, error: readError.message };
+    const missing = (items ?? []).filter((i) => !isItemTranslation((i.translations as Record<string, unknown> | null)?.[data.language]));
     if (!missing.length) return { ok: true as const, translated: 0, remaining: 0 };
     try {
       let translated = 0;
@@ -364,15 +366,20 @@ export const translateItems = createServerFn({ method: "POST" })
         },
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(todo.map(({ id, title, body, cadence }) => ({ id, title, body, cadence }))) }] }],
       });
+        const validated = z.object({ items: z.array(z.object({ id: z.string().uuid(), title: z.string().trim().min(1), body: z.string().trim().min(1), cadence: z.string().nullable() })) }).parse(out);
         const byId = new Map(todo.map((t) => [t.id, t]));
-        for (const t of out.items) {
+        const saved = new Set<string>();
+        for (const t of validated.items) {
           const orig = byId.get(t.id);
-          if (!orig) continue;
-          const translations = { ...((orig.translations as Record<string, unknown>) ?? {}), [data.language]: { title: t.title, body: t.body, cadence: t.cadence } };
-          await supabase.from("knowledge_items").update({ translations: translations as never }).eq("id", t.id);
+          if (!orig || saved.has(t.id)) continue;
+          const { data: stored, error: writeError } = await supabase.rpc("cache_item_translation", { item_id: t.id, reading_language: data.language, expected_title: orig.title, expected_body: orig.body, translated_value: { title: t.title, body: t.body, cadence: t.cadence } });
+          if (writeError) throw new Error(writeError.message);
+          if (!stored) throw new Error("The source changed during translation. Retry to translate the latest version.");
+          saved.add(t.id);
           translated++;
         }
       }
+      if (translated === 0) throw new Error("No translations were returned. Retry translation when you are ready.");
       return { ok: true as const, translated, remaining: Math.max(0, missing.length - translated) };
     } catch (e) {
       return { ok: false as const, error: errMessage(e) };
