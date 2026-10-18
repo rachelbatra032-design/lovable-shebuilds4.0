@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Brand } from "@/components/Brand";
+import { Brand, HandoverSymbol } from "@/components/Brand";
 import { ThemeToggle } from "@/components/ThemeProvider";
 
 export const Route = createFileRoute("/")({
