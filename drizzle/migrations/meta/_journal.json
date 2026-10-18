@@ -43,6 +43,13 @@
       "when": 1792302020161,
       "tag": "0005_handover_agent_runs",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792302069465,
+      "tag": "0006_atomic_translation_cache",
+      "breakpoints": true
     }
   ]
 }

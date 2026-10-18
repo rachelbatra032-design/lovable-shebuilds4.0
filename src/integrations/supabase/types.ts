@@ -598,6 +598,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cache_item_translation: {
+        Args: {
+          expected_body: string
+          expected_title: string
+          item_id: string
+          reading_language: string
+          translated_value: Json
+        }
+        Returns: boolean
+      }
       is_company_admin: { Args: { _company: string }; Returns: boolean }
       is_company_member: { Args: { _company: string }; Returns: boolean }
     }
