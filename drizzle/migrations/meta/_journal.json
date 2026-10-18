@@ -36,6 +36,13 @@
       "when": 1792254860335,
       "tag": "0004_enforce_company_reference_boundaries",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792302020161,
+      "tag": "0005_handover_agent_runs",
+      "breakpoints": true
     }
   ]
 }
