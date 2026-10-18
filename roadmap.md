@@ -1,5 +1,8 @@
 # Roadmap (SheBuilds deadline Sun Oct 18 12:29 IST)
 
+- [ ] Run the full test suite and live core journey, including all reading languages
+- [ ] Add user-triggered handover agents with private run history and human-reviewed results
+
 - [x] Design system + landing page + Read Me page
 - [x] Cloud: schema, auth (email, Google, Lovable), sample company "Kerala Spices Traders"
 - [x] Workspace: departments, roles, invites
