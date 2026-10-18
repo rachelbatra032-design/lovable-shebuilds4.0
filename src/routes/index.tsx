@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Mic, Network, MessagesSquare, ShieldCheck, Languages, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Brand } from "@/components/Brand";
+import { Brand, HandoverSymbol } from "@/components/Brand";
 import { ThemeToggle } from "@/components/ThemeProvider";
 
 export const Route = createFileRoute("/")({
@@ -34,10 +34,10 @@ function Landing() {
         <Brand />
         <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost">
+          <Button asChild variant="ghost" className="px-2 sm:px-4">
             <Link to="/readme">Read Me</Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="px-2 sm:px-4">
             <Link to="/app">Open app</Link>
           </Button>
         </nav>
@@ -45,11 +45,7 @@ function Landing() {
 
       <main>
         <section className="mx-auto max-w-4xl px-5 pb-12 pt-8 text-center sm:pb-16 sm:pt-14" aria-labelledby="home-title">
-          <svg viewBox="0 0 160 96" fill="none" className="mx-auto mb-5 h-14 w-[88px] text-foreground sm:mb-8 sm:h-24 sm:w-40" role="img" aria-label="Handover: knowledge passed from one person to the next">
-            <path d="M38 16H18v64h20M122 16h20v64h-20" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M38 48h80m-20-20 20 20-20 20" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="m68 35 13 13-13 13-13-13 13-13Z" fill="currentColor" />
-          </svg>
+          <HandoverSymbol className="mx-auto mb-5 h-14 w-[84px] text-foreground sm:mb-8 sm:h-24 sm:w-40" label="Handover: knowledge passed from one person to the next" />
           <h1 id="home-title" className="text-4xl font-semibold leading-none sm:text-6xl lg:text-8xl">Kaimaaral</h1>
           <p className="mx-auto mt-5 max-w-xl text-2xl font-medium leading-tight text-foreground sm:mt-8 sm:text-3xl">
             Keep the knowledge.<br />Hand over the role.
