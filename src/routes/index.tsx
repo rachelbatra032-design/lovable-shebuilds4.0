@@ -34,10 +34,10 @@ function Landing() {
         <Brand />
         <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost">
+          <Button asChild variant="ghost" className="px-2 sm:px-4">
             <Link to="/readme">Read Me</Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="px-2 sm:px-4">
             <Link to="/app">Open app</Link>
           </Button>
         </nav>
