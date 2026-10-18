@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 
 const generatePlan = vi.fn();
 const askRole = vi.fn();
+const translateItems = vi.hoisted(() => vi.fn());
 
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, ...p }: { children: ReactNode }) => <a {...(p as object)}>{children}</a>,
@@ -18,7 +19,7 @@ vi.mock("@tanstack/react-start", () => ({
   createServerFn: () => ({ middleware: () => ({ inputValidator: () => ({ handler: () => vi.fn() }) }) }),
 }));
 vi.mock("@/lib/roles.functions", () => ({
-  translateItems: vi.fn(async () => ({ ok: true })),
+  translateItems,
   generatePlan: (...a: unknown[]) => generatePlan(...a),
   askRole: (...a: unknown[]) => askRole(...a),
   processInput: vi.fn(),
@@ -72,6 +73,8 @@ describe("Role page tabs", () => {
   beforeEach(() => {
     generatePlan.mockReset();
     askRole.mockReset();
+    translateItems.mockReset();
+    localStorage.removeItem("kaimaaral-lang");
     vi.stubGlobal("matchMedia", () => ({ matches: true }));
   });
 
@@ -80,6 +83,17 @@ describe("Role page tabs", () => {
     fireEvent.click(screen.getByRole("button", { name: /Visual/ }));
     expect(await screen.findByTestId("visual-map")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Visual/ })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("translation rejection clears loading and requires an explicit retry", async () => {
+    localStorage.setItem("kaimaaral-lang", "ml");
+    translateItems.mockRejectedValue(new Error("Translation service unavailable"));
+    setup();
+    const retry = await screen.findByRole("button", { name: "Retry translation" });
+    expect(screen.queryByText("Translating…")).not.toBeInTheDocument();
+    expect(translateItems).toHaveBeenCalledTimes(1);
+    fireEvent.click(retry);
+    await waitFor(() => expect(translateItems).toHaveBeenCalledTimes(2));
   });
 
   it("Capture tab opens the recorder", async () => {
