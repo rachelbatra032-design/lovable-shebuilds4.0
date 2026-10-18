@@ -23,7 +23,7 @@ export function Brand({ to = "/" }: { to?: "/" | "/app" }) {
   return (
     <Link to={to} className="flex min-w-0 items-center gap-2.5" aria-label="Kaimaaral home">
       <HandoverSymbol className="h-5 w-8 shrink-0 text-foreground" />
-      <span className="truncate font-display text-lg font-semibold leading-none text-foreground">Kaimaaral</span>
+      <span className="truncate font-display text-base font-semibold leading-none text-foreground sm:text-lg">Kaimaaral</span>
     </Link>
   );
 }
