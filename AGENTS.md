@@ -28,3 +28,5 @@
 - Invitations allow only acceptance updates, are consumed atomically on membership insertion, and cannot be reopened; this prevents retargeting or reuse after removal.
 - Database triggers reject cross-company related IDs and tenant reassignment; per-row membership policies alone cannot guarantee relationship integrity.
 - Visual role maps expand one category at a time in a stable three-column layout, keeping dense maps readable without changing stored knowledge or links.
+- Handover agents invoke existing authenticated plan generation and source-backed validation, with company-scoped run history; they never auto-approve knowledge changes.
+- Translation caches merge atomically under caller RLS and compare source text before saving, preventing concurrent languages or edited sources from being overwritten.

@@ -20,6 +20,8 @@ import { CapturePanel } from "./CapturePanel";
 import { ReviewPanel } from "./ReviewPanel";
 import { AskPanel } from "./AskPanel";
 import { PlanPanel } from "./PlanPanel";
+import { AgentsPanel } from "./AgentsPanel";
+import { isItemTranslation } from "@/lib/translation";
 
 const TABS = [
   { value: "map", label: "Map", icon: BookText },
@@ -45,6 +47,9 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const [mode, setMode] = useState<"read" | "visual">("read");
   const [selected, setSelected] = useState<string | null>(null);
   const [translating, setTranslating] = useState(false);
+  const [translationError, setTranslationError] = useState<string | null>(null);
+  const [translationRetry, setTranslationRetry] = useState(0);
+  const translationInFlight = useRef(false);
   const translate = useServerFn(translateItems);
   const tried = useRef(new Set<string>());
   const panelRef = useRef<HTMLDivElement>(null);
@@ -57,26 +62,33 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   }
 
   const list = items.data?.items ?? [];
-  const untranslated = lang === "en" ? 0 : list.filter((i) => !(i.translations as Record<string, unknown>)?.[lang]).length;
+  const untranslated = lang === "en" ? 0 : list.filter((i) => !isItemTranslation((i.translations as Record<string, unknown>)?.[lang])).length;
   const needsTranslation = untranslated > 0;
 
   useEffect(() => {
-    const key = `${roleId}-${lang}-${untranslated}`;
-    if (!needsTranslation || tried.current.has(key)) return;
+    const key = `${roleId}-${lang}-${translationRetry}-${untranslated}`;
+    if (!needsTranslation || tried.current.has(key) || translationInFlight.current) return;
     tried.current.add(key);
+    translationInFlight.current = true;
+    setTranslationError(null);
     setTranslating(true);
     translate({ data: { roleId, language: lang as "ml" | "hi" | "ta" } })
       .then((r) => {
         if (!r.ok) {
           toast.error(r.error);
-          tried.current.delete(key); // allow a retry on the next render
-        } else if (r.remaining > 0) {
+          setTranslationError(r.error);
+        } else if (r.remaining > 0 && r.translated > 0) {
           tried.current.delete(key); // more items to translate — run again
         }
-        qc.invalidateQueries({ queryKey: ["role", roleId, "items"] });
+        return qc.invalidateQueries({ queryKey: ["role", roleId, "items"] });
       })
-      .finally(() => setTranslating(false));
-  }, [needsTranslation, lang, roleId, untranslated, translate, qc]);
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : "Translation failed. Please retry.";
+        setTranslationError(message);
+        toast.error(message);
+      })
+      .finally(() => { translationInFlight.current = false; setTranslating(false); });
+  }, [needsTranslation, lang, roleId, untranslated, translationRetry, translating, translate, qc]);
 
   const display = useCallback((i: KnowledgeItem) => displayItem(i, lang), [lang]);
 
@@ -118,10 +130,12 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
             <span>{list.length} recorded items · Based on the last 30 days</span>
+            <AgentsPanel roleId={roleId} companyId={r.company_id} language={lang} items={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} />
           </div>
         </div>
 
         <div className="mt-6">
+          {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => setTranslationRetry(n => n + 1)}>Retry translation</Button></div>}
           <div role="tablist" aria-label="Role sections" className="mobile-workspace-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 gap-1 border-t border-border bg-background px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] sm:static sm:flex sm:w-full sm:border-t-0 sm:border-b sm:px-0 sm:py-0">
             {TABS.map((t) => (
               <Button
