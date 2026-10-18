@@ -50,6 +50,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const [translationError, setTranslationError] = useState<string | null>(null);
   const [translationRetry, setTranslationRetry] = useState(0);
   const translationInFlight = useRef(false);
+  const blockedTranslations = useRef(new Set<string>());
   const translate = useServerFn(translateItems);
   const tried = useRef(new Set<string>());
   const panelRef = useRef<HTMLDivElement>(null);
@@ -67,7 +68,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
 
   useEffect(() => {
     const key = `${roleId}-${lang}-${translationRetry}-${untranslated}`;
-    if (!needsTranslation || tried.current.has(key) || translationInFlight.current) return;
+    if (!needsTranslation || tried.current.has(key) || translationInFlight.current || blockedTranslations.current.has(`${roleId}-${lang}`)) return;
     tried.current.add(key);
     translationInFlight.current = true;
     setTranslationError(null);
@@ -75,6 +76,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
     translate({ data: { roleId, language: lang as "ml" | "hi" | "ta" } })
       .then((r) => {
         if (!r.ok) {
+          blockedTranslations.current.add(`${roleId}-${lang}`);
           toast.error(r.error);
           setTranslationError(r.error);
         } else if (r.remaining > 0 && r.translated > 0) {
@@ -83,6 +85,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         return qc.invalidateQueries({ queryKey: ["role", roleId, "items"] });
       })
       .catch((error: unknown) => {
+        blockedTranslations.current.add(`${roleId}-${lang}`);
         const message = error instanceof Error ? error.message : "Translation failed. Please retry.";
         setTranslationError(message);
         toast.error(message);
@@ -135,7 +138,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         </div>
 
         <div className="mt-6">
-          {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => setTranslationRetry(n => n + 1)}>Retry translation</Button></div>}
+          {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => { blockedTranslations.current.delete(`${roleId}-${lang}`); setTranslationRetry(n => n + 1); }}>Retry translation</Button></div>}
           <div role="tablist" aria-label="Role sections" className="mobile-workspace-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 gap-1 border-t border-border bg-background px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] sm:static sm:flex sm:w-full sm:border-t-0 sm:border-b sm:px-0 sm:py-0">
             {TABS.map((t) => (
               <Button
