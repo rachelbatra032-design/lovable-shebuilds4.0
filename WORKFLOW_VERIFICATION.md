@@ -1,6 +1,9 @@
 # Workflow verification
 
 ## Recheck: October 24, 2026
+- Capture options now form one consistent group with plain-English document, screen and session-video choices; Read Me uses a visual five-step review checklist and criterion sections, checked at 1280px, 726px and 390px without overflow.
+- Chromium recorded actual spoken synthetic test audio through the voice button, saved the recording, transcribed it and completed extraction. This verifies the browser recording path, not physical microphone hardware. The transcript misheard "training" as "trading", reinforcing the need to inspect the original recording.
+- A successful read of hosted auth settings confirmed email sign-in and public signup enabled, email confirmation required, and anonymous signup disabled. The signup form rejected missing fields; a reserved example.com address was safely rejected by hosted auth. No real inbox was available, so email delivery, confirmation and full new-account onboarding remain unverified. No auth settings were changed.
 - All 34 automated tests passed across 9 files after the typography and status-bar changes.
 - Signed-out workspace access redirects to sign-in; Read Me opens publicly; signing out blocks role access again.
 - Signed-in Map, Visual, Capture, Review, Ask and Plan were exercised at 1280px, 726px and 390px with no horizontal page overflow.
