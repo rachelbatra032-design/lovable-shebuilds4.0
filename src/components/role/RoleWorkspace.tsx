@@ -220,6 +220,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                       <Button
                         variant="ghost"
                         key={v}
+                        data-tour={v === "visual" ? "visual-toggle" : undefined}
                         type="button"
                         aria-pressed={mode === v}
                         onClick={() => setMode(v)}
@@ -246,7 +247,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 ) : mode === "read" ? (
                   <div data-tour="knowledge" className="grid gap-8 xl:grid-cols-2">
                     {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k, sectionIndex) => (
-                      <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "xl:col-span-2")}>
+                      <section key={k} data-tour={sectionIndex === 0 ? "knowledge-first" : undefined} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "xl:col-span-2")}>
                         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                           <div className="flex min-w-0 items-baseline gap-3"><span className="text-xs tabular-nums text-muted-foreground">{String(sectionIndex + 1).padStart(2, "0")}</span><h2 className="min-w-0 text-xl sm:text-2xl">{KIND_LABEL[k as Kind]}</h2></div>
                           <span className="text-xs tabular-nums text-muted-foreground">{list.filter((i) => i.kind === k).length}</span>
