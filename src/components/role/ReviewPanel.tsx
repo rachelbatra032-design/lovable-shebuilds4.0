@@ -25,7 +25,7 @@ export function ReviewPanel({ roleId, companyId, inputs }: { roleId: string; com
   const list = q.data ?? [];
   if (!list.length)
     return (
-      <div className="paper-card p-8 text-center">
+      <div className="border-y border-border py-14 text-center">
         <p className="font-display text-3xl">All up to date</p>
         <p className="mt-1 text-muted-foreground">When a new note contradicts the map, it will show up here for a one-tap check.</p>
       </div>
@@ -37,19 +37,19 @@ export function ReviewPanel({ roleId, companyId, inputs }: { roleId: string; com
         const old = c.knowledge_items as { title: string; body: string } | null;
         const src = inputs.find((i) => i.id === c.source_input_id);
         return (
-          <article key={c.id} className="paper-card p-5">
+          <article key={c.id} className="border-t border-border py-6">
             <div className="flex items-center gap-2">
               <p className="font-display text-2xl">Did this change?</p>
               {c.is_sample && <Badge variant="outline" className="border-terracotta text-terracotta">Sample data</Badge>}
             </div>
             <p className="mt-1 text-muted-foreground">{c.reason}</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border border-border p-4 opacity-80">
+              <div className="border-l-2 border-border bg-muted p-4">
                 <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Before</p>
                 <p className="mt-1 font-medium line-through decoration-destructive/60">{old?.title}</p>
                 <p className="text-sm text-muted-foreground">{old?.body}</p>
               </div>
-              <div className="rounded-lg border-2 border-primary p-4">
+              <div className="border-l-2 border-primary bg-card p-4">
                 <p className="text-xs font-semibold uppercase tracking-widest text-primary">Now</p>
                 <p className="mt-1 font-medium">{c.proposed_title}</p>
                 <p className="text-sm">{c.proposed_body}</p>

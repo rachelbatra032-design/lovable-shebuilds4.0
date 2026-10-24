@@ -69,10 +69,10 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
     <div className="mx-auto flex h-[65dvh] min-h-[360px] max-h-[800px] max-w-3xl flex-col">
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto p-4 sm:p-5" aria-live="polite">
         {msgs.length === 0 && (
-          <div className="py-10 text-center sm:py-16">
+          <div className="py-8 text-left sm:py-12">
             <p className="font-display text-2xl sm:text-3xl">Ask the {roleTitle}</p>
             <p className="mt-2 text-sm text-muted-foreground">Grounded in this role’s recorded knowledge.</p>
-            <div className="mt-6 grid gap-1 text-left sm:mx-auto sm:max-w-lg">
+            <div className="mt-6 grid gap-1 divide-y divide-border text-left">
               {SUGGESTIONS.map((s) => (
                 <Button key={s} variant="ghost" size="sm" className="h-auto justify-start whitespace-normal py-3 text-left text-muted-foreground" onClick={() => send(s)}>
                   {s}
@@ -109,7 +109,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
                       {m.cited.map((id) => {
                         const it = byId.get(id);
                         return it ? (
-                          <button key={id} onClick={() => onOpenItem(id)} className="max-w-full rounded-full border border-border bg-background px-2.5 py-0.5 text-left text-xs hover:border-primary">
+                          <button key={id} onClick={() => onOpenItem(id)} className="max-w-full rounded-md border border-border bg-card px-2.5 py-0.5 text-left text-xs hover:border-primary">
                             {displayItem(it, lang).title}
                           </button>
                         ) : null;
@@ -129,7 +129,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
         <div ref={endRef} />
       </div>
       <form
-        className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-lg border border-border bg-muted p-3"
+        className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-md border border-border bg-card p-3"
         onSubmit={(e) => {
           e.preventDefault();
           send(q);

@@ -22,9 +22,9 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background">
-      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:flex sm:justify-between sm:gap-3">
-        <Brand to="/app" />
+    <header className="sticky top-0 z-30 border-b border-border bg-card">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 lg:px-6 sm:flex sm:justify-between sm:gap-3">
+        <div className="flex min-w-0 items-center gap-6"><Brand to="/app" /><span className="editorial-label hidden border-l border-border pl-6 md:block">The handover workspace</span></div>
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <select
             value={lang}

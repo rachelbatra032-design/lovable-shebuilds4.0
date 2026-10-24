@@ -116,30 +116,17 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   return (
     <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
-        <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> {co?.name}
-        </Link>
-        <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-border pb-7 sm:pb-9">
-          <div className="min-w-0 flex-1">
-            <p className="mb-3 text-xs font-medium uppercase text-muted-foreground">{dept} / Role knowledge</p>
-            <h1 className="text-3xl sm:text-5xl">{r.title}</h1>
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm">
-              <div><p className="text-xs text-muted-foreground">{r.status === "leaving" ? "Handing over" : "Role-holder"}</p><p className="mt-1 font-medium">{r.holder_name ?? "No holder"}</p></div>
-              {r.successor_name && <><ArrowRight className="h-5 w-5 text-muted-foreground" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">Taking over</p><p className="mt-1 font-medium">{r.successor_name}</p></div></>}
+      <div className="workspace-shell mx-auto max-w-[1440px] lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
+        <aside className="workspace-rail lg:sticky lg:top-[65px] lg:h-[calc(100dvh-65px)] lg:overflow-y-auto lg:border-r lg:border-border lg:bg-sidebar lg:px-4 lg:py-7">
+          <div className="hidden lg:block">
+            <Button asChild variant="outline" className="w-full justify-start bg-card"><Link to="/app" search={{ c: r.company_id }}><ArrowLeft /> All roles</Link></Button>
+            <div className="mt-7 border-t border-border pt-6">
+              <p className="editorial-label">Current handover</p>
+              <p className="mt-3 text-lg font-semibold leading-snug">{r.title}</p>
+              <p className="mt-2 text-xs text-muted-foreground">{dept}</p>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-2"><ScoreRing value={score} size={64} /><span className="text-xs text-muted-foreground">Documented</span></div>
-          <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
-            <span>{list.length} recorded items · Based on the last 30 days</span>
-            <AgentsPanel roleId={roleId} companyId={r.company_id} language={lang} items={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} />
-          </div>
-        </div>
-
-        <div className="mt-6">
-          {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => { blockedTranslations.current.delete(`${roleId}-${lang}`); setTranslationRetry(n => n + 1); }}>Retry translation</Button></div>}
-          <div role="tablist" aria-label="Role sections" className="mobile-workspace-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 gap-1 border-t border-border bg-background px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] sm:static sm:flex sm:w-full sm:border-t-0 sm:border-b sm:px-0 sm:py-0">
+          <div className="lg:mt-6">          <div role="tablist" aria-label="Role sections" className="mobile-workspace-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 gap-1 border-t border-border bg-background px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] sm:static sm:flex sm:w-full sm:border-t-0 sm:border-b sm:px-0 sm:py-0 lg:grid lg:grid-cols-1 lg:gap-1 lg:border-0">
             {TABS.map((t) => (
               <Button
                 key={t.value}
@@ -151,22 +138,51 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 variant="ghost"
                 onClick={() => switchPanel(t.value)}
                 className={cn(
-                  "relative h-14 min-w-0 flex-col gap-1 rounded-md border-b-2 px-1 py-2 text-[11px] font-medium sm:h-11 sm:flex-row sm:rounded-none sm:px-5 sm:text-sm",
-                  tab === t.value ? "border-transparent bg-muted text-foreground sm:border-foreground sm:bg-transparent" : "border-transparent text-muted-foreground hover:text-foreground",
+                  "relative h-14 min-w-0 flex-col gap-1 rounded-md border-b-2 px-1 py-2 text-[11px] font-medium sm:h-11 sm:flex-row sm:rounded-none sm:px-5 sm:text-sm lg:justify-start lg:gap-3 lg:rounded-md lg:border-0 lg:px-3",
+                  tab === t.value ? "border-transparent bg-muted text-foreground sm:border-foreground sm:bg-transparent lg:bg-sidebar-accent" : "border-transparent text-muted-foreground hover:text-foreground",
                 )}
               >
-                <t.icon className="h-4 w-4 sm:hidden" aria-hidden="true" />
+                <t.icon className="h-4 w-4 sm:hidden lg:block" aria-hidden="true" />
                 {t.label}
                 {t.value === "review" && pending > 0 && <span className="absolute top-1 right-2 rounded-full bg-primary px-1 text-[10px] text-primary-foreground sm:static sm:ml-1">{pending}</span>}
               </Button>
             ))}
+          </div></div>
+          <div className="mt-8 hidden border-t border-border pt-5 lg:block">
+            <div className="flex items-center gap-3"><ScoreRing value={score} size={40} /><div><p className="text-xs font-medium">Documented</p><p className="mt-1 text-xs text-muted-foreground">{list.length} recorded items</p></div></div>
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">{co?.name}</p>
           </div>
+        </aside>
+        <main className="min-w-0 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+        <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" /> {co?.name}
+        </Link>
+        <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-border pb-6">
+          <div className="min-w-0 flex-1">
+            <p className="mb-3 text-xs font-medium uppercase text-muted-foreground">{dept} / {r.title}</p>
+            <h1 className="text-3xl font-medium sm:text-4xl">{tab === "map" ? "Role knowledge" : tab === "capture" ? "Capture the context" : tab === "review" ? "Review changes" : tab === "ask" ? "Ask the role" : "Onboarding"}</h1>
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm">
+              <div><p className="text-xs text-muted-foreground">{r.status === "leaving" ? "Handing over" : "Role-holder"}</p><p className="mt-1 font-medium">{r.holder_name ?? "No holder"}</p></div>
+              {r.successor_name && <><ArrowRight className="h-5 w-5 text-muted-foreground" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">Taking over</p><p className="mt-1 font-medium">{r.successor_name}</p></div></>}
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-2 lg:hidden"><ScoreRing value={score} size={64} /><span className="text-xs text-muted-foreground">Documented</span></div>
+          <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
+            <span>{list.length} recorded items · Based on the last 30 days</span>
+            <AgentsPanel roleId={roleId} companyId={r.company_id} language={lang} items={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} />
+          </div>
+        </div>
+
+        <div className="mt-6">
+          {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => { blockedTranslations.current.delete(`${roleId}-${lang}`); setTranslationRetry(n => n + 1); }}>Retry translation</Button></div>}
+
 
           <div ref={panelRef} role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5 scroll-mt-24">
             {tab === "map" && (
               <>
                 <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
-                  <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-lg bg-muted p-1">
+                  <div role="group" aria-label="View mode" className="inline-flex gap-1 rounded-md border border-border bg-card p-1">
                     {(
                       [
                         { v: "read", label: "Read", Icon: BookText },
@@ -181,7 +197,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                         onClick={() => setMode(v)}
                         className={cn(
                           "inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring sm:min-h-9",
-                          mode === v ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground",
+                          mode === v ? "bg-sidebar-accent text-foreground" : "text-muted-foreground hover:text-foreground",
                         )}
                       >
                         <Icon className="h-4 w-4" /> {label}
@@ -200,9 +216,9 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                     <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture: the AI will start building the map.</p>
                   </div>
                 ) : mode === "read" ? (
-                  <div className="grid gap-5 md:grid-cols-2">
+                  <div className="grid gap-8 xl:grid-cols-2">
                     {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k, sectionIndex) => (
-                      <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "md:col-span-2")}>
+                      <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "xl:col-span-2")}>
                         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                           <div className="flex min-w-0 items-baseline gap-3"><span className="text-xs tabular-nums text-muted-foreground">{String(sectionIndex + 1).padStart(2, "0")}</span><h2 className="min-w-0 text-xl sm:text-2xl">{KIND_LABEL[k as Kind]}</h2></div>
                           <span className="text-xs tabular-nums text-muted-foreground">{list.filter((i) => i.kind === k).length}</span>
@@ -244,7 +260,8 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
             {tab === "plan" && <PlanPanel roleId={roleId} lang={lang} sourceItems={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} onOpenItem={setSelected} />}
           </div>
         </div>
-      </main>
+        </main>
+      </div>
       <ItemSheet item={selectedItem} inputs={inputs.data ?? []} lang={lang} open={!!selected} onOpenChange={(o) => !o && setSelected(null)} />
     </div>
   );

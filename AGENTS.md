@@ -24,7 +24,7 @@
 - Shared surface and category colors use global semantic tokens; retain legacy token aliases so redesigns do not alter knowledge logic or status behavior.
 - Shared navigation and mixed text/action rows use shrink-safe responsive grids; bounded chat/map canvases and scrollable dialogs keep phone controls reachable without changing laptop layouts.
 - Theme preference is owned by the root ThemeProvider and restored after hydration; shared tokens and graph variables keep light/dark presentation consistent without server storage access.
-- Role panels share one tab state and one responsive tablist, fixed to the phone bottom edge with safe-area clearance, so desktop and mobile navigation cannot diverge.
+- Role panels share one tab state and one responsive tablist: desktop left rail, tablet horizontal navigation, and phone bottom navigation with safe-area clearance, so navigation behavior cannot diverge.
 - Invitations allow only acceptance updates, are consumed atomically on membership insertion, and cannot be reopened; this prevents retargeting or reuse after removal.
 - Database triggers reject cross-company related IDs and tenant reassignment; per-row membership policies alone cannot guarantee relationship integrity.
 - Visual role maps expand one category at a time in a stable three-column layout, keeping dense maps readable without changing stored knowledge or links.

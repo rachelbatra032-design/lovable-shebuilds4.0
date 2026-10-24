@@ -133,8 +133,8 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
 
       {isV2 && (
         <>
-          <div className="grid gap-4 md:grid-cols-3">
-            <section className="paper-card p-5">
+          <div className="grid gap-6 xl:grid-cols-3">
+            <section className="border-t border-border pt-5">
               <h3 className="flex items-center gap-2 text-2xl"><CalendarDays className="h-5 w-5 text-primary" /> Key dates</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {keyDates.map((d, i) => (
@@ -146,7 +146,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
                 {!keyDates.length && <li className="text-muted-foreground">None recorded yet.</li>}
               </ul>
             </section>
-            <section className="paper-card p-5">
+            <section className="border-t border-border pt-5">
               <h3 className="flex items-center gap-2 text-2xl"><Users className="h-5 w-5 text-primary" /> People to meet</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {keyContacts.map((c, i) => (
@@ -158,7 +158,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
                 {!keyContacts.length && <li className="text-muted-foreground">None recorded yet.</li>}
               </ul>
             </section>
-            <section className="paper-card p-5">
+            <section className="border-t border-border pt-5">
               <h3 className="flex items-center gap-2 text-2xl"><AlertTriangle className="h-5 w-5 text-terracotta" /> Watch out for</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {watchOuts.map((w, i) => (
@@ -187,10 +187,10 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
                   >
                     {pi + 1}
                   </span>
-                  <section className="paper-card p-3 sm:p-5">
+                  <section className="border-t border-border py-5">
                     <div className="grid gap-2 sm:flex sm:items-baseline sm:justify-between">
                       <h3 className="min-w-0 text-2xl sm:text-3xl">{p.label}</h3>
-                      <span className="rounded-full bg-secondary px-3 py-0.5 text-sm font-medium">{p.timeframe}</span>
+                      <span className="rounded-md bg-secondary px-3 py-0.5 text-sm font-medium">{p.timeframe}</span>
                     </div>
                     <p className="mt-1 text-muted-foreground">{p.goal}</p>
                     <ul className="mt-4 divide-y divide-border">
