@@ -14,9 +14,9 @@ export const Route = createFileRoute("/auth")({
   validateSearch: z.object({ redirect: z.string().optional() }),
   head: () => ({
     meta: [
-      { title: "Sign in — Kaimaaral" },
+      { title: "Sign in: Kaimaaral" },
       { name: "description", content: "Sign in to capture and explore your team's role knowledge." },
-      { property: "og:title", content: "Sign in — Kaimaaral" },
+      { property: "og:title", content: "Sign in: Kaimaaral" },
       { property: "og:description", content: "Sign in to capture and explore your team's role knowledge." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

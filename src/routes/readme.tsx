@@ -6,9 +6,9 @@ import { ThemeToggle } from "@/components/ThemeProvider";
 export const Route = createFileRoute("/readme")({
   head: () => ({
     meta: [
-      { title: "Read Me — how to review Kaimaaral" },
+      { title: "Read Me: how to review Kaimaaral" },
       { name: "description", content: "Start with a private sample company in Kaimaaral, explore sourced role knowledge, and test capture, answers and onboarding plans." },
-      { property: "og:title", content: "Read Me — how to review Kaimaaral" },
+      { property: "og:title", content: "Read Me: how to review Kaimaaral" },
       { property: "og:description", content: "A quick sample walkthrough, followed by usefulness, functionality, user experience and originality." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/readme")({
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="border-t border-border py-6 sm:py-8">
+    <section className="border-t border-border py-8 sm:py-10">
       <p className="text-sm font-medium text-muted-foreground">{n}</p>
       <h2 className="mt-2 text-2xl sm:text-3xl">{title}</h2>
       <div className="mt-4 space-y-3 text-[1.02rem] leading-relaxed [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold">{children}</div>
@@ -40,7 +40,7 @@ function ReadMe() {
         </div>
       </header>
       <main className="mx-auto max-w-4xl space-y-6 px-5 pb-20">
-        <div className="py-6">
+        <div className="pb-4 pt-10 sm:pt-14">
           <h1 className="text-5xl sm:text-6xl">Read Me</h1>
           <p className="mt-3 text-lg text-muted-foreground">
             Kaimaaral (കൈമാറൽ, Malayalam for "handover") captures how a role actually works, in the language people really speak,
@@ -64,7 +64,7 @@ function ReadMe() {
         </Section>
 
         <Section n="Criterion 1" title="Usefulness & understanding of the user">
-          <p><strong>Category:</strong> Business Operations — preserving role knowledge and preparing successors for day-to-day work.</p>
+          <p><strong>Category:</strong> Business Operations: preserving role knowledge and preparing successors for day-to-day work.</p>
           <p>
             <strong>Who:</strong> small and medium businesses in India (traders, exporters, clinics, agencies) with 10–200 staff, where one person
             often holds a whole function in their head, and where everyday work happens in Malayalam, Hindi or Tamil over WhatsApp and phone calls.

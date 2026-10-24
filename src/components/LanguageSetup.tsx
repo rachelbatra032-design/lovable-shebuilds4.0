@@ -85,7 +85,7 @@ export function LanguageSetup() {
             <>
               <DialogHeader>
                 <DialogTitle className="font-display text-3xl font-normal">Which languages will you record in?</DialogTitle>
-                <DialogDescription>Pick all you speak at work — for example English and Hindi, or Malayalam and Hindi. Mixing them in one note is fine.</DialogDescription>
+                <DialogDescription>Pick all you speak at work: for example English and Hindi, or Malayalam and Hindi. Mixing them in one note is fine.</DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-2 gap-2" role="group" aria-label="Recording languages">
                 {LANGUAGES.map((l) => {

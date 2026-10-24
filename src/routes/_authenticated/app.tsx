@@ -23,9 +23,9 @@ export const Route = createFileRoute("/_authenticated/app")({
   validateSearch: z.object({ c: z.string().optional() }),
   head: () => ({
     meta: [
-      { title: "Workspace — Kaimaaral" },
+      { title: "Workspace: Kaimaaral" },
       { name: "description", content: "Departments, roles and how well each role is documented." },
-      { property: "og:title", content: "Workspace — Kaimaaral" },
+      { property: "og:title", content: "Workspace: Kaimaaral" },
       { property: "og:description", content: "Departments, roles and how well each role is documented." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,7 +44,7 @@ function AppHome() {
   return (
     <div className="min-h-screen">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main className="mx-auto max-w-6xl px-5 py-8 sm:py-10">
         {companies.isLoading ? (
           <p className="text-muted-foreground">Loading your workspace…</p>
         ) : !current ? (
@@ -275,7 +275,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                 <AddRoleDialog companyId={companyId} departmentId={d.id} departmentName={d.name} onDone={refresh} />
               </div>
               {deptRoles.length === 0 ? (
-                <p className="mt-4 text-muted-foreground">No roles yet. Add the first role in {d.name} — e.g. "Accounts Lead".</p>
+                <p className="mt-4 text-muted-foreground">No roles yet. Add the first role in {d.name}: e.g. "Accounts Lead".</p>
               ) : (
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   {deptRoles.map((r) => {
@@ -287,7 +287,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                         key={r.id}
                         to="/roles/$roleId"
                         params={{ roleId: r.id }}
-                        className="group flex min-w-0 flex-col gap-5 rounded-lg border border-border p-5 transition-colors hover:border-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:p-6"
+                        className="group flex min-w-0 flex-col gap-5 rounded-md border border-border bg-card p-5 transition-colors hover:border-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:p-6"
                       >
                         <div className="flex w-full items-center justify-between gap-3"><ScoreRing value={s} /><ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden /></div>
                         <div className="w-full min-w-0 flex-1">

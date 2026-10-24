@@ -30,3 +30,4 @@
 - Visual role maps expand one category at a time in a stable three-column layout, keeping dense maps readable without changing stored knowledge or links.
 - Handover agents invoke existing authenticated plan generation and source-backed validation, with company-scoped run history; they never auto-approve knowledge changes.
 - Translation caches merge atomically under caller RLS and compare source text before saving, preventing concurrent languages or edited sources from being overwritten.
+- Visible punctuation is normalized after hydration by a root-owned observer, excluding editable fields; original stored evidence stays untouched so readiness and translation checks retain their exact source text.

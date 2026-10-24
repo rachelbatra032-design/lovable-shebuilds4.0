@@ -58,7 +58,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
       const r = await gen({ data: { roleId, language: lang } });
       if (r.ok) {
         if (r.plan.completeness?.status === "ready") toast.success("Onboarding plan ready");
-        else toast.warning("Draft saved — missing procedural details need attention");
+        else toast.warning("Draft saved: missing procedural details need attention");
         qc.invalidateQueries({ queryKey: ["role", roleId] });
       } else toast.error(r.error);
     } catch (e) {
@@ -80,14 +80,14 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
 
   return (
     <div className="space-y-5">
-      <div className="paper-card grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div className="grid gap-4 border-b border-border pb-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="min-w-0 flex-1">
           <p className="font-display text-3xl">Onboarding plan</p>
           {audit && <p role="status" className={cn("mt-1 text-sm font-semibold", audit.status === "ready" ? "text-primary" : "text-terracotta")}>
             {audit.status === "ready" ? "Ready · all procedural checks passed" : `Draft · ${audit.gaps.length ? `${audit.gaps.length} missing details` : "completeness check required"}`}
           </p>}
           <p className="text-muted-foreground">
-            {plan ? plan.summary : "Turn this role's map into a step-by-step plan: get set up, watch and learn, do it together, then own it."}
+            {plan ? plan.summary : "Turn recorded role knowledge into executable steps, with sources and missing details clearly flagged."}
           </p>
           {isV2 && (
             <div className="mt-3 flex items-center gap-3" aria-label={`${doneCount} of ${allTasks.length} steps done`}>
@@ -139,7 +139,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
               <ul className="mt-3 space-y-2 text-sm">
                 {keyDates.map((d, i) => (
                   <li key={i}>
-                    <span className="font-semibold">{d.when}</span> — {d.what}
+                    <span className="font-semibold">{d.when}</span>: {d.what}
                     <SourceLink id={d.item_id} onOpenItem={onOpenItem} />
                   </li>
                 ))}
@@ -151,7 +151,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
               <ul className="mt-3 space-y-2 text-sm">
                 {keyContacts.map((c, i) => (
                   <li key={i}>
-                    <span className="font-semibold">{c.name}</span> — {c.why}
+                    <span className="font-semibold">{c.name}</span>: {c.why}
                     <SourceLink id={c.item_id} onOpenItem={onOpenItem} />
                   </li>
                 ))}

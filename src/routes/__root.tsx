@@ -15,6 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { installClientErrorLogging } from "@/lib/client-error-log";
 import { recoverModuleLoad } from "@/lib/module-recovery";
 import { RouteErrorScreen } from "@/components/RouteErrorScreen";
+import { installDisplayPunctuation } from "@/lib/display-punctuation";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 function NotFoundComponent() {
@@ -42,7 +43,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kaimaaral — role knowledge that stays" },
+      { title: "Kaimaaral: role knowledge that stays" },
       { name: "description", content: "Capture how a role really works, in Malayalam, Hindi, Tamil or English, before that knowledge walks out the door." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -81,6 +82,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+
+  useEffect(() => installDisplayPunctuation(), []);
 
   useEffect(() => {
     installClientErrorLogging();

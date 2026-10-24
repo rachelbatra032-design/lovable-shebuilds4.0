@@ -1,5 +1,7 @@
 # Roadmap (SheBuilds deadline Sun Oct 18 12:29 IST)
 
+- [x] Refresh the design using the Hand Off reference and remove app-facing em dashes, including saved AI content (33 tests pass; homepage, sign-in CTA, Read Me, all signed-in role tabs and Visual map checked on phone/laptop without overflow or runtime errors)
+
 - [x] Run the full test suite and live core journey, including all reading languages (33 tests pass; signed-in capture, Review, cited Ask, Draft Plan, translations and phone/laptop navigation verified; limits in WORKFLOW_VERIFICATION.md)
 - [x] Add user-triggered handover agents with private run history and human-reviewed results (Plan builder and rule-based Readiness checker; completed history survives reload)
 

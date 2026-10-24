@@ -5,9 +5,9 @@ describe("tracked handover agents", () => {
   it("records completed task results", async () => {
     const start = vi.fn().mockResolvedValue("run-1");
     const finish = vi.fn().mockResolvedValue(undefined);
-    await expect(trackAgentTask("plan", { start, finish, execute: async () => "Draft — 4 gaps" })).resolves.toBe("Draft — 4 gaps");
+    await expect(trackAgentTask("plan", { start, finish, execute: async () => "Draft: 4 gaps" })).resolves.toBe("Draft: 4 gaps");
     expect(start).toHaveBeenCalledWith("plan");
-    expect(finish).toHaveBeenCalledWith("run-1", "completed", "Draft — 4 gaps");
+    expect(finish).toHaveBeenCalledWith("run-1", "completed", "Draft: 4 gaps");
   });
   it("records failures without reporting completion", async () => {
     const finish = vi.fn().mockResolvedValue(undefined);
