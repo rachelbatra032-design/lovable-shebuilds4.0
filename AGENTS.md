@@ -20,7 +20,7 @@
 - Onboarding readiness is computed by the shared source-backed validator in `src/lib/plan-completeness.ts` on save and display, not by an AI readiness claim; missing or legacy audits fail closed to draft.
 - Stale dynamic-module failures recover through a fresh document load, capped per path to prevent reload loops; ordinary runtime errors remain in the error boundary.
 - Root and router-default error boundaries share `RouteErrorScreen` so failed route imports retain a visible retry and home action after recovery is exhausted.
-- Typography is centralized in global font tokens; display and body share one sans-serif stack with script-specific fallbacks so headings and controls stay consistent across languages.
+- Typography is centralized in separate display and body font tokens with script-specific fallbacks; headings use the display token while controls and reading text use the body token so the reference typography remains consistent across languages.
 - Shared surface and category colors use global semantic tokens; retain legacy token aliases so redesigns do not alter knowledge logic or status behavior.
 - Shared navigation and mixed text/action rows use shrink-safe responsive grids; bounded chat/map canvases and scrollable dialogs keep phone controls reachable without changing laptop layouts.
 - Theme preference is owned by the root ThemeProvider and restored after hydration; shared tokens and graph variables keep light/dark presentation consistent without server storage access.
