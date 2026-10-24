@@ -14,7 +14,9 @@ Notes:
 - No secret keys are stored in the code. The only key in it is the public one the app is designed to expose.
 
 ## What I will prepare so the repository looks professional
-1. **README.md**: what Kaimaaral does, the problem it solves for Indian SMEs, main features (capture, map, Ask, Review, Plan, agents, four languages), how judges try it, a tech overview and how to run it locally.
+1. **README.md** (titled "Kaimaaral, built for SheBuilds Season 04"): what Kaimaaral does, the problem it solves for Indian SMEs, main features (capture, map, Ask, Review, Plan, agents, four languages), how judges try it, a tech overview and how to run it locally.
+   - A SheBuilds section at the top showing your submission screenshot (saved as `docs/images/shebuilds-season04-submitted.png`) with the line: "Selected for SheBuilds Season 04: one of 800 builders accepted out of 3,400 applications."
+   - The screenshot itself shows "Submitted. Your build is in." (Oct 17), so the caption will say it was submitted, without implying a judging result.
 2. **docs/ folder**: move the loose report files out of the root and into `docs/`, so the root stays tidy:
    - `docs/SUBMISSION_READINESS.md`
    - `docs/SECURITY_REVIEW.md`
@@ -26,7 +28,7 @@ Notes:
 
 ## Final layout
 ```text
-kaimaaral/
+lovable-shebuilds4.0/
   README.md
   AGENTS.md
   .env.example
