@@ -1,5 +1,7 @@
 # Roadmap (SheBuilds deadline Sun Oct 18 12:29 IST)
 
+- [x] Re-run all automated tests and the signed-in core journey after the status-bar and typography changes (34 tests passed; real captures, text upload, cited Ask, translations, tracked agents, Draft checks, dark-mode persistence and protected access verified; invitation acceptance fixture absent and device/signup limitations recorded in WORKFLOW_VERIFICATION.md).
+
 - [x] Extend the workspace reference design across role panels, workspace and Read Me, preserving phone navigation (33 tests pass; all panels, Visual, Read Me anchors and dark mode checked at 360, 393, 726 and 1280px with one tablist and no page overflow)
 
 - [x] Refresh the design using the Hand Off reference and remove app-facing em dashes, including saved AI content (33 tests pass; homepage, sign-in CTA, Read Me, all signed-in role tabs and Visual map checked on phone/laptop without overflow or runtime errors)
