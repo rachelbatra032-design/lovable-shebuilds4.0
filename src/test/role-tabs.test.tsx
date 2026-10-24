@@ -91,8 +91,8 @@ describe("Role page tabs", () => {
     fireEvent.click(tab("Capture"));
     fireEvent.click(screen.getByRole("button", { name: "Guided walkthrough" }));
     const panels = ["Map", "Map", "Map", "Capture", "Review", "Ask", "Plan", "Plan"];
-    for (let i = 0; i < panels.length; i++) {
-      expect(tab(panels[i])).toHaveAttribute("aria-selected", "true");
+    for (const [i, name] of panels.entries()) {
+      expect(tab(name)).toHaveAttribute("aria-selected", "true");
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       if (i === 2) expect(await screen.findByTestId("visual-map")).toBeInTheDocument();
       if (i < 7) fireEvent.click(screen.getByRole("button", { name: "Next" }));
