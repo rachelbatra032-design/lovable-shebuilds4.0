@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ScoreRing } from "@/components/ScoreRing";
+import { Progress } from "@/components/ui/progress";
 import { roleChangesQuery, roleInputsQuery, roleItemsQuery, roleQuery, type KnowledgeItem } from "@/lib/queries";
 import { completeness, KINDS, KIND_LABEL, type Kind } from "@/lib/knowledge";
 import { useLang } from "@/lib/use-lang";
@@ -149,11 +149,21 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
             ))}
           </div></div>
           <div className="mt-8 hidden border-t border-border pt-5 lg:block">
-            <div className="flex items-center gap-3"><ScoreRing value={score} size={40} /><div><p className="text-xs font-medium">Documented</p><p className="mt-1 text-xs text-muted-foreground">{list.length} recorded items</p></div></div>
-            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">{co?.name}</p>
+            <p className="text-xs leading-relaxed text-muted-foreground">{co?.name}</p>
           </div>
         </aside>
         <main className="min-w-0 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+        <section aria-label="Handover status" className="mb-6 grid gap-4 border-y border-border bg-sidebar px-4 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="editorial-label">Handover status</span>
+            <Badge variant="outline" className="capitalize">{r.status === "leaving" ? "Handing over" : r.status.replaceAll("_", " ")}</Badge>
+            <span className="text-xs text-muted-foreground">{pending > 0 ? `${pending} changes to review` : "No pending changes"}</span>
+          </div>
+          <div className="min-w-0">
+            <div className="mb-2 flex items-center justify-between gap-3 text-xs"><span className="text-muted-foreground">Knowledge documented</span><span className="font-medium tabular-nums">{score}%</span></div>
+            <Progress value={score} aria-label="Knowledge documented" aria-valuenow={score} className="h-1.5" />
+          </div>
+        </section>
         <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> {co?.name}
         </Link>
@@ -166,7 +176,6 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
               {r.successor_name && <><ArrowRight className="h-5 w-5 text-muted-foreground" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">Taking over</p><p className="mt-1 font-medium">{r.successor_name}</p></div></>}
             </div>
           </div>
-          <div className="flex flex-col items-center gap-2 lg:hidden"><ScoreRing value={score} size={64} /><span className="text-xs text-muted-foreground">Documented</span></div>
           <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
             <span>{list.length} recorded items · Based on the last 30 days</span>
