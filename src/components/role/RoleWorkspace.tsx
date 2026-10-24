@@ -80,7 +80,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           toast.error(r.error);
           setTranslationError(r.error);
         } else if (r.remaining > 0 && r.translated > 0) {
-          tried.current.delete(key); // more items to translate — run again
+          tried.current.delete(key); // more items to translate: run again
         }
         return qc.invalidateQueries({ queryKey: ["role", roleId, "items"] });
       })
@@ -116,7 +116,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   return (
     <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-4 py-5">
+      <main className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
         <Link to="/app" search={{ c: r.company_id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> {co?.name}
         </Link>
@@ -173,7 +173,8 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                         { v: "visual", label: "Visual", Icon: Network },
                       ] as const
                     ).map(({ v, label, Icon }) => (
-                      <button
+                      <Button
+                        variant="ghost"
                         key={v}
                         type="button"
                         aria-pressed={mode === v}
@@ -184,7 +185,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                         )}
                       >
                         <Icon className="h-4 w-4" /> {label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                   {translating && (
@@ -196,7 +197,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                 {list.length === 0 ? (
                   <div className="paper-card p-8 text-center">
                     <p className="font-display text-3xl">This map is empty</p>
-                    <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture — the AI will start building the map.</p>
+                    <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture: the AI will start building the map.</p>
                   </div>
                 ) : mode === "read" ? (
                   <div className="grid gap-5 md:grid-cols-2">

@@ -91,6 +91,7 @@ type Extraction = {
 
 const EXTRACT_INSTRUCTIONS = `You map how a specific job role actually works inside an Indian SME, so the knowledge survives when the person leaves.
 You receive one new input (voice transcript, typed note, document, chat export, email, or a screen/KT recording transcript with screenshots) plus the role's existing knowledge map.
+For generated text use commas, colons or periods, never Unicode U+2014 punctuation. Preserve verbatim original source quotes.
 Inputs may be in Malayalam, Hindi, Tamil, English, or code-mixed (Manglish/Hinglish). Understand them natively.
 
 Return:
@@ -289,6 +290,7 @@ export const askRole = createServerFn({ method: "POST" })
     try {
       const out = await respondJSON<{ answer: string; cited_ids: string[]; checklist: string[] }>({
         instructions: `You are "Ask the role": you answer a new hire's questions about the role "${role.title}"${role.holder_name ? ` (previously done by ${role.holder_name})` : ""}, using ONLY the role knowledge map provided.
+Use commas, colons or periods instead of Unicode U+2014 punctuation.
 Answer in ${LANG_NAME[data.language]} (use its native script). Keep names, amounts and tool names as-is.
 Give exact, practical steps when relevant (markdown, short). Cite the ids of every item you used in cited_ids.
 If the map does not cover the question, say so plainly and suggest asking the role-holder to record a note about it. Never invent facts.
@@ -344,7 +346,7 @@ export const translateItems = createServerFn({ method: "POST" })
       for (let start = 0; start < missing.length && start < 60; start += 6) {
         const todo = missing.slice(start, start + 6);
         const out = await respondJSON<{ items: { id: string; title: string; body: string; cadence: string | null }[] }>({
-        instructions: `Translate workplace knowledge items from English into natural, everyday ${LANG_NAME[data.language]} as an SME employee would speak it (native script). Keep names, amounts, product and software names (Tally, GST, etc.) unchanged. Keep markdown/numbering.`,
+        instructions: `Translate workplace knowledge items from English into natural, everyday ${LANG_NAME[data.language]} as an SME employee would speak it (native script). Keep names, amounts, product and software names (Tally, GST, etc.) unchanged. Keep markdown/numbering. Use commas or periods instead of Unicode U+2014 punctuation.`,
         schema: {
           name: "translations",
           schema: {
@@ -478,7 +480,7 @@ export const generatePlan = createServerFn({ method: "POST" })
       .select("id, kind, title, body, cadence")
       .eq("role_id", data.roleId)
       .eq("status", "active");
-    if (!items?.length) return { ok: false as const, error: "Add a few logs first — the plan is built from the role map." };
+    if (!items?.length) return { ok: false as const, error: "Add a few logs first: the plan is built from the role map." };
     const holder = role?.holder_name ?? "the current role-holder";
     try {
       const raw = await respondJSON<OnboardingPlan>({
@@ -495,7 +497,7 @@ Each phase: one-sentence goal; 3-5 tasks; a checkpoint written as "By the end, y
 Each task: one short imperative sentence (max ~14 words), a type (meet / learn / shadow / do / review), when (e.g. "Day 1", "Before the 10th", "Every Friday") or null, with_person (a name from the map) or null, and item_id of the source map item or null.
 Make every task SELF-EXPLANATORY so the successor never has to ask around:
 - why: one sentence on why it matters (the consequence, e.g. lost input tax credit).
-- steps: 2-8 concrete actions (do NOT prefix them with numbers) synthesized across ALL relevant map items — which documented screen/menu/report to use, what to check, the exact recorded thresholds, amounts, recipients and approval sequence. For "learn" tasks, state the actual rule in full. Each step tells the successor what to DO, not what to ask someone to explain.
+- steps: 2-8 concrete actions (do NOT prefix them with numbers) synthesized across ALL relevant map items: which documented screen/menu/report to use, what to check, the exact recorded thresholds, amounts, recipients and approval sequence. For "learn" tasks, state the actual rule in full. Each step tells the successor what to DO, not what to ask someone to explain.
 - done_when: one observable result (e.g. "Register emailed to Priya and saved in the GST folder").
 - ask_if_stuck: name of the person from the map to ask, or null.
 Do NOT create tasks or steps such as "Ask how she coordinates GST", "Ask which Tally export/screens she uses", "Ask how invoices are paid", "note the workflow", "confirm shadowing", or "arrange a meeting to learn the steps". These defeat the purpose of a handover plan. Do not turn missing information into questions for the successor.
@@ -507,7 +509,7 @@ summary: 1-2 sentences in plain words.
 Before finalizing, audit EVERY task in procedure_checks for screen_paths, decision_criteria, approval_rules and completion_criteria.
 For each check return status, detail, source_item_id and source_quote. A documented check needs a specific usable detail in the task AND an EXACT verbatim quote from a source item's English body supporting it (even when output is translated). Screen paths require the actual screen/menu/report navigation, not merely a tool name. Decision criteria require the recorded conditions, checks or thresholds and what action to take. Approval rules require who approves, when and any recorded limits or sequence; a contact name alone is insufficient. Completion criteria require an observable result, not a blocked action or a vague instruction to learn.
 If the necessary detail is absent, mark missing, describe exactly what is missing, and use null for source_item_id/source_quote. Do not hide missing details as not_applicable. Use not_applicable only when the recorded workflow demonstrably needs no screen, decision or approval; give the reason and the exact source quote supporting that scope. Completion criteria can NEVER be not_applicable. Include all known gaps even if watch_outs has reached its limit. Never invent details to pass these checks. A task with blocked execution has missing completion_criteria. The application, not you, decides readiness.
-Write everything in ${LANG_NAME[data.language]} (native script); keep names, amounts and tool names (Tally, GST…) as-is. Short, simple sentences.`,
+Write everything in ${LANG_NAME[data.language]} (native script); keep names, amounts and tool names (Tally, GST…) as-is. Short, simple sentences. Use commas, colons or periods instead of Unicode U+2014 punctuation.`,
         schema: { name: "onboarding_plan", schema: PLAN_SCHEMA },
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(items) }] }],
       });

@@ -42,7 +42,7 @@ export function AgentsPanel({ roleId, companyId, language, items, plan }: { role
           if (task === "plan") {
             const result = await generate({ data: { roleId, language } });
             if (!result.ok) throw new Error(result.error);
-            return `Plan generated · ${result.plan.completeness?.status === "ready" ? "procedural checks passed" : "Draft — missing details need review"}. Review it in Plan before handover.`;
+            return `Plan generated · ${result.plan.completeness?.status === "ready" ? "procedural checks passed" : "Draft: missing details need review"}. Review it in Plan before handover.`;
           }
           const result = checkPlanCompleteness(plan ?? {}, items);
           return `${result.checked_tasks} steps checked · ${result.gaps.length} missing details · ${result.status === "ready" ? "Ready" : "Draft"}.`;
@@ -80,7 +80,7 @@ export function AgentsPanel({ roleId, companyId, language, items, plan }: { role
         {runs.data?.length === 0 && <p className="text-sm text-muted-foreground">No runs yet.</p>}
         <ul className="divide-y divide-border">{runs.data?.map(run => <li key={run.id} className="py-3 text-sm">
           <div className="flex flex-wrap justify-between gap-2"><span className="font-medium">{run.task === "plan" ? "Plan builder" : "Readiness checker"}</span><span className="text-muted-foreground">{run.status}</span></div>
-          <p className="mt-1 text-muted-foreground">{run.summary ?? "Started — keep this page open until the result returns."}</p>
+          <p className="mt-1 text-muted-foreground">{run.summary ?? "Started: keep this page open until the result returns."}</p>
           <time className="mt-2 block text-xs text-muted-foreground">{new Date(run.created_at).toLocaleString()}</time>
         </li>)}</ul>
       </DialogContent>
