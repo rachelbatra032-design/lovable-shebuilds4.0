@@ -31,3 +31,4 @@
 - Handover agents invoke existing authenticated plan generation and source-backed validation, with company-scoped run history; they never auto-approve knowledge changes.
 - Translation caches merge atomically under caller RLS and compare source text before saving, preventing concurrent languages or edited sources from being overwritten.
 - Visible punctuation is normalized after hydration by a root-owned observer, excluding editable fields; original stored evidence stays untouched so readiness and translation checks retain their exact source text.
+- Shared progress indicators use a provider-free accessible DOM implementation to avoid introducing a separate context dependency into the handover workspace.
