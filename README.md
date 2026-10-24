@@ -45,8 +45,8 @@ src/
   lib/           AI, translation, plan checks, capture logic
   integrations/  backend client (generated)
   test/          automated tests
-supabase/        database migrations
-docs/            security review, verification reports, roadmap
+drizzle/         database schema and migrations
+docs/            setup guide, security review, verification reports, roadmap
 public/          static files
 ```
 
@@ -55,14 +55,17 @@ public/          static files
 ```bash
 bun install
 cp .env.example .env   # fill in your backend values
-bun run dev
-bunx vitest run        # run the test suite
+bun run dev            # http://localhost:8080
+bunx vitest run        # 36 automated tests
 ```
+
+The full guide, including database migrations, the file storage area, sign-in providers and troubleshooting, is in [docs/SETUP.md](docs/SETUP.md).
 
 AI features call the Lovable AI Gateway and need a server-side `LOVABLE_API_KEY`.
 
 ## Docs
 
+- [Setup guide](docs/SETUP.md)
 - [Security review](docs/SECURITY_REVIEW.md)
 - [Workflow verification](docs/WORKFLOW_VERIFICATION.md)
 - [Submission readiness](docs/SUBMISSION_READINESS.md)
