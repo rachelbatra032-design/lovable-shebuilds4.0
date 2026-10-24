@@ -1,4 +1,21 @@
-# Workflow verification — October 18, 2026
+# Workflow verification
+
+## Recheck: October 24, 2026
+- All 34 automated tests passed across 9 files after the typography and status-bar changes.
+- Signed-out workspace access redirects to sign-in; Read Me opens publicly; signing out blocks role access again.
+- Signed-in Map, Visual, Capture, Review, Ask and Plan were exercised at 1280px, 726px and 390px with no horizontal page overflow.
+- Malayalam, Hindi and Tamil maps displayed native-script content without a translation retry error; English restored.
+- Real fictional typed captures and a text-file upload saved and appeared in Capture history; extraction added their training procedures to the role map.
+- Ask returned Suresh Nair's approval rule above ₹50,000, the GSTIN check and three source citations; a source sheet displayed the original Malayalam evidence.
+- Plan builder completed and persisted after reload; Readiness checker also completed with 12 steps checked and 29 missing details. The plan remained Draft.
+- Dark mode restored after hydration on reload; live browser checks recorded no runtime errors.
+- The invitation security script passed its first three negative-access assertions but could not test valid acceptance: its reserved invite fixture is absent (confirmed by a read-only database query). This is an incomplete security recheck, not evidence that invitations are broken or secure in every case.
+- Review had no pending conflicts; a fresh conflict acceptance was not exercised in this recheck.
+- Physical microphone/screen recording, fresh signup and email delivery, social sign-in and native-speaker translation quality remain unverified, as do other document formats and the release gates below.
+
+This recheck added explicitly fictional training notes and a text upload to the existing private sample company, and regenerated its draft plan. No production company was used.
+
+## Earlier verification: October 18, 2026
 
 ## Passed
 - Full automated suite: 8 files, 33 tests.
