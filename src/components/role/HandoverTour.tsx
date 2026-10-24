@@ -42,10 +42,11 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
       if (!el || !popup) { setRect(null); return; }
       const bounds = el.getBoundingClientRect();
       const narrow = window.innerWidth < 640;
-      const top = Math.max(72, bounds.top - 5);
-      let left = Math.max(8, bounds.left - 5);
-      let right = Math.min(window.innerWidth - 8, bounds.right + 5);
-      let bottom = Math.min(window.innerHeight - 12, bounds.bottom + 5);
+      const pad = ("pad" in current && current.pad) || 6;
+      const top = Math.max(72, bounds.top - pad);
+      let left = Math.max(8, bounds.left - pad);
+      let right = Math.min(window.innerWidth - 8, bounds.right + pad);
+      let bottom = Math.min(window.innerHeight - 12, bounds.bottom + pad);
       const overlaps = right > popup.left - 12 && left < popup.right + 12 && bottom > popup.top - 12;
       if (overlaps) {
         // Prefer trimming beside the popup when that keeps more of the target visible than trimming above it.
@@ -57,10 +58,18 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
           const limit = Math.min(bottom, popup.top - 12);
           // Snap to the last row that fits fully so the outline never slices through text or icons.
           let snapped = 0;
-          el.querySelectorAll<HTMLElement>("li, section, h2, p, button, form").forEach((child) => {
-            const b = child.getBoundingClientRect().bottom + 5;
-            if (b <= limit && b > top + 24 && b > snapped) snapped = b;
-          });
+          const parts = Array.from(el.querySelectorAll<HTMLElement>("li, section, h2, h3, p, button, form, label"));
+          const boxes: DOMRect[] = parts.map((part) => part.getBoundingClientRect());
+          for (const gap of [pad, 3]) {
+            parts.forEach((child, i) => {
+              const edge = boxes[i]!.bottom;
+              const b = edge + gap;
+              // Skip edges that would cut through another visible line of text.
+              const straddles = parts.some((other, j) => j !== i && !other.contains(child) && boxes[j]!.top < b - 1 && boxes[j]!.bottom > edge + 1);
+              if (!straddles && b <= limit && b > top + 24 && b > snapped) snapped = b;
+            });
+            if (snapped) break;
+          }
           bottom = snapped || limit;
         }
       }
