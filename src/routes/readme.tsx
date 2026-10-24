@@ -19,7 +19,7 @@ export const Route = createFileRoute("/readme")({
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="border-t border-border py-8 sm:py-10">
+    <section id={n === "Start here" ? "start" : n === "Good to know" ? "limitations" : `criterion-${n.slice(-1)}`} className="scroll-mt-24 border-t border-border py-8 sm:py-10">
       <p className="text-sm font-medium text-muted-foreground">{n}</p>
       <h2 className="mt-2 text-2xl sm:text-3xl">{title}</h2>
       <div className="mt-4 space-y-3 text-[1.02rem] leading-relaxed [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold">{children}</div>
@@ -30,7 +30,7 @@ function Section({ n, title, children }: { n: string; title: string; children: R
 function ReadMe() {
   return (
     <div className="min-h-screen">
-      <header className="mx-auto grid max-w-4xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-5 py-5">
+      <header className="sticky top-0 z-30 border-b border-border bg-card"><div className="mx-auto grid max-w-[1280px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-5 py-4 sm:px-8">
         <Brand />
         <div className="flex shrink-0 items-center gap-1">
         <ThemeToggle />
@@ -38,10 +38,18 @@ function ReadMe() {
           <Link to="/app">Open app</Link>
         </Button>
         </div>
-      </header>
-      <main className="mx-auto max-w-4xl space-y-6 px-5 pb-20">
+      </div></header>
+      <div className="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
+        <aside className="hidden border-r border-border bg-sidebar px-5 py-10 lg:sticky lg:top-[73px] lg:block lg:h-[calc(100dvh-73px)]">
+          <p className="editorial-label">Read Me</p>
+          <nav aria-label="Read Me sections" className="mt-5 grid gap-1">
+            {[["start", "Start here"], ["criterion-1", "Usefulness"], ["criterion-2", "Functionality"], ["criterion-3", "Experience & design"], ["criterion-4", "Originality"], ["limitations", "Known limitations"]].map(([id, label], index) => <Button key={id} asChild variant="ghost" className="h-auto min-h-11 justify-start gap-3 whitespace-normal px-3 py-3 text-left text-sm"><a href={`#${id}`}><span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground">{index + 1}</span>{label}</a></Button>)}
+          </nav>
+        </aside>
+      <main className="min-w-0 space-y-6 px-5 pb-20 sm:px-8 lg:px-12">
         <div className="pb-4 pt-10 sm:pt-14">
-          <h1 className="text-5xl sm:text-6xl">Read Me</h1>
+          <p className="editorial-label mb-4">A first look at Kaimaaral</p>
+          <h1 className="text-4xl font-medium sm:text-5xl">Read Me</h1>
           <p className="mt-3 text-lg text-muted-foreground">
             Kaimaaral (കൈമാറൽ, Malayalam for "handover") captures how a role actually works, in the language people really speak,
             and turns it into an onboarding map for whoever comes next.
@@ -121,6 +129,7 @@ function ReadMe() {
           </ul>
         </Section>
       </main>
+      </div>
     </div>
   );
 }

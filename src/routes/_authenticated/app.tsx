@@ -44,14 +44,14 @@ function AppHome() {
   return (
     <div className="min-h-screen">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-5 py-8 sm:py-10">
+      <main className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 sm:py-10 lg:px-12">
         {companies.isLoading ? (
           <p className="text-muted-foreground">Loading your workspace…</p>
         ) : !current ? (
           <Onboarding onCreated={(id) => navigate({ search: { c: id } })} />
         ) : (
           <>
-            <div className="mb-6 grid gap-3 sm:flex sm:items-center">
+            <div className="mb-8 grid gap-3 border-b border-border pb-6 sm:flex sm:items-center sm:justify-between">
               {list.length > 1 ? (
                 <Select value={current.id} onValueChange={(v) => navigate({ search: { c: v } })}>
                   <SelectTrigger className="w-full min-w-0 sm:w-auto sm:min-w-[14rem]" aria-label="Workspace">
@@ -255,7 +255,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
       <div className="grid gap-4 sm:flex sm:items-end sm:justify-between">
         <div className="min-w-0">
           <div className="grid gap-2 sm:flex sm:items-center">
-            <h1 className="min-w-0 text-3xl sm:text-5xl">{name}</h1>
+            <h1 className="min-w-0 text-3xl font-medium sm:text-4xl">{name}</h1>
             {isSample && <Badge variant="outline" className="w-fit shrink-0 border-terracotta text-terracotta">Sample data</Badge>}
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
@@ -265,7 +265,7 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
         {isAdmin && <InviteDialog companyId={companyId} roles={roles} invites={invites} onDone={refresh} />}
       </div>
 
-      <div className="mt-8 space-y-10">
+      <div className="mt-10 space-y-10">
         {departments.map((d, departmentIndex) => {
           const deptRoles = roles.filter((r) => r.department_id === d.id);
           return (
@@ -287,11 +287,12 @@ function CompanyView({ companyId, name, isSample, isAdmin }: { companyId: string
                         key={r.id}
                         to="/roles/$roleId"
                         params={{ roleId: r.id }}
-                        className="group flex min-w-0 flex-col gap-5 rounded-md border border-border bg-card p-5 transition-colors hover:border-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:p-6"
+                        className="group grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-4 rounded-md border border-border bg-card p-5 transition-colors hover:border-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:p-6"
                       >
-                        <div className="flex w-full items-center justify-between gap-3"><ScoreRing value={s} /><ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden /></div>
-                        <div className="w-full min-w-0 flex-1">
-                          <h3 className="text-2xl sm:text-3xl">{r.title}</h3>
+                        <div className="col-start-2 row-start-1 flex flex-col items-center gap-3"><ScoreRing value={s} /><ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden /></div>
+                        <div className="col-start-1 row-start-1 w-full min-w-0">
+                          <p className="editorial-label">Role handover</p>
+                          <h3 className="mt-3 text-2xl font-medium">{r.title}</h3>
                           <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><span>{r.holder_name || "No holder yet"}</span>{r.successor_name && <><ArrowRight className="h-3 w-3" aria-hidden /><span>{r.successor_name}</span></>}</div>
                           <div className="mt-2 flex flex-wrap gap-1.5">
                             <Badge variant="outline" className={risk.tone === "danger" ? "border-destructive text-destructive" : risk.tone === "warn" ? "border-terracotta text-terracotta" : "border-success text-success"}>
