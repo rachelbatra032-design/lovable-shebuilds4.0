@@ -148,12 +148,12 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
   const mmss = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_280px]">
       <div className="space-y-5">
-        <section className="flex flex-col items-center border-b border-border px-4 py-6 text-center sm:py-8">
-          <h2 className="text-2xl">What did you decide today, and why?</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Malayalam · Hindi · Tamil · English</p>
-          <div className="mt-6">
+        <section className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-b border-border pb-7">
+          <div><p className="editorial-label">01 · Voice note</p><h2 className="mt-3 text-2xl font-medium">What did you decide today?</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Malayalam · Hindi · Tamil · English</p></div>
+          <div className="row-span-2">
             {recording === "voice" ? (
               <Button size="mic" className="mic-pulse shadow-none" onClick={stop} aria-label="Stop recording">
                 <Square />
@@ -164,13 +164,13 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
               </Button>
             )}
           </div>
-          <p className="mt-3 h-5 text-sm text-muted-foreground" aria-live="polite">
+          <p className="mt-3 min-h-5 text-sm text-muted-foreground" aria-live="polite">
             {recording === "voice" ? `Recording… ${mmss}  · tap to finish` : busy ? "Processing…" : "Tap to record"}
           </p>
         </section>
 
         <form
-          className="py-2"
+          className="border-b border-border py-3 pb-7"
           onSubmit={(e) => {
             e.preventDefault();
             if (!note.trim()) return;
@@ -179,9 +179,9 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
           }}
         >
           <label htmlFor="note" className="text-sm font-semibold">
-            Note, email or chat
+            <span className="editorial-label block mb-3">02 · Written context</span>Note, email or chat
           </label>
-          <Textarea id="note" className="mt-3 min-h-32 bg-muted text-base shadow-none" value={note} onChange={(e) => setNote(e.target.value)} placeholder="ഇന്ന് GST file ചെയ്തു… / आज vendor को payment किया… / Today I…" />
+          <Textarea id="note" className="mt-3 min-h-44 bg-card text-base shadow-none" value={note} onChange={(e) => setNote(e.target.value)} placeholder="ഇന്ന് GST file ചെയ്തു… / आज vendor को payment किया… / Today I…" />
           <div className="mt-3 flex justify-end">
             <Button type="submit" disabled={busy || !note.trim()}>
               <Send /> Add to map
@@ -219,8 +219,8 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
         </div>
       </div>
 
-      <section className="min-w-0">
-        <h2 className="text-xl">Capture history</h2>
+      <section className="min-w-0 xl:border-l xl:border-border xl:pl-6">
+        <p className="editorial-label">Your recorded context</p><h2 className="mt-3 text-xl font-medium">Capture history</h2>
         <ul className="mt-3 divide-y divide-border">
           {inputs.length === 0 && <li className="text-muted-foreground">Nothing yet. Record your first voice note.</li>}
           {inputs.map((i) => (
