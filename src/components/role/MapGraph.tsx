@@ -35,7 +35,7 @@ export default function MapGraph({ roleTitle, items, links, display, onSelect }:
   }, [items, links, roleTitle, display, active, kinds.join("|")]);
 
   return (
-    <div className="role-graph relative h-[60dvh] min-h-[400px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[70dvh] sm:min-h-[520px]">
+    <div data-tour="visual-map" className="role-graph relative h-[60dvh] min-h-[400px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[70dvh] sm:min-h-[520px]">
       <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-background px-4 py-3">
         <span className="text-sm font-medium">{active ? KIND_LABEL[active] : roleTitle}</span>
         <span className="text-xs tabular-nums text-muted-foreground">{items.filter((i) => i.kind === active).length} records</span>

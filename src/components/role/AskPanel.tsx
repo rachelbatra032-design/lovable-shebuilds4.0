@@ -129,6 +129,7 @@ export function AskPanel({ roleId, roleTitle, items, lang, onOpenItem }: { roleI
         <div ref={endRef} />
       </div>
       <form
+        data-tour="ask-input"
         className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-md border border-border bg-card p-3"
         onSubmit={(e) => {
           e.preventDefault();

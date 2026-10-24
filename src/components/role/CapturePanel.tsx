@@ -150,7 +150,7 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
   return (
     <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_280px]">
       <div className="space-y-5">
-        <section className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-b border-border pb-7">
+        <section data-tour="capture-record" className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-b border-border pb-7">
           <div><p className="editorial-label">01 · Voice note</p><h2 className="mt-3 text-2xl font-medium">What did you decide today?</h2>
           <p className="mt-2 text-sm text-muted-foreground">Malayalam · Hindi · Tamil · English</p></div>
           <div className="row-span-2">
