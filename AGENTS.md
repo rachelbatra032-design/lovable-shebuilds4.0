@@ -33,3 +33,4 @@
 - Visible punctuation is normalized after hydration by a root-owned observer, excluding editable fields; original stored evidence stays untouched so readiness and translation checks retain their exact source text.
 - Shared progress indicators use a provider-free accessible DOM implementation to avoid introducing a separate context dependency into the handover workspace.
 - Read Me keeps judge criteria and a local, user-ticked walkthrough separate from actual workspace readiness; its progress never changes business data.
+- The optional role walkthrough uses one controlled step list and stable targets, changes only the visible panel, and restores the prior view on exit; it never submits captures, runs agents or changes readiness.

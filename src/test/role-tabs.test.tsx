@@ -76,6 +76,7 @@ describe("Role page tabs", () => {
     translateItems.mockReset();
     localStorage.removeItem("kaimaaral-lang");
     vi.stubGlobal("matchMedia", () => ({ matches: true }));
+    vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} });
   });
 
   it("Visual button shows the visual map", async () => {
@@ -83,6 +84,41 @@ describe("Role page tabs", () => {
     fireEvent.click(screen.getByRole("button", { name: /Visual/ }));
     expect(await screen.findByTestId("visual-map")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Visual/ })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("guided walkthrough visits eight steps without running business actions and restores the prior panel", async () => {
+    setup();
+    fireEvent.click(tab("Capture"));
+    fireEvent.click(screen.getByRole("button", { name: "Guided walkthrough" }));
+    const panels = ["Map", "Map", "Map", "Capture", "Review", "Ask", "Plan", "Plan"];
+    for (const [i, name] of panels.entries()) {
+      expect(tab(name)).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      if (i === 2) expect(await screen.findByTestId("visual-map")).toBeInTheDocument();
+      if (i < 7) fireEvent.click(screen.getByRole("button", { name: "Next" }));
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Finish" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(tab("Capture")).toHaveAttribute("aria-selected", "true");
+    expect(generatePlan).not.toHaveBeenCalled();
+    expect(askRole).not.toHaveBeenCalled();
+  });
+
+  it("walkthrough supports previous, skip, replay and Escape without retaining a step", async () => {
+    setup();
+    const start = () => fireEvent.click(screen.getByRole("button", { name: "Guided walkthrough" }));
+    start();
+    expect(screen.getByRole("button", { name: "Previous step" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+    fireEvent.click(screen.getByRole("button", { name: "Previous step" }));
+    expect(screen.getByRole("button", { name: "Previous step" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    start();
+    expect(screen.getByRole("button", { name: "Previous step" })).toBeDisabled();
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(document.querySelector("[data-tour-workspace]")).not.toHaveAttribute("inert");
   });
 
   it("translation rejection clears loading and requires an explicit retry", async () => {

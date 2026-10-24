@@ -1,5 +1,7 @@
 # Roadmap (SheBuilds deadline Sun Oct 18 12:29 IST)
 
+- [x] Add an optional eight-step highlighted role walkthrough with business-value explanations; all eight highlights, auto-play, finish, replay, skip and Escape verified signed in at 1280px, 726px and 390px; 36 tests pass and no runtime errors.
+
 - [x] Align capture upload choices and rewrite Read Me as a visual guide with a review checklist; 34 tests pass and layouts verified on phone/tablet/laptop. Spoken browser test recording saved, transcribed and extracted; hosted signup settings read successfully.
 - [ ] Complete physical microphone/screen-sharing and fresh email-confirmed account checks — requires a real device and accessible inbox; browser simulation and hosted settings are verified separately.
 

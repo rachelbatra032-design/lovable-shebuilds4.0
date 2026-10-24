@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, ArrowRight, BookText, Network, Loader2, Mic, MessageCircle, ListChecks, ClipboardCheck, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookText, Network, Loader2, Mic, MessageCircle, ListChecks, ClipboardCheck, ChevronRight, Play } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { cn } from "@/lib/utils";
@@ -22,6 +22,8 @@ import { AskPanel } from "./AskPanel";
 import { PlanPanel } from "./PlanPanel";
 import { AgentsPanel } from "./AgentsPanel";
 import { isItemTranslation } from "@/lib/translation";
+import { HandoverTour } from "./HandoverTour";
+import { HANDOVER_TOUR } from "./tour-steps";
 
 const TABS = [
   { value: "map", label: "Map", icon: BookText },
@@ -54,6 +56,22 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const translate = useServerFn(translateItems);
   const tried = useRef(new Set<string>());
   const panelRef = useRef<HTMLDivElement>(null);
+  const [tourStep, setTourStep] = useState<number | null>(null);
+  const previousView = useRef({ tab: "map", mode: "read" as "read" | "visual" });
+  const tourTrigger = useRef<HTMLButtonElement>(null);
+  const showTourStep = useCallback((step: number) => {
+    const next = HANDOVER_TOUR[step];
+    if (!next) return;
+    setTab(next.panel);
+    setMode(next.mode);
+    setTourStep(step);
+  }, []);
+  const closeTour = useCallback(() => {
+    setTourStep(null);
+    setTab(previousView.current.tab);
+    setMode(previousView.current.mode);
+    requestAnimationFrame(() => { tourTrigger.current?.scrollIntoView({ block: "center" }); tourTrigger.current?.focus(); });
+  }, []);
 
   function switchPanel(value: string) {
     setTab(value);
@@ -114,7 +132,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const selectedItem = list.find((i) => i.id === selected) ?? null;
 
   return (
-    <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
+    <div data-tour-workspace data-tour-active={tourStep !== null} className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
       <AppHeader />
       <div className="workspace-shell mx-auto max-w-[1440px] lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
         <aside className="workspace-rail lg:sticky lg:top-[65px] lg:h-[calc(100dvh-65px)] lg:overflow-y-auto lg:border-r lg:border-border lg:bg-sidebar lg:px-4 lg:py-7">
@@ -153,7 +171,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           </div>
         </aside>
         <main className="min-w-0 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-        <section aria-label="Handover status" className="mb-6 grid gap-4 border-y border-border bg-sidebar px-4 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center">
+        <section data-tour="status" aria-label="Handover status" className="mb-6 grid gap-4 border-y border-border bg-sidebar px-4 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center">
           <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
             <span className="editorial-label">Handover status</span>
             <Badge variant="outline" className="capitalize">{r.status === "leaving" ? "Handing over" : r.status.replaceAll("_", " ")}</Badge>
@@ -179,7 +197,8 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           <div className="col-span-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             {co?.is_sample && <Badge variant="outline">Sample data</Badge>}
             <span>{list.length} recorded items · Based on the last 30 days</span>
-            <AgentsPanel roleId={roleId} companyId={r.company_id} language={lang} items={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} />
+            <span data-tour="agents" className="inline-flex"><AgentsPanel roleId={roleId} companyId={r.company_id} language={lang} items={list} plan={(r.onboarding_plan as OnboardingPlan | null) ?? null} /></span>
+            <Button ref={tourTrigger} variant="outline" size="sm" onClick={() => { previousView.current = { tab, mode }; showTourStep(0); }}><Play /> Guided walkthrough</Button>
           </div>
         </div>
 
@@ -187,7 +206,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
           {translationError && needsTranslation && <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 text-sm"><span>{translationError}</span><Button variant="outline" size="sm" onClick={() => { blockedTranslations.current.delete(`${roleId}-${lang}`); setTranslationRetry(n => n + 1); }}>Retry translation</Button></div>}
 
 
-          <div ref={panelRef} role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5 scroll-mt-24">
+          <div data-tour="panel" ref={panelRef} role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-5 scroll-mt-24">
             {tab === "map" && (
               <>
                 <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
@@ -220,12 +239,12 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                   )}
                 </div>
                 {list.length === 0 ? (
-                  <div className="paper-card p-8 text-center">
+                  <div data-tour="knowledge" className="paper-card p-8 text-center">
                     <p className="font-display text-3xl">This map is empty</p>
                     <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture: the AI will start building the map.</p>
                   </div>
                 ) : mode === "read" ? (
-                  <div className="grid gap-8 xl:grid-cols-2">
+                  <div data-tour="knowledge" className="grid gap-8 xl:grid-cols-2">
                     {KINDS.filter((k) => list.some((i) => i.kind === k)).map((k, sectionIndex) => (
                       <section key={k} className={cn("min-w-0 border-t border-border py-5", k === "decision" && "xl:col-span-2")}>
                         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
@@ -272,6 +291,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
         </main>
       </div>
       <ItemSheet item={selectedItem} inputs={inputs.data ?? []} lang={lang} open={!!selected} onOpenChange={(o) => !o && setSelected(null)} />
+      {tourStep !== null && <HandoverTour step={tourStep} onStep={showTourStep} onClose={closeTour} />}
     </div>
   );
 }
