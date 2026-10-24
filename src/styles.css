@@ -61,14 +61,14 @@
 }
 
 :root {
-  --radius: 0.5rem;
-  --background: oklch(1 0 0);
+  --radius: 0.375rem;
+  --background: oklch(0.99 0 0);
   --paper: oklch(1 0 0);
   --foreground: oklch(0.22 0 0);
   --ink: var(--foreground);
-  --card: var(--background);
+  --card: var(--paper);
   --card-foreground: var(--foreground);
-  --popover: var(--background);
+  --popover: var(--paper);
   --popover-foreground: var(--foreground);
   --primary: oklch(0.22 0 0);
   --primary-foreground: oklch(1 0 0);
@@ -84,7 +84,7 @@
   --success: oklch(0.46 0.1 155);
   --destructive: oklch(0.52 0.18 27);
   --destructive-foreground: var(--primary-foreground);
-  --border: oklch(0.91 0 0);
+  --border: oklch(0.89 0 0);
   --input: oklch(0.86 0 0);
   --ring: var(--foreground);
   --kind-responsibility: oklch(0.32 0 0);
@@ -107,7 +107,7 @@
 
 .dark {
   --background: oklch(0.17 0 0);
-  --paper: var(--background);
+  --paper: oklch(0.19 0 0);
   --foreground: oklch(0.94 0 0);
   --primary: oklch(0.94 0 0);
   --primary-foreground: oklch(0.17 0 0);
@@ -242,4 +242,19 @@
 
 @media print {
   .mobile-workspace-nav { display: none; }
+}
+
+.editorial-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+.editorial-quote {
+  border-left: 2px solid var(--foreground);
+  padding-left: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
