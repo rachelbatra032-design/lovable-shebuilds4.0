@@ -6,6 +6,7 @@ Lovable syncs all of your code to GitHub for you, so you don't have to upload an
 1. Open Project settings, then Git (or use the + menu next to the chat box, then Project, then GitHub).
 2. Click Connect GitHub and sign in to the GitHub account or organization you want to use.
 3. Lovable creates a new private repository and pushes all of the code. After that, every change syncs both ways.
+4. **Rename it to `lovable-shebuilds4.0`**: on GitHub, open the new repository, go to Settings, change the Repository name to `lovable-shebuilds4.0` and click Rename. Sync keeps working after a rename on GitHub. (Lovable picks the first name itself, so the rename has to happen on GitHub.)
 
 Notes:
 - Lovable always creates a brand-new repository. It cannot link to one you already have.
