@@ -283,5 +283,7 @@
   .tour-popup { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: calc(100vw - 24px); max-height: 58dvh; padding: 16px; }
 }
 @media (min-width: 640px) and (max-height: 800px) {
-  .tour-popup { max-height: 58dvh; }
+  .tour-popup { width: min(460px, calc(100vw - 32px)); max-height: 58dvh; padding: 16px; }
+  .tour-popup h2 { font-size: 1.25rem; }
+  .tour-popup #tour-body { font-size: 0.8125rem; line-height: 1.5; }
 }

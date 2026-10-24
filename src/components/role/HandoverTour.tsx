@@ -25,6 +25,7 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
 
   useEffect(() => {
     if (!current) return;
+    if (dialog.current) dialog.current.scrollTop = 0;
     const target = document.querySelector<HTMLElement>(`[data-tour="${current.target}"]`);
     if (target) window.scrollTo({ top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - 86), behavior: "instant" });
     const measure = () => {
