@@ -60,13 +60,16 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
           let snapped = 0;
           const parts = Array.from(el.querySelectorAll<HTMLElement>("li, section, h2, h3, p, button, form, label"));
           const boxes = parts.map((part) => part.getBoundingClientRect());
-          parts.forEach((child, i) => {
-            const edge = boxes[i].bottom;
-            const b = edge + pad;
-            // Skip edges that would cut through another visible line of text.
-            const straddles = parts.some((other, j) => j !== i && !other.contains(child) && boxes[j].top < b - 1 && boxes[j].bottom > edge + 1);
-            if (!straddles && b <= limit && b > top + 24 && b > snapped) snapped = b;
-          });
+          for (const gap of [pad, 3]) {
+            parts.forEach((child, i) => {
+              const edge = boxes[i].bottom;
+              const b = edge + gap;
+              // Skip edges that would cut through another visible line of text.
+              const straddles = parts.some((other, j) => j !== i && !other.contains(child) && boxes[j].top < b - 1 && boxes[j].bottom > edge + 1);
+              if (!straddles && b <= limit && b > top + 24 && b > snapped) snapped = b;
+            });
+            if (snapped) break;
+          }
           bottom = snapped || limit;
         }
       }
