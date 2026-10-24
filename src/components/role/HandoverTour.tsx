@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight, Check, Pause, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HANDOVER_TOUR } from "./tour-steps";
 
+const findTarget = (name: string) => document.querySelector<HTMLElement>(`[data-tour="${name}"]`) ?? document.querySelector<HTMLElement>('[data-tour="panel"]');
+
 type Rect = { top: number; left: number; width: number; height: number };
 
 export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: (step: number) => void; onClose: () => void }) {
@@ -26,10 +28,10 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
   useEffect(() => {
     if (!current) return;
     if (dialog.current) dialog.current.scrollTop = 0;
-    const target = document.querySelector<HTMLElement>(`[data-tour="${current.target}"]`);
+    const target = findTarget(current.target);
     if (target) window.scrollTo({ top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - 86), behavior: "instant" });
     const measure = () => {
-      const el = document.querySelector<HTMLElement>(`[data-tour="${current.target}"]`);
+      const el = findTarget(current.target);
       const popup = dialog.current?.getBoundingClientRect();
       if (!el || !popup) { setRect(null); return; }
       const bounds = el.getBoundingClientRect();

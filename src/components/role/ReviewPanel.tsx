@@ -25,14 +25,14 @@ export function ReviewPanel({ roleId, companyId, inputs }: { roleId: string; com
   const list = q.data ?? [];
   if (!list.length)
     return (
-      <div className="border-y border-border py-14 text-center">
+      <div data-tour="review-list" className="border-y border-border py-14 text-center">
         <p className="font-display text-3xl">All up to date</p>
         <p className="mt-1 text-muted-foreground">When a new note contradicts the map, it will show up here for a one-tap check.</p>
       </div>
     );
 
   return (
-    <div className="space-y-4">
+    <div data-tour="review-list" className="space-y-4">
       {list.map((c) => {
         const old = c.knowledge_items as { title: string; body: string } | null;
         const src = inputs.find((i) => i.id === c.source_input_id);

@@ -80,7 +80,7 @@ export function PlanPanel({ roleId, plan, lang = "en", sourceItems, onOpenItem }
 
   return (
     <div className="space-y-5">
-      <div className="grid gap-4 border-b border-border pb-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div data-tour="plan-header" className="grid gap-4 border-b border-border pb-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="min-w-0 flex-1">
           <p className="font-display text-3xl">Onboarding plan</p>
           {audit && <p role="status" className={cn("mt-1 text-sm font-semibold", audit.status === "ready" ? "text-primary" : "text-terracotta")}>
