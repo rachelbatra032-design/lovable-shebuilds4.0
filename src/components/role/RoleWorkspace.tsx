@@ -132,7 +132,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
   const selectedItem = list.find((i) => i.id === selected) ?? null;
 
   return (
-    <div data-tour-workspace className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
+    <div data-tour-workspace data-tour-active={tourStep !== null} className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-16">
       <AppHeader />
       <div className="workspace-shell mx-auto max-w-[1440px] lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
         <aside className="workspace-rail lg:sticky lg:top-[65px] lg:h-[calc(100dvh-65px)] lg:overflow-y-auto lg:border-r lg:border-border lg:bg-sidebar lg:px-4 lg:py-7">
@@ -239,7 +239,7 @@ export function RoleWorkspace({ roleId }: { roleId: string }) {
                   )}
                 </div>
                 {list.length === 0 ? (
-                  <div className="paper-card p-8 text-center">
+                  <div data-tour="knowledge" className="paper-card p-8 text-center">
                     <p className="font-display text-3xl">This map is empty</p>
                     <p className="mt-1 text-muted-foreground">Record a voice note or upload a file in Capture: the AI will start building the map.</p>
                   </div>

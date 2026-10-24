@@ -275,9 +275,13 @@
 }
 
 .handover-tour { position: fixed; inset: 0; z-index: 100; }
+[data-tour-active="true"] { padding-bottom: 100dvh; }
 .tour-dim { position: fixed; background: var(--tour-scrim); }
 .tour-highlight { position: fixed; border: 2px solid var(--foreground); border-radius: 6px; pointer-events: none; }
 .tour-popup { position: fixed; right: 24px; bottom: 24px; width: min(400px, calc(100vw - 32px)); max-height: calc(100dvh - 100px); overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 20px; box-shadow: var(--tour-shadow); outline: none; }
 @media (max-width: 639px) {
   .tour-popup { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: calc(100vw - 24px); max-height: 58dvh; padding: 16px; }
+}
+@media (min-width: 640px) and (max-height: 800px) {
+  .tour-popup { max-height: 58dvh; }
 }
