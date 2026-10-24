@@ -53,7 +53,16 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
         const aboveArea = (right - left) * Math.max(0, popup.top - 12 - top);
         const sideArea = (sideRight - left) * (bottom - top);
         if (!narrow && sideRight - left > 200 && sideArea > aboveArea) right = sideRight;
-        else bottom = Math.min(bottom, popup.top - 12);
+        else {
+          const limit = Math.min(bottom, popup.top - 12);
+          // Snap to the last row that fits fully so the outline never slices through text or icons.
+          let snapped = 0;
+          el.querySelectorAll<HTMLElement>("li, section, h2, p, button, form").forEach((child) => {
+            const b = child.getBoundingClientRect().bottom + 5;
+            if (b <= limit && b > top + 24 && b > snapped) snapped = b;
+          });
+          bottom = snapped || limit;
+        }
       }
       left = Math.min(left, right);
       setRect(bottom > top && right > left ? { top, left, width: right - left, height: bottom - top } : null);
