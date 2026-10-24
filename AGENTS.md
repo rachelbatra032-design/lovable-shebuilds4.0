@@ -32,3 +32,4 @@
 - Translation caches merge atomically under caller RLS and compare source text before saving, preventing concurrent languages or edited sources from being overwritten.
 - Visible punctuation is normalized after hydration by a root-owned observer, excluding editable fields; original stored evidence stays untouched so readiness and translation checks retain their exact source text.
 - Shared progress indicators use a provider-free accessible DOM implementation to avoid introducing a separate context dependency into the handover workspace.
+- Read Me keeps judge criteria and a local, user-ticked walkthrough separate from actual workspace readiness; its progress never changes business data.

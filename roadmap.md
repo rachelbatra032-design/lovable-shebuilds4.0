@@ -1,5 +1,8 @@
 # Roadmap (SheBuilds deadline Sun Oct 18 12:29 IST)
 
+- [x] Align capture upload choices and rewrite Read Me as a visual guide with a review checklist; 34 tests pass and layouts verified on phone/tablet/laptop. Spoken browser test recording saved, transcribed and extracted; hosted signup settings read successfully.
+- [ ] Complete physical microphone/screen-sharing and fresh email-confirmed account checks — requires a real device and accessible inbox; browser simulation and hosted settings are verified separately.
+
 - [x] Re-run all automated tests and the signed-in core journey after the status-bar and typography changes (34 tests passed; real captures, text upload, cited Ask, translations, tracked agents, Draft checks, dark-mode persistence and protected access verified; invitation acceptance fixture absent and device/signup limitations recorded in WORKFLOW_VERIFICATION.md).
 
 - [x] Extend the workspace reference design across role panels, workspace and Read Me, preserving phone navigation (33 tests pass; all panels, Visual, Read Me anchors and dark mode checked at 360, 393, 726 and 1280px with one tablist and no page overflow)

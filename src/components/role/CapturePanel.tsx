@@ -189,34 +189,39 @@ export function CapturePanel({ companyId, roleId, inputs }: { companyId: string;
           </div>
         </form>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <section className="border-t border-border pt-6">
+        <p className="editorial-label">03 · Files and recordings</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <Button variant="outline" className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={() => fileRef.current?.click()} disabled={busy}>
             <span className="flex items-center gap-2 font-semibold">
-              <Upload /> Upload a file
+              <Upload /> Upload a document
             </span>
-            <span className="whitespace-normal text-xs text-muted-foreground">PDF, Word, Excel, CSV, email or WhatsApp export, audio</span>
+            <span className="whitespace-normal text-xs text-muted-foreground">Documents, spreadsheets, emails, chat exports or audio files</span>
           </Button>
           <input ref={fileRef} aria-label="Upload document or audio" type="file" className="hidden" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,.eml,.json,audio/*" onChange={onFile} />
           {recording === "screen" ? (
             <Button className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={stop}>
               <span className="flex items-center gap-2 font-semibold">
-                <Square /> Stop screen recording · {mmss}
+                <Square /> Stop recording · {mmss}
               </span>
               <span className="text-xs">Explain each step out loud as you go</span>
             </Button>
           ) : (
             <Button variant="outline" className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none" onClick={() => start("screen")} disabled={busy || !!recording}>
               <span className="flex items-center gap-2 font-semibold">
-                <MonitorUp /> Record screen + voice
+                <MonitorUp /> Record your screen
               </span>
-              <span className="whitespace-normal text-xs text-muted-foreground">Becomes a step-by-step guide with screenshots</span>
+              <span className="whitespace-normal text-xs text-muted-foreground">Show the steps and explain them aloud</span>
             </Button>
           )}
-          <Button variant="link" className="h-auto justify-start whitespace-normal text-left sm:col-span-2" onClick={() => videoRef.current?.click()} disabled={busy}>
-            Upload a KT session video instead (max 25 MB)
+          <Button variant="outline" className="h-auto min-w-0 flex-col items-start gap-2 whitespace-normal p-4 text-left shadow-none sm:col-span-2 xl:col-span-1" onClick={() => videoRef.current?.click()} disabled={busy}>
+            <span className="flex items-center gap-2 font-semibold"><Upload /> Upload a session video</span>
+            <span className="whitespace-normal text-xs text-muted-foreground">Add an existing handover or training recording</span>
           </Button>
           <input ref={videoRef} aria-label="Upload session video" type="file" className="hidden" accept="video/*" onChange={onFile} />
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">Maximum upload size: 25 MB per file.</p>
+        </section>
       </div>
 
       <section className="min-w-0 xl:border-l xl:border-border xl:pl-6">
