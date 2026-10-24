@@ -58,9 +58,14 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
           const limit = Math.min(bottom, popup.top - 12);
           // Snap to the last row that fits fully so the outline never slices through text or icons.
           let snapped = 0;
-          el.querySelectorAll<HTMLElement>("li, section, h2, p, button, form").forEach((child) => {
-            const b = child.getBoundingClientRect().bottom + pad;
-            if (b <= limit && b > top + 24 && b > snapped) snapped = b;
+          const parts = Array.from(el.querySelectorAll<HTMLElement>("li, section, h2, h3, p, button, form, label"));
+          const boxes = parts.map((part) => part.getBoundingClientRect());
+          parts.forEach((child, i) => {
+            const edge = boxes[i].bottom;
+            const b = edge + pad;
+            // Skip edges that would cut through another visible line of text.
+            const straddles = parts.some((other, j) => j !== i && !other.contains(child) && boxes[j].top < b - 1 && boxes[j].bottom > edge + 1);
+            if (!straddles && b <= limit && b > top + 24 && b > snapped) snapped = b;
           });
           bottom = snapped || limit;
         }
