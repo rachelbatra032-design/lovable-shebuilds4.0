@@ -158,6 +158,9 @@
   input, textarea, select, button {
     font-family: inherit;
   }
+  button {
+    color: inherit;
+  }
   @media (max-width: 639px) {
     input, textarea, select {
       font-size: 1rem;
