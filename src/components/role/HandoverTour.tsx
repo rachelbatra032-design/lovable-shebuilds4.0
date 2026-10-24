@@ -28,29 +28,44 @@ export function HandoverTour({ step, onStep, onClose }: { step: number; onStep: 
   useEffect(() => {
     if (!current) return;
     if (dialog.current) dialog.current.scrollTop = 0;
-    const target = findTarget(current.target);
-    if (target) window.scrollTo({ top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - 86), behavior: "instant" });
+    const exact = () => document.querySelector<HTMLElement>(`[data-tour="${current.target}"]`);
+    let observed: HTMLElement | null = null;
+    const observer = new ResizeObserver(() => measure());
+    const scrollTo = (el: HTMLElement) => window.scrollTo({ top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - 86), behavior: "instant" });
     const measure = () => {
-      const el = findTarget(current.target);
+      const el = exact() ?? findTarget(current.target);
+      if (el && el !== observed) {
+        if (observed) observer.unobserve(observed);
+        observer.observe(el); observed = el; scrollTo(el);
+      }
       const popup = dialog.current?.getBoundingClientRect();
       if (!el || !popup) { setRect(null); return; }
       const bounds = el.getBoundingClientRect();
       const narrow = window.innerWidth < 640;
-      const overlapsPopup = bounds.right > popup.left - 12 && bounds.left < popup.right + 12;
-      const bottomLimit = narrow || overlapsPopup ? popup.top - 12 : window.innerHeight - 12;
       const top = Math.max(72, bounds.top - 5);
-      const left = Math.max(8, bounds.left - 5);
-      const right = Math.min(window.innerWidth - 8, bounds.right + 5);
-      const bottom = Math.min(bottomLimit, bounds.bottom + 5);
+      let left = Math.max(8, bounds.left - 5);
+      let right = Math.min(window.innerWidth - 8, bounds.right + 5);
+      let bottom = Math.min(window.innerHeight - 12, bounds.bottom + 5);
+      const overlaps = right > popup.left - 12 && left < popup.right + 12 && bottom > popup.top - 12;
+      if (overlaps) {
+        // Prefer trimming beside the popup when that keeps more of the target visible than trimming above it.
+        const sideRight = popup.left - 12;
+        const aboveArea = (right - left) * Math.max(0, popup.top - 12 - top);
+        const sideArea = (sideRight - left) * (bottom - top);
+        if (!narrow && sideRight - left > 200 && sideArea > aboveArea) right = sideRight;
+        else bottom = Math.min(bottom, popup.top - 12);
+      }
+      left = Math.min(left, right);
       setRect(bottom > top && right > left ? { top, left, width: right - left, height: bottom - top } : null);
     };
     const frame = requestAnimationFrame(measure);
-    const observer = new ResizeObserver(measure);
-    if (target) observer.observe(target);
+    // Lazily rendered targets (such as the visual map) appear after the step starts.
+    const poll = window.setInterval(() => { if (exact() !== observed) measure(); }, 150);
+    const stopPoll = window.setTimeout(() => window.clearInterval(poll), 3000);
     if (dialog.current) observer.observe(dialog.current);
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", measure, true);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("resize", measure); window.removeEventListener("scroll", measure, true); };
+    return () => { cancelAnimationFrame(frame); window.clearInterval(poll); window.clearTimeout(stopPoll); observer.disconnect(); window.removeEventListener("resize", measure); window.removeEventListener("scroll", measure, true); };
   }, [current]);
 
   useEffect(() => {
