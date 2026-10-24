@@ -1,5 +1,12 @@
 # Workflow verification
 
+## Guided walkthrough: October 24, 2026
+- Added an optional eight-step role walkthrough covering coverage, recorded evidence, Visual, Capture, Review, Ask, Plan and tracked agents with business-value explanations and no em dashes.
+- Signed-in private sample: all eight highlights verified at 1280x1800, 726x638 and 390x844; highlight and explanation did not overlap, and the page had no horizontal overflow.
+- Next, Previous, Finish, Skip, replay, Auto-play, Pause and Escape checked through automated interactions or the live browser. Exiting restores the previous panel; the walkthrough submits no notes and runs no AI tasks.
+- All 36 tests passed across 9 files. Latest preview build reports build OK; live browser recorded zero runtime errors.
+- No physical-device, inbox, social-sign-in or security-release claims were added by this walkthrough check.
+
 ## Recheck: October 24, 2026
 - Capture options now form one consistent group with plain-English document, screen and session-video choices; Read Me uses a visual five-step review checklist and criterion sections, checked at 1280px, 726px and 390px without overflow.
 - Chromium recorded actual spoken synthetic test audio through the voice button, saved the recording, transcribed it and completed extraction. This verifies the browser recording path, not physical microphone hardware. The transcript misheard "training" as "trading", reinforcing the need to inspect the original recording.
